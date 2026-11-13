@@ -48,7 +48,9 @@
     "assistantName": "Lamnian AI"
   },
   "firebase": {
-    "adminEmails": [],
+    "adminEmails": [
+      "mohzammajeed@gmail.com"
+    ],
     "config": {
       "apiKey": "AIzaSyBc2VA1OA3FfNw7qWTEzZauidFWuBcAdEQ",
       "authDomain": "lamnian-ai.firebaseapp.com",

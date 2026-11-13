@@ -35,7 +35,7 @@ window.LAM = (() => {
   }
 
   // Shrink photos in the browser before upload (saves data for phone users).
-  async function resizeImage(file, maxDim = 1600, quality = 0.82) {
+  async function resizeImage(file, maxDim = 1280, quality = 0.78) {
     if (!/^image\/(jpeg|png|webp)$/.test(file.type)) throw new Error('Please choose a JPG, PNG or WebP photo.');
     const url = URL.createObjectURL(file);
     try {

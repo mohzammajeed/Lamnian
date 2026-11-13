@@ -54,7 +54,7 @@
 
   async function load() {
     try { S = await api('/api/admin/overview'); render(); }
-    catch (e) { if (e.status === 401) showLogin(); else app.replaceChildren(el('p', { class: 'form-error', text: e.message })); }
+    catch (e) { if (e.status === 401) showLogin(); else app.replaceChildren(el('div', { class: 'login' }, el('div', { class: 'card' }, el('h1', { text: 'Lamnian Admin' }), el('p', { class: 'form-error', text: e.message }), el('button', { class: 'btn primary', text: 'Try again', onclick: load })))); }
   }
 
   const pendingCount = (n) => S.collections[n].filter((i) => i.status === 'pending').length;
@@ -143,11 +143,11 @@
     const aiCard = el('div', { class: 'card' }, el('h3', { text: 'AI assistant' }),
       el('div', { class: 'ai-state' }, el('span', { class: 'status-badge' + (ai.connected ? ' on' : ''), text: ai.connected ? 'Connected' : 'Not connected' }), ai.connected ? el('span', { class: 'note', text: `${ai.provider} · ${ai.model}` }) : null),
       ai.connected ? el('p', { class: 'note', text: 'Visitors can chat with the assistant on the website. It already knows today’s weather, latest news and upcoming events.' }) : el('div', {},
-        el('p', { class: 'note', text: 'When you are ready, set these environment variables where the server runs, then restart it. The chat on the site switches on automatically.' }),
+        el('p', { class: 'note', text: 'When you are ready: Vercel → your project → Settings → Environment Variables, add these, then redeploy. The chat on the site switches on automatically.' }),
         el('pre', { class: 'code', text: 'LAMNIAN_AI_PROVIDER=anthropic   # or: openai, webhook\nLAMNIAN_AI_KEY=your-api-key\n# optional: LAMNIAN_AI_MODEL=model-name\n# for your own AI server (webhook):\n# LAMNIAN_AI_PROVIDER=webhook\n# LAMNIAN_AI_WEBHOOK=https://your-server/chat' })));
 
     const backup = el('div', { class: 'card' }, el('h3', { text: 'Backup' }),
-      el('p', { class: 'note', text: 'Download all posts and settings as a JSON file. Uploaded photos live in the uploads folder on the server.' }),
+      el('p', { class: 'note', text: 'Download all posts and settings as a JSON file (photos are not included; they stay in your Firebase database).' }),
       el('a', { class: 'btn', href: '/api/admin/backup', text: '⬇ Download backup' }));
 
     return el('div', { class: 'panel' }, el('div', { class: 'card' }, el('h3', { text: 'Site-wide alert banner' }), alertForm), aiCard, backup);

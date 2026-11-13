@@ -1,73 +1,60 @@
-# Lamnian — community website
+# Lamnian — community website (Vercel + Firebase)
 
-Weather forecast, local news, photo gallery, events, notice board, local directory
-and an AI assistant slot — for the people of Lamnian.
-Everything people submit waits for **your approval** before it appears.
+Weather forecast, local news, photo gallery, events, notice board, local directory and an AI
+assistant slot. Everything visitors submit waits for **your approval**.
 
-No installs needed: it uses only Node.js (version 18 or newer).
+**How it runs on Vercel**
+- `public/` → the website pages (static)
+- `api/[...path].js` + `lib/` → the backend (Vercel serverless function)
+- Posts, photos and settings are stored in your **Firebase Realtime Database**
+- Admin login = **Sign in with Google**, allowed only for the emails in `config.json → firebase.adminEmails`
+  (currently `mohzammajeed@gmail.com`)
 
-## Run it
+## Deploy (one time, ~10 minutes)
 
-    node server.js
+1. **Put the project on Vercel** — push this folder to GitHub and import it in Vercel
+   (Framework Preset: *Other*; leave build/output settings empty — `vercel.json` handles it).
+2. **Create a Firebase service-account key** (this is how the backend talks to your database):
+   Firebase console → ⚙ Project settings → **Service accounts** → *Generate new private key* → a `.json` file downloads.
+3. **Give it to Vercel**: Vercel → your project → Settings → **Environment Variables** → add
+   `FIREBASE_SERVICE_ACCOUNT` = the **entire contents** of that `.json` file (all environments). 
+   Treat it like a password: never put it in GitHub or in `config.json`.
+4. **Allow your website address for Google sign-in**: Firebase console → Authentication → Settings →
+   **Authorized domains** → add `your-project.vercel.app` (and your own domain if you have one).
+5. **Lock the database** (the backend uses its own key, so public access is not needed):
+   Realtime Database → Rules → paste `firebase-rules/database.rules.json` → Publish.
+6. **Redeploy** in Vercel (Deployments → ⋯ → Redeploy) so the new variable is picked up.
+7. Open `https://your-site/admin` → **Sign in with Google**.
 
-Open http://localhost:3000 (site) and http://localhost:3000/admin (admin panel).
-
-Until you add an admin email (see below), an admin password is generated on first run, printed in the terminal and saved in
-`data/admin-password.txt`. To choose your own, set `ADMIN_PASSWORD=...` before starting.
-
-## What's inside
-
-| Section | Who adds content | Notes |
-|---|---|---|
-| Weather (live) | automatic | Open-Meteo, no API key. 24 h chart, 7 days, sun, air quality, smart tips |
-| Prayer times | automatic | Aladhan (Karachi method, Hanafi Asr) — change in `config.json` |
-| News, Photos, Events, Notices, Directory | visitors submit → you approve | Phone numbers marked "only admin sees" are never public |
-| Alert banner | you (Admin → Settings) | e.g. "Road closed due to landslide" |
-| Emergency numbers | you (`config.json`) | Please double-check them for your area |
-| AI assistant | you, later | Shows "coming soon" until connected |
+If something is missing the site tells you what: e.g. “The database is not connected yet…”.
 
 ## Connect your AI (later)
 
-Set environment variables where the server runs, restart, and the chat on the site
-switches on by itself (it already knows today's weather, news and events):
+Vercel → Settings → Environment Variables, then redeploy. The chat switches on by itself and already
+knows today’s weather, news and events:
 
     LAMNIAN_AI_PROVIDER=anthropic     # or: openai | webhook
     LAMNIAN_AI_KEY=your-api-key
     # optional: LAMNIAN_AI_MODEL=model-name
 
-Own AI server? Use `LAMNIAN_AI_PROVIDER=webhook` and `LAMNIAN_AI_WEBHOOK=https://your-server/chat`.
-It receives `{messages, context, system}` and must answer `{"reply": "..."}`.
-Never put API keys in files under `public/`.
+Own AI server? `LAMNIAN_AI_PROVIDER=webhook` and `LAMNIAN_AI_WEBHOOK=https://your-server/chat`;
+it receives `{messages, context, system}` and must answer `{"reply": "..."}`.
 
-## Admin sign-in with Google (Firebase)
+## Good to know
 
-Firebase is used **only** to prove who is signing in. The server checks Google's signature,
-the project, and that the verified email is on your admin list, then starts its own session.
+- New approved posts appear within about 30 seconds (pages are cached for speed).
+- Photos are shrunk in the browser to ≤1280 px and stored in the database (≈100–300 KB each).
+  The free database (1 GB) holds thousands. Deleting a post deletes its photo.
+- Spam protection: honeypot field, 8 posts per hour per visitor (shared across servers), photo checks, your approval.
+- Backup: Admin → Settings → Download backup (posts and settings; photos stay in Firebase).
+- Change location, prayer settings, emergency numbers and admin emails in `config.json`
+  (or set `ADMIN_EMAILS=a@x.com,b@y.com` in Vercel).
+- Coordinates are set to Lamnian, Azad Kashmir — please check them.
 
-1. In `config.json` set your Google email(s):  `"firebase": { "adminEmails": ["you@gmail.com"], ... }`
-   (or set the `ADMIN_EMAILS` environment variable, comma-separated), then restart.
-2. Open `/admin` → **Sign in with Google**. Once an admin email is set, the password login
-   is switched off (set `ALLOW_PASSWORD_LOGIN=1` if you want to keep it as a backup).
-3. Firebase console → Authentication → Settings → **Authorized domains**: add the domain
-   your site is on (localhost already works).
-4. Your Realtime Database is not used by this site. Lock it:
-   Realtime Database → Rules → paste `firebase-rules/database.rules.json` → Publish.
-   (Databases created in "test mode" are open to everyone until they expire.)
+## Run on your own computer (optional)
 
-The Firebase web config in `config.json` is public by design — it is not a secret.
-What protects the admin panel is the server-side email check.
+    node server.js        # http://localhost:3000
 
-## Change location / settings
-
-Edit `config.json` (coordinates are set to Lamnian, Azad Kashmir — **please check them**).
-
-## Putting it online
-
-Needs a host that runs Node.js **and keeps files** (a small VPS, or Render/Railway with a
-persistent disk) — your posts and photos are stored in `data/` and `uploads/`.
-Behind a proxy/HTTPS set `TRUST_PROXY=1` and `ADMIN_PASSWORD`. Back up via Admin → Settings.
-
-## Safety built in
-
-Admin login rate-limited · posts and AI questions rate-limited per visitor · photos verified
-and shrunk · spam trap field · all text escaped · strict Content-Security-Policy.
+Uses a local file database (`data/db.json`) unless `FIREBASE_SERVICE_ACCOUNT` is set.
+Google sign-in works on localhost too. For a quick password login while testing:
+`ADMIN_PASSWORD=choose-one ALLOW_PASSWORD_LOGIN=1 node server.js`.
