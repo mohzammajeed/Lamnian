@@ -1,6 +1,0 @@
-node_modules
-data/*
-!data/.gitkeep
-.vercel
-.env*
-*.log
