@@ -1,69 +1,36 @@
-# Lamnian — community website (Vercel + Firebase)
+# Lamnian
 
-Weather, local news, photo gallery, events, notice board, local directory and an AI assistant slot.
-Everything visitors submit waits for **your approval**.
+Community website for Lamnian: live weather, prayer times, local news, photo gallery, events, notices and a local directory. Static site on Vercel, Firebase (Spark plan) for data.
 
-## How it saves data (same idea as the RishtaCV site)
-
-The **browser talks to Firebase directly**. There is no custom login and no service-account key.
-
-| What | Where it is stored |
+## Files
+| File | Purpose |
 |---|---|
-| Posts (news, gallery, events, notices, directory) | Firestore `news`, `gallery`, `events`, `notices`, `directory` → one document per post |
-| Photos | inside the post document (`image`, shrunk to < 400 KB in the browser) |
-| Private phone numbers (news + gallery) | Firestore `contacts/{postId}` — only the admin can read it |
-| Banner at the top of the site | Firestore `settings/alert` |
-| Admin login | Firebase Authentication → Google |
+| `index.html` | The whole public site (inline CSS and JS) |
+| `admin.html` | Admin panel at `/admin`: approve or delete posts (Google sign-in) |
+| `firestore.rules` | Firestore security rules (paste into Firebase console) |
+| `api/weather.js` | Serverless function: calls Open-Meteo with your private API key |
+| `vercel.json` | Clean URLs (`/admin`) and security headers |
+| `404.html` | Not-found page |
+| `favicon.svg`, `robots.txt` | Icon; keeps `/admin` out of search |
 
-Each post has `status`: `pending` → `approved` / `rejected`. Visitors can only create `pending` posts and
-only read `approved` ones. **`firestore.rules` is what enforces this** (and who the admin is).
+## Setup
+1. **Firestore:** create the database, then paste `firestore.rules` into Rules and Publish.
+2. **Authentication:** enable the Google provider. Add your Vercel domain (and custom domain) under Settings → Authorized domains.
+3. **GitHub:** push all files to the repo root.
+4. **Vercel:** import the repo. Framework preset: Other. No build command, no output directory.
+5. Open `/admin`, sign in with the admin Google account, and approve posts.
 
-All of it is in one file: `db.js`.
+## Settings
+Edit the `CFG` block near the top of the script in `index.html`:
+- `lat`, `lon`: Lamnian's coordinates (weather, air quality, prayer times)
+- `region`: text shown above the title
+- `prayerMethod`: Aladhan calculation method (1 = Karachi)
 
-The small server part (`api/index.js`) only handles things that cannot run in the browser:
-`/api/weather`, `/api/prayer`, `/api/ai`. It stores nothing.
+## How posts work
+Visitors submit through **Contribute**. Photos are shrunk in the browser (max 900 px JPEG) and stored inside the Firestore document. Posts are saved with `approved: false` and only appear after approval in `/admin`.
 
-```
-index.html  admin.html  style.css  admin.css  theme.js  common.js  app.js  admin.js   the website
-db.js            all saving/loading (browser → Firebase)
-config.json      site name, location, emergency numbers, Firebase web config
-firestore.rules  paste into Firebase → Firestore → Rules
-api/index.js     weather + prayer times + AI chat (Vercel needs this one file inside a folder named api)
-vercel.json  package.json  favicon.svg
-```
+## Weather API key
+In Vercel → Settings → Environment Variables add `OPEN_METEO_API_KEY` (all environments), then redeploy. The site calls `/api/weather`; if that fails it falls back to the free Open-Meteo endpoint.
 
-## Deploy (one time, ~5 minutes)
-
-1. **Firebase console → Build → Firestore Database → Create database** (any location, start in production mode).
-2. **Firestore → Rules** → paste the whole `firestore.rules` file → **Publish**.
-3. **Authentication → Sign-in method** → turn on **Google**.
-4. **Authentication → Settings → Authorized domains** → add `your-project.vercel.app` (and your own domain).
-5. **Vercel**: push this folder to GitHub → import in Vercel (Framework Preset: *Other*, leave build/output/install commands empty).
-   **No environment variables are needed** for the site itself.
-6. Open `https://your-site/admin` → **Sign in with Google** with the admin Gmail.
-
-The old Realtime Database is no longer used; you can leave it.
-
-### Change the admin
-Edit the email list in `isAdmin()` at the top of `firestore.rules` and publish the rules again.
-That list is the only place that decides who is admin.
-
-## AI assistant (later)
-
-Vercel → Settings → Environment Variables, then redeploy. The chat switches on by itself:
-
-    LAMNIAN_AI_PROVIDER=anthropic     # or: openai | webhook
-    LAMNIAN_AI_KEY=your-api-key
-    # optional: LAMNIAN_AI_MODEL=model-name
-
-Own AI server: `LAMNIAN_AI_PROVIDER=webhook` and `LAMNIAN_AI_WEBHOOK=https://your-server/chat`
-(it receives `{messages, context, system}` and must answer `{"reply": "..."}`).
-
-## Good to know
-
-- Spam protection: hidden honeypot field, 8 posts per hour per browser, size/field checks in the rules, and your approval
-  (nothing is public until you approve). Firestore rules cannot limit per IP; if spam ever becomes a problem, turn on Firebase App Check.
-- Free Firebase limits: 50,000 reads/day. Each page visit reads the approved posts once.
-- Backup: Admin → Settings → Download backup (posts and settings; photos are left out).
-- Change location, prayer settings and emergency numbers in `config.json`.
-- Coordinates are set to Lamnian, Azad Kashmir — please check them.
+## Never commit
+Service account keys and API keys that must stay private. Put them in Vercel → Settings → Environment Variables. The `.gitignore` already skips `.env` and service account files. The Firebase web config in `index.html` is public by design; the Firestore rules are what protect your data.

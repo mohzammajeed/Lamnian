@@ -1,228 +1,417 @@
 <!doctype html>
 <html lang="en" data-theme="light">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Lamnian — Weather, News &amp; Community</title>
-  <meta name="description" content="Lamnian community website: live weather forecast, local news, photos, events, notices, local directory and an AI assistant.">
-  <meta name="theme-color" content="#0f3d3a">
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="/theme.js"></script>
-  <link rel="stylesheet" href="/style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lamnian — Weather, News &amp; Community</title>
+<meta name="description" content="Lamnian community website: live weather forecast, local news, photos, events, notices, local directory and an AI assistant.">
+<meta name="theme-color" content="#0f3d3a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230f3d3a'/%3E%3Cpath d='M6 50 24 22l9 13 7-9 18 24z' fill='%23fff'/%3E%3Ccircle cx='47' cy='17' r='6' fill='%23f0b24a'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.dataset.theme=t}catch(e){}</script>
+<style>
+:root{--bg:#f6f4ee;--alt:#ecefe9;--fg:#15302d;--mut:#5d6f6c;--card:#fff;--line:#dde3de;--brand:#0f3d3a;--brand2:#1b6b63;--acc:#f0b24a;--sh:0 6px 22px rgba(15,61,58,.09);--r:18px;--serif:'Fraunces',Georgia,serif;--sans:'Manrope',system-ui,-apple-system,Segoe UI,sans-serif}
+[data-theme=dark]{--bg:#0c1a19;--alt:#102321;--fg:#e8f0ee;--mut:#93a8a4;--card:#142b29;--line:#21403d;--brand:#1b6b63;--sh:0 6px 22px rgba(0,0,0,.35)}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{margin:0;font:500 16px/1.6 var(--sans);background:var(--bg);color:var(--fg)}
+a{color:inherit}h1,h2,h3{margin:0}
+.wrap{width:min(1180px,100% - 32px);margin:0 auto}
+.skip{position:absolute;left:-999px;top:8px;background:var(--acc);color:#222;padding:8px 14px;border-radius:8px;z-index:99}.skip:focus{left:8px}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.alert-bar{background:#b4531a;color:#fff;text-align:center;padding:8px 16px;font-weight:700;font-size:14px}
+.site-header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.header-row{display:flex;align-items:center;gap:18px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font:700 22px var(--serif);color:var(--brand)}
+[data-theme=dark] .brand{color:var(--fg)}
+.nav{display:flex;gap:4px;margin-left:auto}
+.nav a{text-decoration:none;padding:8px 12px;border-radius:999px;font-weight:700;font-size:14px;color:var(--mut)}
+.nav a:hover{background:var(--alt);color:var(--fg)}
+.pill-new{background:var(--acc);color:#3a2a00;font-size:10px;padding:2px 7px;border-radius:99px;margin-left:3px;font-weight:800}
+.header-actions{display:flex;gap:8px;align-items:center}
+.icon-btn{border:1px solid var(--line);background:var(--card);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:16px;color:var(--fg)}
+.menu-btn{display:none}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--card);color:var(--fg);padding:11px 20px;border-radius:999px;font:700 15px var(--sans);cursor:pointer;text-decoration:none}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}.btn.primary:hover{background:var(--brand2)}
+.btn.sm{padding:8px 15px;font-size:14px}
+.btn.light{background:#fff;color:#0f3d3a;border-color:#fff}
+.btn.ghost{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.45)}
+/* hero */
+.hero{position:relative;color:#fff;overflow:hidden;background:linear-gradient(180deg,#2e7fc0,#8ec6e8 70%,#cfe8f3);--cap:#fff}
+.hero[data-sky=clear-night]{background:linear-gradient(180deg,#081428,#17305a 75%,#2b4a7a)}
+.hero[data-sky=cloudy]{background:linear-gradient(180deg,#5d7587,#9fb2bf 75%,#c3ced5)}
+.hero[data-sky=rain]{background:linear-gradient(180deg,#34495a,#5f7a8c 75%,#8aa1ae)}
+.hero[data-sky=snow]{background:linear-gradient(180deg,#7d95ab,#c1d1de 75%,#e3ebf1)}
+.hero[data-sky=storm]{background:linear-gradient(180deg,#232c3a,#455468 75%,#667690)}
+.sky-fx{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.sky-fx i{position:absolute;top:-20px;width:2px;height:16px;background:rgba(255,255,255,.55);animation:fall linear infinite}
+.sky-fx i.s{width:6px;height:6px;border-radius:50%;background:#fff;opacity:.85}
+.sky-fx i.st{width:2px;height:2px;border-radius:50%;background:#fff;animation:tw 3s ease-in-out infinite}
+@keyframes fall{to{transform:translateY(120vh)}}@keyframes tw{50%{opacity:.2}}
+.hero-inner{position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:72px 0 170px}
+.eyebrow{font-weight:700;letter-spacing:.04em;margin:0 0 6px;opacity:.9}
+.hero h1{font:700 clamp(54px,9vw,104px)/1 var(--serif);letter-spacing:-.02em;margin-bottom:14px}
+.lead{font-size:19px;max-width:30em;margin:0 0 24px;opacity:.95}.lead.dark{color:var(--mut);opacity:1}
+.hero-cta{display:flex;gap:10px;flex-wrap:wrap}
+.glass{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(16px);border-radius:26px;padding:24px;box-shadow:0 14px 40px rgba(0,0,0,.18)}
+.wx-top{display:flex;justify-content:space-between;align-items:center}
+.wx-temp{font:700 76px/1 var(--serif)}.wx-ico{font-size:64px}
+.wx-desc{font-size:20px;font-weight:700;margin:6px 0 2px}.wx-sub{opacity:.9;font-size:14px}
+.wx-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}
+.wx-row div{background:rgba(255,255,255,.14);border-radius:14px;padding:10px;text-align:center;font-size:13px}
+.wx-row b{display:block;font-size:17px}
+.mountains{position:absolute;bottom:-1px;left:0;width:100%;height:170px}
+.m1{fill:var(--bg)}.m2{fill:#1b6b63;opacity:.85}.m3{fill:#0f3d3a;opacity:.9}.cap{fill:var(--cap);opacity:.9}
+.hero[data-sky=clear-night] .cap{fill:#9fb4d4}
+/* pulse */
+.pulse-wrap{margin-top:-22px;position:relative;z-index:3}
+.pulse{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.pulse div{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 16px;box-shadow:var(--sh);font-size:13px;color:var(--mut)}
+.pulse b{display:block;font:700 22px var(--serif);color:var(--fg)}
+/* sections */
+.section{padding:72px 0}.section.alt{background:var(--alt)}
+.section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:28px}
+.kicker{margin:0 0 4px;color:var(--brand2);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+h2{font:700 clamp(28px,4vw,40px)/1.15 var(--serif)}
+.muted{color:var(--mut);font-size:14px;margin:0}.fine{color:var(--mut);font-size:12.5px;margin:10px 0 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:var(--sh)}
+.card-title{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:14px}
+.card-title h3{font:700 19px var(--serif)}
+.chip{background:var(--alt);color:var(--mut);font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px}
+.grid-wx{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.span-2{grid-column:span 2}
+.legend{font-size:12px;color:var(--mut)}.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin:0 4px 0 8px}
+.lg-temp{background:#e0782e}.lg-rain{background:#3d8fd1}
+.chart-wrap svg{width:100%;height:auto}
+.hour-strip{display:flex;gap:8px;overflow-x:auto;padding:12px 0 4px}
+.hour-strip div{flex:0 0 66px;text-align:center;background:var(--alt);border-radius:14px;padding:8px 4px;font-size:12.5px}
+.hour-strip b{display:block;font-size:16px}
+.tips{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.tips li{background:var(--alt);border-radius:12px;padding:10px 12px;font-size:14px}
+.daily{display:grid;gap:4px}
+.day{display:grid;grid-template-columns:78px 34px 1fr 52px 1fr 48px;gap:10px;align-items:center;padding:9px 4px;border-bottom:1px solid var(--line);font-size:14px}
+.day:last-child{border:0}.day .ic{font-size:22px}.day span.r{color:#3d8fd1;font-weight:700;text-align:right}
+.bar{height:6px;border-radius:9px;background:var(--alt);position:relative}
+.bar i{position:absolute;top:0;bottom:0;border-radius:9px;background:linear-gradient(90deg,#3d8fd1,#e0782e)}
+.stats{margin:0;display:grid;gap:8px}.stats div{display:flex;justify-content:space-between;border-bottom:1px dashed var(--line);padding:5px 0;font-size:14px}
+.stats dt{color:var(--mut)}.stats dd{margin:0;font-weight:800}
+.sun-arc{width:100%}.sun-t{display:flex;justify-content:space-between;font-size:14px;font-weight:700}
+.prayer{list-style:none;margin:0;padding:0}
+.prayer li{display:flex;justify-content:space-between;padding:7px 10px;border-radius:10px;font-weight:700;font-size:15px}
+.prayer li.next{background:var(--brand);color:#fff}
+.aqi-n{font:700 44px/1 var(--serif)}.aqi-l{display:inline-block;padding:3px 12px;border-radius:99px;color:#fff;font-weight:800;font-size:13px;margin-left:8px}
+.skel{border-radius:14px;background:linear-gradient(90deg,var(--alt),var(--line),var(--alt));background-size:200% 100%;animation:sk 1.3s infinite;list-style:none}
+@keyframes sk{to{background-position:-200% 0}}.h60{height:60px}.h120{height:120px}.h200{height:200px}.h240{height:240px;background:rgba(255,255,255,.2)}.h260{height:260px}
+/* content */
+.news-grid,.notice-grid,.dir-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.post{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);display:flex;flex-direction:column}
+.post .img{height:150px;background:linear-gradient(135deg,var(--brand),var(--brand2));display:grid;place-items:center;font-size:44px}
+.post .img img{width:100%;height:100%;object-fit:cover}
+.post .body{padding:16px 18px 18px}.post h3{font:700 19px/1.25 var(--serif);margin:4px 0 6px}.post p{margin:0;color:var(--mut);font-size:14.5px}
+.post .meta{font-size:12px;color:var(--mut);font-weight:700}
+.gallery{columns:3 240px;column-gap:14px}.gallery figure{margin:0 0 14px;break-inside:avoid;border-radius:16px;overflow:hidden;position:relative;box-shadow:var(--sh)}
+.gallery img{width:100%;display:block}.gallery .ph{aspect-ratio:4/3;display:grid;place-items:center;font-size:48px;color:#fff}
+.gallery figcaption{position:absolute;left:0;right:0;bottom:0;padding:22px 12px 10px;color:#fff;font-size:13px;font-weight:700;background:linear-gradient(transparent,rgba(0,0,0,.65))}
+.events{display:grid;gap:14px}
+.ev{display:flex;gap:18px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 20px;box-shadow:var(--sh)}
+.ev .d{flex:0 0 66px;text-align:center;background:var(--brand);color:#fff;border-radius:14px;padding:8px 0;font-weight:800}
+.ev .d b{display:block;font:700 26px/1 var(--serif)}.ev h3{font:700 19px var(--serif)}.ev p{margin:2px 0 0;color:var(--mut);font-size:14px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.chips button{border:1px solid var(--line);background:var(--card);color:var(--fg);padding:7px 15px;border-radius:99px;font:700 13.5px var(--sans);cursor:pointer}
+.chips button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.tag{display:inline-block;background:var(--alt);color:var(--brand2);font-size:12px;font-weight:800;padding:2px 10px;border-radius:99px}
+.emergency{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px}
+.emergency a{background:#b4331a;color:#fff;text-decoration:none;border-radius:16px;padding:12px 16px;font-weight:700;font-size:13px}
+.emergency b{display:block;font:700 26px/1.1 var(--serif)}
+.dir-tools input,.fld{width:100%;padding:12px 16px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--fg);font:500 15px var(--sans)}
+.dir-tools{margin-bottom:14px}
+.empty{grid-column:1/-1;text-align:center;color:var(--mut);padding:28px}
+/* AI */
+.ai-wrap{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.ai-points{padding-left:18px;color:var(--mut)}.ai-points b{color:var(--fg)}
+.status-badge{display:inline-block;background:var(--alt);border:1px solid var(--line);padding:5px 14px;border-radius:99px;font-weight:800;font-size:13px}
+.chat{display:flex;flex-direction:column;height:420px;padding:0;overflow:hidden}
+.chat-log{flex:1;overflow:auto;padding:18px;display:grid;gap:10px;align-content:start}
+.msg{max-width:85%;padding:10px 14px;border-radius:16px;font-size:14.5px;background:var(--alt)}.msg.me{margin-left:auto;background:var(--brand);color:#fff}
+.suggest{display:flex;gap:8px;flex-wrap:wrap;padding:0 18px 10px}.suggest button{border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:99px;padding:5px 12px;font:600 12.5px var(--sans);cursor:pointer}
+.chat-form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}.chat-form input{flex:1;padding:11px 16px;border-radius:99px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font:500 15px var(--sans)}
+.ai-fab{position:fixed;right:18px;bottom:18px;z-index:40;background:var(--acc);color:#3a2a00;text-decoration:none;font-weight:800;padding:12px 18px;border-radius:99px;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.site-footer{background:var(--brand);color:#dcebe8;padding:36px 0}.site-footer a{color:var(--acc)}
+.foot-row{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}.foot-brand{font:700 24px var(--serif);color:#fff}
+.site-footer p{margin:6px 0 0}.site-footer .fine{color:#a9c4bf;text-align:right}
+/* modal */
+dialog{border:0;border-radius:22px;padding:24px;width:min(480px,92vw);background:var(--card);color:var(--fg);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog::backdrop{background:rgba(0,0,0,.5)}dialog form{display:grid;gap:12px}dialog h3{font:700 24px var(--serif)}
+dialog label{font-weight:700;font-size:13px;display:grid;gap:4px}dialog textarea{min-height:90px;resize:vertical}
+.row{display:flex;gap:8px;justify-content:flex-end}[hidden]{display:none!important}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:11px 20px;border-radius:99px;font-weight:700;z-index:99}
+@media(max-width:900px){.hero-inner,.ai-wrap{grid-template-columns:1fr}.grid-wx{grid-template-columns:1fr 1fr}.span-2{grid-column:span 2}.menu-btn{display:grid;place-items:center}
+.nav{position:absolute;top:64px;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--line);flex-direction:column;padding:10px 16px;display:none;margin:0}.nav.open{display:flex}}
+@media(max-width:600px){.grid-wx{grid-template-columns:1fr}.span-2{grid-column:auto}.day{grid-template-columns:64px 28px 1fr 44px}.day .bar,.day span.lo{display:none}.hero-inner{padding:48px 0 150px}.site-footer .fine{text-align:left}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
+</style>
 </head>
 <body>
-  <a class="skip" href="#weather">Skip to content</a>
+<a class="skip" href="#weather">Skip to content</a>
+<div id="alertBar" class="alert-bar" hidden></div>
 
-  <div id="alertBar" class="alert-bar" hidden></div>
-
-  <header class="site-header" id="siteHeader">
-    <div class="wrap header-row">
-      <a class="brand" href="#top" aria-label="Lamnian home">
-        <svg viewBox="0 0 64 64" width="34" height="34" aria-hidden="true"><rect width="64" height="64" rx="16" fill="currentColor" opacity=".16"/><path d="M6 50 24 22l9 13 7-9 18 24z" fill="currentColor"/><circle cx="47" cy="17" r="6" fill="#f0b24a"/></svg>
-        <span>Lamnian</span>
-      </a>
-      <nav class="nav" id="nav" aria-label="Main">
-        <a href="#weather">Weather</a>
-        <a href="#news">News</a>
-        <a href="#gallery">Gallery</a>
-        <a href="#events">Events</a>
-        <a href="#notices">Notices</a>
-        <a href="#directory">Directory</a>
-        <a href="#ai">Ask AI <span class="pill-new">soon</span></a>
-      </nav>
-      <div class="header-actions">
-        <button class="icon-btn" id="themeBtn" aria-label="Switch light or dark theme" title="Light / dark">🌓</button>
-        <button class="btn primary sm" id="contributeBtn">＋ Contribute</button>
-        <button class="icon-btn menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">☰</button>
-      </div>
+<header class="site-header" id="siteHeader">
+  <div class="wrap header-row">
+    <a class="brand" href="#top" aria-label="Lamnian home">
+      <svg viewBox="0 0 64 64" width="34" height="34" aria-hidden="true"><rect width="64" height="64" rx="16" fill="currentColor" opacity=".16"/><path d="M6 50 24 22l9 13 7-9 18 24z" fill="currentColor"/><circle cx="47" cy="17" r="6" fill="#f0b24a"/></svg>
+      <span>Lamnian</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="#weather">Weather</a><a href="#news">News</a><a href="#gallery">Gallery</a><a href="#events">Events</a><a href="#notices">Notices</a><a href="#directory">Directory</a><a href="#ai">Ask AI <span class="pill-new">soon</span></a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn" id="themeBtn" aria-label="Switch light or dark theme" title="Light / dark">🌓</button>
+      <button class="btn primary sm" id="contributeBtn">＋ Contribute</button>
+      <button class="icon-btn menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">☰</button>
     </div>
-  </header>
-
-  <!-- ============ HERO / LIVE WEATHER ============ -->
-  <section class="hero" id="top" data-sky="clear-day">
-    <div class="sky-fx" id="skyFx" aria-hidden="true"></div>
-    <div class="wrap hero-inner">
-      <div class="hero-copy">
-        <p class="eyebrow" id="heroRegion">Azad Kashmir, Pakistan</p>
-        <h1>Lamnian</h1>
-        <p class="lead" id="heroTagline">Weather, news and neighbours of the valley — all in one place.</p>
-        <div class="hero-cta">
-          <a class="btn light" href="#weather">7-day forecast</a>
-          <a class="btn ghost" href="#news">Latest news</a>
-        </div>
-      </div>
-      <article class="wx-card glass" id="heroWx" aria-live="polite" aria-label="Current weather">
-        <div class="skel h240"></div>
-      </article>
-    </div>
-    <svg class="mountains" viewBox="0 0 1440 260" preserveAspectRatio="none" aria-hidden="true">
-      <path class="m3" d="M0 190 150 120 260 170 420 80 560 160 700 100 860 175 1010 90 1160 165 1300 110 1440 170V260H0z"/>
-      <path class="m2" d="M0 215 120 160 240 205 400 130 540 200 690 140 830 205 980 150 1120 210 1270 155 1440 205V260H0z"/>
-      <path class="cap" d="M400 130 420 80 440 106 425 100 412 118zM1010 90 1030 118 1018 112 1006 128 995 108zM700 100 716 124 704 120 692 130 684 114z"/>
-      <path class="m1" d="M0 240 160 205 320 235 500 195 660 238 840 200 1000 236 1180 202 1320 232 1440 214V260H0z"/>
-    </svg>
-  </section>
-
-  <!-- community pulse -->
-  <div class="wrap pulse-wrap">
-    <div class="pulse" id="pulse"></div>
   </div>
+</header>
 
-  <main>
-    <!-- ============ WEATHER ============ -->
-    <section class="section" id="weather">
-      <div class="wrap">
-        <header class="section-head">
-          <div><p class="kicker">Forecast</p><h2>Weather in Lamnian</h2></div>
-          <p class="muted" id="wxUpdated"></p>
-        </header>
-
-        <div class="grid-wx">
-          <div class="card span-2">
-            <div class="card-title"><h3>Next 24 hours</h3><span class="legend"><i class="lg-temp"></i>Temperature <i class="lg-rain"></i>Rain chance</span></div>
-            <div id="hourChart" class="chart-wrap"><div class="skel h200"></div></div>
-            <div id="hourStrip" class="hour-strip" tabindex="0" aria-label="Hourly forecast"></div>
-          </div>
-
-          <div class="card">
-            <div class="card-title"><h3>Smart tips</h3><span class="chip">auto</span></div>
-            <ul class="tips" id="tips"><li class="skel h60"></li></ul>
-            <p class="fine">Tips are generated from the forecast. For official warnings check PMD / NDMA.</p>
-          </div>
-
-          <div class="card span-2">
-            <div class="card-title"><h3>7-day forecast</h3></div>
-            <div id="dailyList" class="daily"><div class="skel h260"></div></div>
-          </div>
-
-          <div class="card">
-            <div class="card-title"><h3>Right now</h3></div>
-            <dl class="stats" id="statList"></dl>
-          </div>
-
-          <div class="card">
-            <div class="card-title"><h3>Sun</h3></div>
-            <div id="sunBox"></div>
-          </div>
-
-          <div class="card">
-            <div class="card-title"><h3>Prayer times</h3><span class="chip" id="hijri"></span></div>
-            <ul class="prayer" id="prayerList"><li class="skel h120"></li></ul>
-          </div>
-
-          <div class="card">
-            <div class="card-title"><h3>Air quality</h3></div>
-            <div id="aqiBox"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ NEWS ============ -->
-    <section class="section alt" id="news">
-      <div class="wrap">
-        <header class="section-head">
-          <div><p class="kicker">From the community</p><h2>Local news</h2></div>
-          <button class="btn primary" data-share="news">＋ Share news</button>
-        </header>
-        <div id="newsGrid" class="news-grid"></div>
-      </div>
-    </section>
-
-    <!-- ============ GALLERY ============ -->
-    <section class="section" id="gallery">
-      <div class="wrap">
-        <header class="section-head">
-          <div><p class="kicker">Our valley</p><h2>Photo gallery</h2></div>
-          <button class="btn primary" data-share="gallery">＋ Upload photo</button>
-        </header>
-        <div id="galleryGrid" class="gallery"></div>
-      </div>
-    </section>
-
-    <!-- ============ EVENTS ============ -->
-    <section class="section alt" id="events">
-      <div class="wrap">
-        <header class="section-head">
-          <div><p class="kicker">What's on</p><h2>Events</h2></div>
-          <button class="btn primary" data-share="events">＋ Add event</button>
-        </header>
-        <div id="eventsList" class="events"></div>
-      </div>
-    </section>
-
-    <!-- ============ NOTICES ============ -->
-    <section class="section" id="notices">
-      <div class="wrap">
-        <header class="section-head">
-          <div><p class="kicker">Notice board</p><h2>Lost &amp; found, jobs, for sale</h2></div>
-          <button class="btn primary" data-share="notices">＋ Post notice</button>
-        </header>
-        <div id="noticeChips" class="chips"></div>
-        <div id="noticeGrid" class="notice-grid"></div>
-      </div>
-    </section>
-
-    <!-- ============ DIRECTORY ============ -->
-    <section class="section alt" id="directory">
-      <div class="wrap">
-        <header class="section-head">
-          <div><p class="kicker">Useful numbers</p><h2>Local directory</h2></div>
-          <button class="btn primary" data-share="directory">＋ Add business</button>
-        </header>
-
-        <div class="emergency" id="emergency"></div>
-
-        <div class="dir-tools">
-          <input id="dirSearch" type="search" placeholder="Search shops, clinics, services…" aria-label="Search directory">
-        </div>
-        <div id="dirChips" class="chips"></div>
-        <div id="dirGrid" class="dir-grid"></div>
-      </div>
-    </section>
-
-    <!-- ============ AI ============ -->
-    <section class="section" id="ai">
-      <div class="wrap ai-wrap">
-        <div class="ai-intro">
-          <p class="kicker">Assistant</p>
-          <h2 id="aiTitle">Lamnian AI</h2>
-          <p class="lead dark" id="aiLead">Ask about the weather, the roads, local events or anything else. Coming soon.</p>
-          <ul class="ai-points">
-            <li><b>Weather-aware</b> — knows today’s forecast for Lamnian.</li>
-            <li><b>Local news &amp; events</b> — can summarise what’s happening.</li>
-            <li><b>Speaks your language</b> — English, Urdu or Roman Urdu.</li>
-          </ul>
-          <span class="status-badge" id="aiBadge">Not connected yet</span>
-        </div>
-        <div class="chat card" id="chat">
-          <div class="chat-log" id="chatLog" aria-live="polite"></div>
-          <div class="suggest" id="suggest"></div>
-          <form class="chat-form" id="chatForm">
-            <input id="chatInput" type="text" maxlength="1000" placeholder="Ask Lamnian AI…" autocomplete="off" aria-label="Your question">
-            <button class="btn primary" type="submit" id="chatSend">Send</button>
-          </form>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="wrap foot-row">
-      <div>
-        <strong class="foot-brand">Lamnian</strong>
-        <p>A community website by and for the people of Lamnian.</p>
-      </div>
-      <p class="fine">Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> · Prayer times by <a href="https://aladhan.com/" target="_blank" rel="noopener">Aladhan</a><br>Community posts are reviewed by the site admin before publishing. <a href="/admin">Admin</a></p>
+<section class="hero" id="top" data-sky="clear-day">
+  <div class="sky-fx" id="skyFx" aria-hidden="true"></div>
+  <div class="wrap hero-inner">
+    <div class="hero-copy">
+      <p class="eyebrow" id="heroRegion">Azad Kashmir, Pakistan</p>
+      <h1>Lamnian</h1>
+      <p class="lead" id="heroTagline">Weather, news and neighbours of the valley — all in one place.</p>
+      <div class="hero-cta"><a class="btn light" href="#weather">7-day forecast</a><a class="btn ghost" href="#news">Latest news</a></div>
     </div>
-  </footer>
+    <article class="wx-card glass" id="heroWx" aria-live="polite" aria-label="Current weather"><div class="skel h240"></div></article>
+  </div>
+  <svg class="mountains" viewBox="0 0 1440 260" preserveAspectRatio="none" aria-hidden="true">
+    <path class="m3" d="M0 190 150 120 260 170 420 80 560 160 700 100 860 175 1010 90 1160 165 1300 110 1440 170V260H0z"/>
+    <path class="m2" d="M0 215 120 160 240 205 400 130 540 200 690 140 830 205 980 150 1120 210 1270 155 1440 205V260H0z"/>
+    <path class="cap" d="M400 130 420 80 440 106 425 100 412 118zM1010 90 1030 118 1018 112 1006 128 995 108zM700 100 716 124 704 120 692 130 684 114z"/>
+    <path class="m1" d="M0 240 160 205 320 235 500 195 660 238 840 200 1000 236 1180 202 1320 232 1440 214V260H0z"/>
+  </svg>
+</section>
 
-  <a class="ai-fab" href="#ai" aria-label="Ask Lamnian AI">✨ <span>Ask AI</span></a>
+<div class="wrap pulse-wrap"><div class="pulse" id="pulse"></div></div>
 
-  <script src="/common.js"></script>
-  <script src="/app.js"></script>
+<main>
+<section class="section" id="weather"><div class="wrap">
+  <header class="section-head"><div><p class="kicker">Forecast</p><h2>Weather in Lamnian</h2></div><p class="muted" id="wxUpdated"></p></header>
+  <div class="grid-wx">
+    <div class="card span-2">
+      <div class="card-title"><h3>Next 24 hours</h3><span class="legend"><i class="lg-temp"></i>Temperature <i class="lg-rain"></i>Rain chance</span></div>
+      <div id="hourChart" class="chart-wrap"><div class="skel h200"></div></div>
+      <div id="hourStrip" class="hour-strip" tabindex="0" aria-label="Hourly forecast"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><h3>Smart tips</h3><span class="chip">auto</span></div>
+      <ul class="tips" id="tips"><li class="skel h60"></li></ul>
+      <p class="fine">Tips are generated from the forecast. For official warnings check PMD / NDMA.</p>
+    </div>
+    <div class="card span-2"><div class="card-title"><h3>7-day forecast</h3></div><div id="dailyList" class="daily"><div class="skel h260"></div></div></div>
+    <div class="card"><div class="card-title"><h3>Right now</h3></div><dl class="stats" id="statList"></dl></div>
+    <div class="card"><div class="card-title"><h3>Sun</h3></div><div id="sunBox"></div></div>
+    <div class="card"><div class="card-title"><h3>Prayer times</h3><span class="chip" id="hijri"></span></div><ul class="prayer" id="prayerList"><li class="skel h120"></li></ul></div>
+    <div class="card"><div class="card-title"><h3>Air quality</h3></div><div id="aqiBox"></div></div>
+  </div>
+</div></section>
+
+<section class="section alt" id="news"><div class="wrap">
+  <header class="section-head"><div><p class="kicker">From the community</p><h2>Local news</h2></div><button class="btn primary" data-share="news">＋ Share news</button></header>
+  <div id="newsGrid" class="news-grid"></div>
+</div></section>
+
+<section class="section" id="gallery"><div class="wrap">
+  <header class="section-head"><div><p class="kicker">Our valley</p><h2>Photo gallery</h2></div><button class="btn primary" data-share="gallery">＋ Upload photo</button></header>
+  <div id="galleryGrid" class="gallery"></div>
+</div></section>
+
+<section class="section alt" id="events"><div class="wrap">
+  <header class="section-head"><div><p class="kicker">What’s on</p><h2>Events</h2></div><button class="btn primary" data-share="events">＋ Add event</button></header>
+  <div id="eventsList" class="events"></div>
+</div></section>
+
+<section class="section" id="notices"><div class="wrap">
+  <header class="section-head"><div><p class="kicker">Notice board</p><h2>Lost &amp; found, jobs, for sale</h2></div><button class="btn primary" data-share="notices">＋ Post notice</button></header>
+  <div id="noticeChips" class="chips"></div>
+  <div id="noticeGrid" class="notice-grid"></div>
+</div></section>
+
+<section class="section alt" id="directory"><div class="wrap">
+  <header class="section-head"><div><p class="kicker">Useful numbers</p><h2>Local directory</h2></div><button class="btn primary" data-share="directory">＋ Add business</button></header>
+  <div class="emergency" id="emergency"></div>
+  <div class="dir-tools"><input id="dirSearch" type="search" placeholder="Search shops, clinics, services…" aria-label="Search directory"></div>
+  <div id="dirChips" class="chips"></div>
+  <div id="dirGrid" class="dir-grid"></div>
+</div></section>
+
+<section class="section" id="ai"><div class="wrap ai-wrap">
+  <div class="ai-intro">
+    <p class="kicker">Assistant</p>
+    <h2 id="aiTitle">Lamnian AI</h2>
+    <p class="lead dark" id="aiLead">Ask about the weather, the roads, local events or anything else. Coming soon.</p>
+    <ul class="ai-points">
+      <li><b>Weather-aware</b> — knows today’s forecast for Lamnian.</li>
+      <li><b>Local news &amp; events</b> — can summarise what’s happening.</li>
+      <li><b>Speaks your language</b> — English, Urdu or Roman Urdu.</li>
+    </ul>
+    <span class="status-badge" id="aiBadge">Not connected yet</span>
+  </div>
+  <div class="chat card" id="chat">
+    <div class="chat-log" id="chatLog" aria-live="polite"></div>
+    <div class="suggest" id="suggest"></div>
+    <form class="chat-form" id="chatForm">
+      <input id="chatInput" type="text" maxlength="1000" placeholder="Ask Lamnian AI…" autocomplete="off" aria-label="Your question">
+      <button class="btn primary" type="submit" id="chatSend">Send</button>
+    </form>
+  </div>
+</div></section>
+</main>
+
+<footer class="site-footer"><div class="wrap foot-row">
+  <div><strong class="foot-brand">Lamnian</strong><p>A community website by and for the people of Lamnian.</p></div>
+  <p class="fine">Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> · Prayer times by <a href="https://aladhan.com/" target="_blank" rel="noopener">Aladhan</a><br>Community posts are reviewed by the site admin before publishing. <a href="/admin">Admin</a></p>
+</div></footer>
+
+<a class="ai-fab" href="#ai" aria-label="Ask Lamnian AI">✨ <span>Ask AI</span></a>
+
+<dialog id="dlg">
+  <form id="dlgForm" method="dialog">
+    <h3 id="dlgTitle">Contribute</h3>
+    <label>What are you sharing?<select class="fld" id="fType"><option value="news">News</option><option value="gallery">Photo</option><option value="events">Event</option><option value="notices">Notice</option><option value="directory">Business</option></select></label>
+    <label>Title<input class="fld" id="fTitle" required maxlength="120"></label>
+    <label>Details<textarea class="fld" id="fBody" maxlength="800"></textarea></label>
+    <label id="fCatWrap">Category<input class="fld" id="fCat" maxlength="40" placeholder="e.g. Jobs, Lost &amp; found, Shops, Clinics"></label>
+    <label id="fExtraWrap"><span id="fExtraLbl">Date / phone</span><input class="fld" id="fExtra" maxlength="40"></label>
+    <label id="fImgWrap">Photo<input class="fld" id="fImg" type="file" accept="image/*"></label>
+    <div class="row"><button class="btn" type="button" id="fCancel">Cancel</button><button class="btn primary" type="submit">Send for review</button></div>
+  </form>
+</dialog>
+
+<script>
+/* ===== SETTINGS — edit these ===== */
+var CFG={
+  lat:34.2404, lon:73.7768,        // Lamnian (check on Google Maps and adjust if needed)
+  region:'Azad Kashmir, Pakistan',
+  firebase:{apiKey:'AIzaSyBc2VA1OA3FfNw7qWTEzZauidFWuBcAdEQ',projectId:'lamnian-ai'},
+  prayerMethod:1                     // 1 = Karachi (Univ. of Islamic Sciences)
+};
+/* ===== helpers ===== */
+var $=function(s){return document.querySelector(s)},esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
+var DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+function toast(m){var t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(function(){t.remove()},3200)}
+function getJSON(u){return fetch(u).then(function(r){if(!r.ok)throw 0;return r.json()})}
+function wc(c,day){var m={0:['Clear',day?'☀️':'🌙'],1:['Mostly clear',day?'🌤️':'🌙'],2:['Partly cloudy','⛅'],3:['Overcast','☁️'],45:['Fog','🌫️'],48:['Fog','🌫️'],51:['Light drizzle','🌦️'],53:['Drizzle','🌦️'],55:['Heavy drizzle','🌧️'],61:['Light rain','🌦️'],63:['Rain','🌧️'],65:['Heavy rain','🌧️'],71:['Light snow','🌨️'],73:['Snow','❄️'],75:['Heavy snow','❄️'],77:['Snow grains','🌨️'],80:['Rain showers','🌦️'],81:['Rain showers','🌧️'],82:['Violent showers','⛈️'],85:['Snow showers','🌨️'],86:['Snow showers','❄️'],95:['Thunderstorm','⛈️'],96:['Thunderstorm, hail','⛈️'],99:['Thunderstorm, hail','⛈️']};return m[c]||['—','🌡️']}
+function sky(c,day){if(c>=95)return'storm';if(c>=71&&c<=86&&!(c>=80&&c<=82))return'snow';if(c>=51)return'rain';if(c>=2&&c!==2)return'cloudy';return day?'clear-day':'clear-night'}
+function fx(type){var f=$('#skyFx'),h='';var n=type==='rain'||type==='storm'?60:type==='snow'?40:type==='clear-night'?50:0;
+  for(var i=0;i<n;i++){var l=Math.random()*100,d=(Math.random()*2+(type==='snow'?5:.7)).toFixed(2),dl=(-Math.random()*6).toFixed(2);
+    if(type==='clear-night')h+='<i class="st" style="left:'+l+'%;top:'+Math.random()*60+'%;animation-delay:'+dl+'s"></i>';
+    else h+='<i class="'+(type==='snow'?'s':'')+'" style="left:'+l+'%;animation-duration:'+d+'s;animation-delay:'+dl+'s"></i>'}
+  f.innerHTML=h}
+/* ===== weather ===== */
+function wxGet(t,direct){return getJSON('/api/weather?type='+t+'&lat='+CFG.lat+'&lon='+CFG.lon).catch(function(){return getJSON(direct)})}
+function loadWeather(){
+  var u='https://api.open-meteo.com/v1/forecast?latitude='+CFG.lat+'&longitude='+CFG.lon+'&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m,pressure_msl,is_day&hourly=temperature_2m,precipitation_probability&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,uv_index_max&timezone=auto&forecast_days=7';
+  wxGet('forecast',u).then(renderWx).catch(function(){$('#heroWx').innerHTML='<p>Weather is unavailable right now. Please try again shortly.</p>';$('#dailyList').innerHTML='<p class="muted">Forecast unavailable.</p>'});
+  wxGet('air','https://air-quality-api.open-meteo.com/v1/air-quality?latitude='+CFG.lat+'&longitude='+CFG.lon+'&current=us_aqi,pm2_5,pm10').then(renderAqi).catch(function(){$('#aqiBox').innerHTML='<p class="muted">Air quality unavailable.</p>'});
+  getJSON('https://api.aladhan.com/v1/timings?latitude='+CFG.lat+'&longitude='+CFG.lon+'&method='+CFG.prayerMethod).then(renderPrayer).catch(function(){$('#prayerList').innerHTML='<li>Prayer times unavailable.</li>'});
+}
+function renderWx(d){
+  var c=d.current,day=!!c.is_day,w=wc(c.weather_code,day),dl=d.daily,h=d.hourly;
+  var s=sky(c.weather_code,day);$('#top').dataset.sky=s;fx(s);
+  $('#heroWx').innerHTML='<div class="wx-top"><div class="wx-temp">'+Math.round(c.temperature_2m)+'°</div><div class="wx-ico">'+w[1]+'</div></div><div class="wx-desc">'+w[0]+'</div><div class="wx-sub">Feels like '+Math.round(c.apparent_temperature)+'° · High '+Math.round(dl.temperature_2m_max[0])+'° / Low '+Math.round(dl.temperature_2m_min[0])+'°</div><div class="wx-row"><div><b>'+c.relative_humidity_2m+'%</b>Humidity</div><div><b>'+Math.round(c.wind_speed_10m)+' km/h</b>Wind</div><div><b>'+dl.precipitation_probability_max[0]+'%</b>Rain</div></div>';
+  $('#wxUpdated').textContent='Updated '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  /* hourly */
+  var now=c.time.slice(0,13)+':00',i0=Math.max(0,h.time.indexOf(now)),T=h.temperature_2m.slice(i0,i0+24),P=h.precipitation_probability.slice(i0,i0+24),HT=h.time.slice(i0,i0+24);
+  var mn=Math.min.apply(0,T)-2,mx=Math.max.apply(0,T)+2,W=720,H=180,px=function(i){return 20+i*(W-40)/(T.length-1)},py=function(v){return 20+(mx-v)/(mx-mn)*(H-50)};
+  var bars=P.map(function(p,i){var bh=p/100*60;return'<rect x="'+(px(i)-6)+'" y="'+(H-20-bh)+'" width="12" height="'+bh+'" rx="3" fill="#3d8fd1" opacity=".35"/>'}).join('');
+  var line=T.map(function(v,i){return px(i)+','+py(v)}).join(' ');
+  var lbl=T.map(function(v,i){return i%4===0?'<text x="'+px(i)+'" y="'+(py(v)-8)+'" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">'+Math.round(v)+'°</text><text x="'+px(i)+'" y="'+(H-4)+'" text-anchor="middle" font-size="11" fill="currentColor" opacity=".6">'+HT[i].slice(11,13)+'h</text>':''}).join('');
+  $('#hourChart').innerHTML='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Temperature and rain chance chart">'+bars+'<polyline points="'+line+'" fill="none" stroke="#e0782e" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>'+lbl+'</svg>';
+  $('#hourStrip').innerHTML=T.map(function(v,i){var hr=+HT[i].slice(11,13);return'<div>'+(i?(hr%12||12)+(hr<12?'am':'pm'):'Now')+'<b>'+Math.round(v)+'°</b>💧'+P[i]+'%</div>'}).join('');
+  /* daily */
+  var lo=Math.min.apply(0,dl.temperature_2m_min),hi=Math.max.apply(0,dl.temperature_2m_max);
+  $('#dailyList').innerHTML=dl.time.map(function(t,i){var dt=new Date(t+'T12:00'),a=dl.temperature_2m_min[i],b=dl.temperature_2m_max[i];
+    return'<div class="day"><b>'+(i?DAYS[dt.getDay()]:'Today')+'</b><span class="ic">'+wc(dl.weather_code[i],1)[1]+'</span><span class="bar"><i style="left:'+((a-lo)/(hi-lo)*100)+'%;right:'+(100-(b-lo)/(hi-lo)*100)+'%"></i></span><span class="r">💧'+dl.precipitation_probability_max[i]+'%</span><span class="lo muted">'+Math.round(a)+'°</span><b>'+Math.round(b)+'°</b></div>'}).join('');
+  /* stats */
+  var st=[['Feels like',Math.round(c.apparent_temperature)+'°C'],['Humidity',c.relative_humidity_2m+'%'],['Wind',Math.round(c.wind_speed_10m)+' km/h'],['Pressure',Math.round(c.pressure_msl)+' hPa'],['UV index (max)',Math.round(dl.uv_index_max[0])]];
+  $('#statList').innerHTML=st.map(function(r){return'<div><dt>'+r[0]+'</dt><dd>'+r[1]+'</dd></div>'}).join('');
+  /* sun */
+  var sr=new Date(dl.sunrise[0]),ss=new Date(dl.sunset[0]),n=new Date(c.time),p=Math.min(1,Math.max(0,(n-sr)/(ss-sr))),ang=Math.PI*(1-p),sx=100+80*Math.cos(ang),sy=100-80*Math.sin(ang),f=function(x){return x.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})};
+  $('#sunBox').innerHTML='<svg class="sun-arc" viewBox="0 0 200 112"><path d="M20 100A80 80 0 0 1 180 100" fill="none" stroke="currentColor" opacity=".25" stroke-width="3" stroke-dasharray="4 5"/><line x1="10" y1="100" x2="190" y2="100" stroke="currentColor" opacity=".25"/><circle cx="'+sx+'" cy="'+sy+'" r="9" fill="#f0b24a"/></svg><div class="sun-t"><span>🌅 '+f(sr)+'</span><span>🌇 '+f(ss)+'</span></div>';
+  tips(c,dl,P);pulse(c);
+}
+function tips(c,dl,P){var t=[],r=Math.max.apply(0,P.slice(0,12)),tmax=dl.temperature_2m_max[0],tmin=dl.temperature_2m_min[0];
+  if(r>=60)t.push('☂️ Rain is likely today — carry an umbrella.');
+  if(tmin<=3)t.push('🧣 Very cold — dress in warm layers.');else if(tmin<=10)t.push('🧥 Cool mornings and evenings — bring a jacket.');
+  if(tmax>=35)t.push('🥵 Hot afternoon — drink water and avoid midday sun.');
+  if(c.wind_speed_10m>=30)t.push('💨 Strong winds — secure loose items.');
+  if(dl.uv_index_max[0]>=7)t.push('🕶️ High UV — use sun protection.');
+  if(dl.weather_code[0]>=95)t.push('⚡ Thunderstorms possible — avoid open ground and hill roads.');
+  if(r>=70&&dl.weather_code[0]>=61)t.push('🛣️ Heavy rain can cause landslides — check road conditions before travel.');
+  if(!t.length)t.push('✅ Pleasant weather — a good day to be out.');
+  $('#tips').innerHTML=t.map(function(x){return'<li>'+x+'</li>'}).join('');
+  if(r>=80||tmax>=40||tmin<=-3){var a=$('#alertBar');a.hidden=false;a.textContent=r>=80?'⚠️ Heavy rain expected today. Stay alert and check official PMD/NDMA updates.':tmax>=40?'⚠️ Extreme heat expected today.':'⚠️ Freezing temperatures expected.'}}
+function renderAqi(d){var a=Math.round(d.current.us_aqi),l=a<=50?['Good','#2e9d5b']:a<=100?['Moderate','#c8961a']:a<=150?['Unhealthy for sensitive','#e0782e']:a<=200?['Unhealthy','#c0392b']:['Very unhealthy','#7d2a8a'];
+  $('#aqiBox').innerHTML='<div><span class="aqi-n">'+a+'</span><span class="aqi-l" style="background:'+l[1]+'">'+l[0]+'</span></div><p class="fine">PM2.5: '+Math.round(d.current.pm2_5)+' µg/m³ · PM10: '+Math.round(d.current.pm10)+' µg/m³</p>'}
+function renderPrayer(d){var t=d.data.timings,names=['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'],now=new Date(),nm=now.getHours()*60+now.getMinutes(),nx=-1;
+  names.forEach(function(n,i){var p=t[n].split(':');if(nx<0&&+p[0]*60+ +p[1]>nm)nx=i});
+  $('#prayerList').innerHTML=names.map(function(n,i){var p=t[n].split(':'),h=+p[0];return'<li'+(i===nx?' class="next"':'')+'><span>'+n+'</span><span>'+(h%12||12)+':'+p[1]+(h<12?' am':' pm')+'</span></li>'}).join('');
+  var hj=d.data.date.hijri;$('#hijri').textContent=hj.day+' '+hj.month.en+' '+hj.year}
+function pulse(c){var wxs=wc(c.weather_code,c.is_day);$('#pulse').innerHTML=[['Now',Math.round(c.temperature_2m)+'° '+wxs[0]],['News stories',DATA.news.length],['Upcoming events',DATA.events.length],['Notices',DATA.notices.length]].map(function(x){return'<div>'+x[0]+'<b>'+esc(x[1])+'</b></div>'}).join('')}
+/* ===== community content ===== */
+var DATA={
+  news:[{title:'Welcome to the new Lamnian website',body:'Weather, news, events and a local directory — all in one place for the valley.',date:'Today',emoji:'📰'},{title:'Road conditions after rain',body:'Residents are asked to check the road before travelling after heavy rainfall.',date:'This week',emoji:'🛣️'}],
+  gallery:[{title:'Morning over the valley',emoji:'🌄'},{title:'Spring blossoms',emoji:'🌸'},{title:'Village path',emoji:'🏞️'},{title:'Evening light',emoji:'🌇'}],
+  events:[{title:'Community meeting',body:'Open discussion on local projects.',date:'2026-12-05',place:'Community hall'},{title:'Friday charity drive',body:'Winter clothing collection.',date:'2026-12-12',place:'Main bazaar'}],
+  notices:[{title:'Lost: brown goat',body:'Please call if seen near the upper road.',cat:'Lost & found'},{title:'Shop assistant needed',body:'Full time, main bazaar.',cat:'Jobs'},{title:'Water pump for sale',body:'Good condition.',cat:'For sale'}],
+  directory:[{title:'Basic Health Unit',body:'Daily 8am – 2pm',cat:'Clinics',phone:''},{title:'General Store',body:'Groceries and daily needs',cat:'Shops',phone:''},{title:'Local Taxi Service',body:'Valley and city trips',cat:'Transport',phone:''}]
+};
+var FB=CFG.firebase,FBON=FB.projectId&&FB.apiKey,FSU=function(c){return'https://firestore.googleapis.com/v1/projects/'+FB.projectId+'/databases/(default)/documents/'+c+'?key='+FB.apiKey};
+function fsVal(v){return v.stringValue!=null?v.stringValue:v.booleanValue!=null?v.booleanValue:v.integerValue!=null?+v.integerValue:''}
+function loadCol(c){if(!FBON)return Promise.resolve(null);
+  return fetch('https://firestore.googleapis.com/v1/projects/'+FB.projectId+'/databases/(default)/documents:runQuery?key='+FB.apiKey,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({structuredQuery:{from:[{collectionId:c}],where:{fieldFilter:{field:{fieldPath:'approved'},op:'EQUAL',value:{booleanValue:true}}},limit:60}})}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(r){return r.filter(function(x){return x.document}).map(function(x){var o={};for(var k in x.document.fields)o[k]=fsVal(x.document.fields[k]);return o}).sort(function(a,b){return(b.created||'')>(a.created||'')?1:-1})}).catch(function(){return null})}
+function postDoc(c,o){if(!FBON)return Promise.reject();var f={approved:{booleanValue:false},created:{stringValue:new Date().toISOString()}};for(var k in o)f[k]={stringValue:String(o[k])};
+  return fetch(FSU(c),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({fields:f})}).then(function(r){if(!r.ok)throw 0})}
+var noticeCat='All',dirCat='All';
+function fillChips(el,items,cur,cb){var all=['All'].concat(items.filter(function(x,i,a){return a.indexOf(x)===i}));el.innerHTML=all.map(function(c){return'<button type="button" class="'+(c===cur?'on':'')+'">'+esc(c)+'</button>'}).join('');
+  el.querySelectorAll('button').forEach(function(b){b.onclick=function(){cb(b.textContent)}})}
+function renderNews(){$('#newsGrid').innerHTML=DATA.news.map(function(n){return'<article class="post"><div class="img">'+(n.image?'<img loading="lazy" alt="" src="'+esc(n.image)+'">':esc(n.emoji||'📰'))+'</div><div class="body"><span class="meta">'+esc(n.date||'')+'</span><h3>'+esc(n.title)+'</h3><p>'+esc(n.body)+'</p></div></article>'}).join('')||'<p class="empty">No news yet — be the first to share.</p>'}
+function renderGallery(){$('#galleryGrid').innerHTML=DATA.gallery.map(function(g,i){var cols=['#1b6b63','#c2703a','#4a6fa5','#7a5c8f'];return'<figure>'+(g.image?'<img loading="lazy" alt="'+esc(g.title)+'" src="'+esc(g.image)+'">':'<div class="ph" style="background:'+cols[i%4]+'">'+esc(g.emoji||'📷')+'</div>')+'<figcaption>'+esc(g.title)+'</figcaption></figure>'}).join('')||'<p class="empty">No photos yet — upload the first one.</p>'}
+function renderEvents(){var M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];$('#eventsList').innerHTML=DATA.events.map(function(e){var d=new Date(e.date+'T12:00'),ok=!isNaN(d);return'<div class="ev"><div class="d">'+(ok?'<b>'+d.getDate()+'</b>'+M[d.getMonth()]:'<b>—</b>soon')+'</div><div><h3>'+esc(e.title)+'</h3><p>'+esc(e.body||'')+(e.place?' · 📍 '+esc(e.place):'')+'</p></div></div>'}).join('')||'<p class="empty">No upcoming events.</p>'}
+function renderNotices(){fillChips($('#noticeChips'),DATA.notices.map(function(n){return n.cat}),noticeCat,function(c){noticeCat=c;renderNotices()});
+  $('#noticeGrid').innerHTML=DATA.notices.filter(function(n){return noticeCat==='All'||n.cat===noticeCat}).map(function(n){return'<article class="post"><div class="body"><span class="tag">'+esc(n.cat||'Notice')+'</span><h3>'+esc(n.title)+'</h3><p>'+esc(n.body)+'</p></div></article>'}).join('')||'<p class="empty">Nothing here yet.</p>'}
+function renderDir(){fillChips($('#dirChips'),DATA.directory.map(function(n){return n.cat}),dirCat,function(c){dirCat=c;renderDir()});
+  var q=$('#dirSearch').value.toLowerCase();
+  $('#dirGrid').innerHTML=DATA.directory.filter(function(n){return(dirCat==='All'||n.cat===dirCat)&&(n.title+n.body+n.cat).toLowerCase().indexOf(q)>-1}).map(function(n){return'<article class="post"><div class="body"><span class="tag">'+esc(n.cat)+'</span><h3>'+esc(n.title)+'</h3><p>'+esc(n.body)+'</p>'+(n.phone?'<p><a href="tel:'+esc(n.phone)+'"><b>📞 '+esc(n.phone)+'</b></a></p>':'')+'</div></article>'}).join('')||'<p class="empty">No matches. Try another search.</p>'}
+function renderAll(){renderNews();renderGallery();renderEvents();renderNotices();renderDir()}
+$('#emergency').innerHTML=[['Rescue','1122'],['Police','15'],['Ambulance (Edhi)','115'],['Fire','16']].map(function(e){return'<a href="tel:'+e[1]+'"><b>'+e[1]+'</b>'+e[0]+'</a>'}).join('');
+$('#dirSearch').oninput=renderDir;
+/* ===== contribute dialog ===== */
+var dlg=$('#dlg');
+function syncDlg(){var t=$('#fType').value;$('#fCatWrap').hidden=!(t==='notices'||t==='directory');$('#fExtraWrap').hidden=!(t==='events'||t==='directory');$('#fImgWrap').hidden=!(t==='news'||t==='gallery'||t==='notices');$('#fImg').required=t==='gallery';$('#fExtra').type=t==='events'?'date':'tel';$('#fExtraLbl').textContent=t==='events'?'Event date':'Phone number'}
+$('#fType').onchange=syncDlg;
+function shrink(f){return new Promise(function(ok){if(!f)return ok('');var r=new FileReader();r.onload=function(){var i=new Image();i.onload=function(){var s=Math.min(1,900/Math.max(i.width,i.height)),cv=document.createElement('canvas');cv.width=Math.round(i.width*s);cv.height=Math.round(i.height*s);cv.getContext('2d').drawImage(i,0,0,cv.width,cv.height);ok(cv.toDataURL('image/jpeg',.72))};i.onerror=function(){ok('')};i.src=r.result};r.readAsDataURL(f)})}
+function openDlg(t){$('#fType').value=t||'news';syncDlg();dlg.showModal()}
+$('#contributeBtn').onclick=function(){openDlg()};
+document.querySelectorAll('[data-share]').forEach(function(b){b.onclick=function(){openDlg(b.dataset.share)}});
+$('#fCancel').onclick=function(){dlg.close()};
+$('#dlgForm').onsubmit=function(e){e.preventDefault();var c=$('#fType').value,x=$('#fExtra').value.trim(),f=$('#fImg').files[0],o={title:$('#fTitle').value.trim(),body:$('#fBody').value.trim(),cat:$('#fCat').value.trim()||'General'};
+  if(c==='events')o.date=x;if(c==='directory')o.phone=x;if(c==='news')o.date=new Date().toLocaleDateString();
+  dlg.close();e.target.reset();toast('Sending…');
+  shrink(f).then(function(img){if(img)o.image=img;return postDoc(c,o)}).then(function(){toast('Thank you! Your post will appear after review.')}).catch(function(){toast('Could not send. Please try again.')})};
+/* ===== theme, menu, AI placeholder ===== */
+$('#themeBtn').onclick=function(){var r=document.documentElement,t=r.dataset.theme==='dark'?'light':'dark';r.dataset.theme=t;try{localStorage.setItem('theme',t)}catch(e){}};
+$('#menuBtn').onclick=function(){var o=$('#nav').classList.toggle('open');$('#menuBtn').setAttribute('aria-expanded',o)};
+$('#nav').onclick=function(){$('#nav').classList.remove('open')};
+$('#chatLog').innerHTML='<div class="msg">Assalam o Alaikum! Lamnian AI is coming soon.</div>';
+$('#suggest').innerHTML=['What’s the weather today?','Any events this week?','Road conditions?'].map(function(s){return'<button type="button">'+s+'</button>'}).join('');
+function aiSay(q){var l=$('#chatLog');l.insertAdjacentHTML('beforeend','<div class="msg me">'+esc(q)+'</div><div class="msg">The assistant isn’t connected yet. Please check back soon.</div>');l.scrollTop=l.scrollHeight}
+$('#suggest').onclick=function(e){if(e.target.tagName==='BUTTON')aiSay(e.target.textContent)};
+$('#chatForm').onsubmit=function(e){e.preventDefault();var i=$('#chatInput');if(i.value.trim()){aiSay(i.value.trim());i.value=''}};
+/* ===== start ===== */
+$('#heroRegion').textContent=CFG.region;
+renderAll();loadWeather();
+['news','gallery','events','notices','directory'].forEach(function(c){loadCol(c).then(function(r){if(r){DATA[c]=r;renderAll()}})});
+</script>
 </body>
 </html>
