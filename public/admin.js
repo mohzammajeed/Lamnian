@@ -20,8 +20,19 @@
   };
 
   async function showLogin(msg) {
-    let cfg = { firebase: null, passwordLogin: true };
-    try { cfg = await api('/api/auth-config'); } catch { /* fall back to password form */ }
+    let cfg;
+    try { cfg = await api('/api/auth-config'); }
+    catch (ex) {
+      app.replaceChildren(el('div', { class: 'login' }, el('div', { class: 'card' }, el('h1', { text: 'Lamnian Admin' }),
+        el('p', { class: 'form-error', text: 'The server did not answer (' + ex.message + '). The /api part of the site is probably not deployed or is blocked. Open /api/health to check.' }),
+        el('button', { class: 'btn primary', text: 'Try again', onclick: () => showLogin() }))));
+      return;
+    }
+    if (!cfg.firebase && !cfg.passwordLogin) {
+      app.replaceChildren(el('div', { class: 'login' }, el('div', { class: 'card' }, el('h1', { text: 'Lamnian Admin' }),
+        el('p', { class: 'form-error', text: 'No sign-in method is configured on the server. Open /api/health to see what is missing.' }))));
+      return;
+    }
     const err = el('p', { class: 'form-error', role: 'alert', hidden: !msg, text: msg || '' });
     const showErr = (t) => { err.textContent = t; err.hidden = false; };
     const card = el('div', { class: 'card' }, el('h1', { text: 'Lamnian Admin' }), el('p', { text: 'Approve posts and manage the site.' }));

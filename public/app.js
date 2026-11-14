@@ -314,8 +314,14 @@
 
   async function loadAll() {
     const names = ['news', 'gallery', 'events', 'notices', 'directory'];
-    await Promise.all(names.map(async (n) => { try { DATA[n] = (await api('/api/' + n)).items; } catch { DATA[n] = []; } }));
+    const failed = [];
+    await Promise.all(names.map(async (n) => { try { DATA[n] = (await api('/api/' + n)).items; } catch (e) { DATA[n] = []; failed.push(e.message); } }));
     renderNews(); renderGallery(); renderEvents(); renderNotices(); renderDirectory(); renderPulse();
+    if (failed.length) {
+      // Tell the visitor (and you) the real reason instead of silently showing empty sections.
+      const a = $('#alertBar');
+      if (a && a.hidden) { a.textContent = '⚠️ Posts could not be loaded: ' + failed[0]; a.className = 'alert-bar warning'; a.hidden = false; }
+    }
   }
 
   /* ---------------------------------------------------------------- */
