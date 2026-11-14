@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lamnian — Weather, News &amp; Community</title>
+  <meta name="description" content="Lamnian community website: live weather forecast, local news, photos, events, notices, local directory and an AI assistant.">
+  <meta name="theme-color" content="#0f3d3a">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="/theme.js"></script>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <a class="skip" href="#weather">Skip to content</a>
+
+  <div id="alertBar" class="alert-bar" hidden></div>
+
+  <header class="site-header" id="siteHeader">
+    <div class="wrap header-row">
+      <a class="brand" href="#top" aria-label="Lamnian home">
+        <svg viewBox="0 0 64 64" width="34" height="34" aria-hidden="true"><rect width="64" height="64" rx="16" fill="currentColor" opacity=".16"/><path d="M6 50 24 22l9 13 7-9 18 24z" fill="currentColor"/><circle cx="47" cy="17" r="6" fill="#f0b24a"/></svg>
+        <span>Lamnian</span>
+      </a>
+      <nav class="nav" id="nav" aria-label="Main">
+        <a href="#weather">Weather</a>
+        <a href="#news">News</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#events">Events</a>
+        <a href="#notices">Notices</a>
+        <a href="#directory">Directory</a>
+        <a href="#ai">Ask AI <span class="pill-new">soon</span></a>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-btn" id="themeBtn" aria-label="Switch light or dark theme" title="Light / dark">🌓</button>
+        <button class="btn primary sm" id="contributeBtn">＋ Contribute</button>
+        <button class="icon-btn menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ HERO / LIVE WEATHER ============ -->
+  <section class="hero" id="top" data-sky="clear-day">
+    <div class="sky-fx" id="skyFx" aria-hidden="true"></div>
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow" id="heroRegion">Azad Kashmir, Pakistan</p>
+        <h1>Lamnian</h1>
+        <p class="lead" id="heroTagline">Weather, news and neighbours of the valley — all in one place.</p>
+        <div class="hero-cta">
+          <a class="btn light" href="#weather">7-day forecast</a>
+          <a class="btn ghost" href="#news">Latest news</a>
+        </div>
+      </div>
+      <article class="wx-card glass" id="heroWx" aria-live="polite" aria-label="Current weather">
+        <div class="skel h240"></div>
+      </article>
+    </div>
+    <svg class="mountains" viewBox="0 0 1440 260" preserveAspectRatio="none" aria-hidden="true">
+      <path class="m3" d="M0 190 150 120 260 170 420 80 560 160 700 100 860 175 1010 90 1160 165 1300 110 1440 170V260H0z"/>
+      <path class="m2" d="M0 215 120 160 240 205 400 130 540 200 690 140 830 205 980 150 1120 210 1270 155 1440 205V260H0z"/>
+      <path class="cap" d="M400 130 420 80 440 106 425 100 412 118zM1010 90 1030 118 1018 112 1006 128 995 108zM700 100 716 124 704 120 692 130 684 114z"/>
+      <path class="m1" d="M0 240 160 205 320 235 500 195 660 238 840 200 1000 236 1180 202 1320 232 1440 214V260H0z"/>
+    </svg>
+  </section>
+
+  <!-- community pulse -->
+  <div class="wrap pulse-wrap">
+    <div class="pulse" id="pulse"></div>
+  </div>
+
+  <main>
+    <!-- ============ WEATHER ============ -->
+    <section class="section" id="weather">
+      <div class="wrap">
+        <header class="section-head">
+          <div><p class="kicker">Forecast</p><h2>Weather in Lamnian</h2></div>
+          <p class="muted" id="wxUpdated"></p>
+        </header>
+
+        <div class="grid-wx">
+          <div class="card span-2">
+            <div class="card-title"><h3>Next 24 hours</h3><span class="legend"><i class="lg-temp"></i>Temperature <i class="lg-rain"></i>Rain chance</span></div>
+            <div id="hourChart" class="chart-wrap"><div class="skel h200"></div></div>
+            <div id="hourStrip" class="hour-strip" tabindex="0" aria-label="Hourly forecast"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><h3>Smart tips</h3><span class="chip">auto</span></div>
+            <ul class="tips" id="tips"><li class="skel h60"></li></ul>
+            <p class="fine">Tips are generated from the forecast. For official warnings check PMD / NDMA.</p>
+          </div>
+
+          <div class="card span-2">
+            <div class="card-title"><h3>7-day forecast</h3></div>
+            <div id="dailyList" class="daily"><div class="skel h260"></div></div>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><h3>Right now</h3></div>
+            <dl class="stats" id="statList"></dl>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><h3>Sun</h3></div>
+            <div id="sunBox"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><h3>Prayer times</h3><span class="chip" id="hijri"></span></div>
+            <ul class="prayer" id="prayerList"><li class="skel h120"></li></ul>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><h3>Air quality</h3></div>
+            <div id="aqiBox"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ NEWS ============ -->
+    <section class="section alt" id="news">
+      <div class="wrap">
+        <header class="section-head">
+          <div><p class="kicker">From the community</p><h2>Local news</h2></div>
+          <button class="btn primary" data-share="news">＋ Share news</button>
+        </header>
+        <div id="newsGrid" class="news-grid"></div>
+      </div>
+    </section>
+
+    <!-- ============ GALLERY ============ -->
+    <section class="section" id="gallery">
+      <div class="wrap">
+        <header class="section-head">
+          <div><p class="kicker">Our valley</p><h2>Photo gallery</h2></div>
+          <button class="btn primary" data-share="gallery">＋ Upload photo</button>
+        </header>
+        <div id="galleryGrid" class="gallery"></div>
+      </div>
+    </section>
+
+    <!-- ============ EVENTS ============ -->
+    <section class="section alt" id="events">
+      <div class="wrap">
+        <header class="section-head">
+          <div><p class="kicker">What's on</p><h2>Events</h2></div>
+          <button class="btn primary" data-share="events">＋ Add event</button>
+        </header>
+        <div id="eventsList" class="events"></div>
+      </div>
+    </section>
+
+    <!-- ============ NOTICES ============ -->
+    <section class="section" id="notices">
+      <div class="wrap">
+        <header class="section-head">
+          <div><p class="kicker">Notice board</p><h2>Lost &amp; found, jobs, for sale</h2></div>
+          <button class="btn primary" data-share="notices">＋ Post notice</button>
+        </header>
+        <div id="noticeChips" class="chips"></div>
+        <div id="noticeGrid" class="notice-grid"></div>
+      </div>
+    </section>
+
+    <!-- ============ DIRECTORY ============ -->
+    <section class="section alt" id="directory">
+      <div class="wrap">
+        <header class="section-head">
+          <div><p class="kicker">Useful numbers</p><h2>Local directory</h2></div>
+          <button class="btn primary" data-share="directory">＋ Add business</button>
+        </header>
+
+        <div class="emergency" id="emergency"></div>
+
+        <div class="dir-tools">
+          <input id="dirSearch" type="search" placeholder="Search shops, clinics, services…" aria-label="Search directory">
+        </div>
+        <div id="dirChips" class="chips"></div>
+        <div id="dirGrid" class="dir-grid"></div>
+      </div>
+    </section>
+
+    <!-- ============ AI ============ -->
+    <section class="section" id="ai">
+      <div class="wrap ai-wrap">
+        <div class="ai-intro">
+          <p class="kicker">Assistant</p>
+          <h2 id="aiTitle">Lamnian AI</h2>
+          <p class="lead dark" id="aiLead">Ask about the weather, the roads, local events or anything else. Coming soon.</p>
+          <ul class="ai-points">
+            <li><b>Weather-aware</b> — knows today’s forecast for Lamnian.</li>
+            <li><b>Local news &amp; events</b> — can summarise what’s happening.</li>
+            <li><b>Speaks your language</b> — English, Urdu or Roman Urdu.</li>
+          </ul>
+          <span class="status-badge" id="aiBadge">Not connected yet</span>
+        </div>
+        <div class="chat card" id="chat">
+          <div class="chat-log" id="chatLog" aria-live="polite"></div>
+          <div class="suggest" id="suggest"></div>
+          <form class="chat-form" id="chatForm">
+            <input id="chatInput" type="text" maxlength="1000" placeholder="Ask Lamnian AI…" autocomplete="off" aria-label="Your question">
+            <button class="btn primary" type="submit" id="chatSend">Send</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap foot-row">
+      <div>
+        <strong class="foot-brand">Lamnian</strong>
+        <p>A community website by and for the people of Lamnian.</p>
+      </div>
+      <p class="fine">Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> · Prayer times by <a href="https://aladhan.com/" target="_blank" rel="noopener">Aladhan</a><br>Community posts are reviewed by the site admin before publishing. <a href="/admin">Admin</a></p>
+    </div>
+  </footer>
+
+  <a class="ai-fab" href="#ai" aria-label="Ask Lamnian AI">✨ <span>Ask AI</span></a>
+
+  <script src="/common.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

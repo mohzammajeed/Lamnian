@@ -58,3 +58,19 @@ it receives `{messages, context, system}` and must answer `{"reply": "..."}`.
 Uses a local file database (`data/db.json`) unless `FIREBASE_SERVICE_ACCOUNT` is set.
 Google sign-in works on localhost too. For a quick password login while testing:
 `ADMIN_PASSWORD=choose-one ALLOW_PASSWORD_LOGIN=1 node server.js`.
+
+## Troubleshooting — open `/api/health` first
+
+Visit `https://your-site/api/health`. It lists what is missing (no secrets are shown):
+
+| It says | Fix |
+|---|---|
+| `serviceAccount: ... not set` | Add `FIREBASE_SERVICE_ACCOUNT` in Vercel → Settings → Environment Variables for **Production**, then **Redeploy** (variables only apply to new deployments). |
+| `serviceAccount: ... not valid JSON` | Paste the **entire** downloaded `.json` file, no extra quotes. |
+| `projectsMatch: false` | The key is from a different Firebase project than `config.json` → `firebase.config.projectId`. |
+| `database: FAILED ... 401/403` | Wrong key/project, or the Realtime Database was not created. Firebase console → Build → Realtime Database → Create. |
+| `database: FAILED ... 404` | `databaseURL` in `config.json` does not match the one shown in the console. |
+| `database: connected` but admin sign-in fails | Firebase → Authentication → Sign-in method → enable **Google**; Settings → **Authorized domains** → add your `*.vercel.app` domain. |
+
+If `/api/health` itself shows a 404 or a Vercel login page: the project root in Vercel is wrong
+(it must be the folder that contains `public/`, `api/` and `lib/`) or Deployment Protection is on.
