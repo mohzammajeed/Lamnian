@@ -1,9 +1,0 @@
-{
-  "name": "lamnian",
-  "version": "1.0.0",
-  "private": true,
-  "description": "Lamnian community website",
-  "engines": {
-    "node": "22.x"
-  }
-}
