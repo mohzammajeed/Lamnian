@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const { el, api, openModal, buildForm, FORMS, timeAgo } = window.LAM;
+  const { el, openModal, buildForm, FORMS, timeAgo } = window.LAM;
   const app = document.getElementById('app');
   const NAMES = ['news', 'gallery', 'events', 'notices', 'directory'];
   const LABEL = { news: 'News', gallery: 'Gallery', events: 'Events', notices: 'Notices', directory: 'Directory' };
@@ -9,7 +9,7 @@
   let tab = 'pending';     // 'pending' | collection | 'settings'
   let filter = 'all';      // status filter inside a collection tab
 
-  /* ---------------- login ---------------- */
+  /* ---------------- login (Firebase Google sign-in; the Firestore rules decide who is admin) ---------------- */
   const FB_ERRORS = {
     'auth/popup-closed-by-user': 'The sign-in window was closed. Please try again.',
     'auth/cancelled-popup-request': 'Another sign-in window is already open.',
@@ -18,54 +18,34 @@
     'auth/operation-not-allowed': 'Google sign-in is not switched on in Firebase (Authentication → Sign-in method).',
     'auth/network-request-failed': 'No internet connection. Please try again.',
   };
+  const DB = () => window.LAM.db();
+  let note = '';   // message kept across the automatic sign-out of a non-admin account
 
-  async function showLogin(msg) {
-    let cfg;
-    try { cfg = await api('/api/auth-config'); }
-    catch (ex) {
-      app.replaceChildren(el('div', { class: 'login' }, el('div', { class: 'card' }, el('h1', { text: 'Lamnian Admin' }),
-        el('p', { class: 'form-error', text: 'The server did not answer (' + ex.message + '). The /api part of the site is probably not deployed or is blocked. Open /api/health to check.' }),
-        el('button', { class: 'btn primary', text: 'Try again', onclick: () => showLogin() }))));
-      return;
-    }
-    if (!cfg.firebase && !cfg.passwordLogin) {
-      app.replaceChildren(el('div', { class: 'login' }, el('div', { class: 'card' }, el('h1', { text: 'Lamnian Admin' }),
-        el('p', { class: 'form-error', text: 'No sign-in method is configured on the server. Open /api/health to see what is missing.' }))));
-      return;
-    }
+  function showLogin(msg) {
     const err = el('p', { class: 'form-error', role: 'alert', hidden: !msg, text: msg || '' });
-    const showErr = (t) => { err.textContent = t; err.hidden = false; };
-    const card = el('div', { class: 'card' }, el('h1', { text: 'Lamnian Admin' }), el('p', { text: 'Approve posts and manage the site.' }));
-
-    if (cfg.firebase) {
-      const gbtn = el('button', { class: 'btn primary', type: 'button', text: 'Sign in with Google' });
-      gbtn.addEventListener('click', async () => {
-        err.hidden = true; gbtn.disabled = true; gbtn.textContent = 'Opening Google…';
-        try {
-          const { googleIdToken } = await import('/firebase-login.js');
-          const idToken = await googleIdToken(cfg.firebase);
-          await api('/api/admin/firebase-login', { method: 'POST', body: { idToken } });
-          load();
-        } catch (ex) { showErr(FB_ERRORS[ex.code] || ex.message || 'Sign-in failed.'); }
-        finally { gbtn.disabled = false; gbtn.textContent = 'Sign in with Google'; }
-      });
-      card.append(el('div', { class: 'form' }, gbtn));
-    }
-    if (cfg.passwordLogin) {
-      const pw = el('input', { type: 'password', autocomplete: 'current-password', placeholder: 'Admin password', 'aria-label': 'Admin password', required: true });
-      card.append(el('form', { class: 'form', onsubmit: async (e) => {
-        e.preventDefault(); err.hidden = true;
-        try { await api('/api/admin/login', { method: 'POST', body: { password: pw.value } }); load(); }
-        catch (ex) { showErr(ex.message); pw.select(); }
-      } }, cfg.firebase ? el('p', { class: 'note', text: 'or use the admin password:' }) : null, pw, el('button', { class: 'btn', type: 'submit', text: 'Log in' })));
-    }
-    card.append(err, el('p', { class: 'fine' }, el('a', { href: '/', text: '← Back to the website' })));
+    const gbtn = el('button', { class: 'btn primary', type: 'button', text: 'Sign in with Google' });
+    gbtn.addEventListener('click', async () => {
+      err.hidden = true; gbtn.disabled = true; gbtn.textContent = 'Opening Google…';
+      try { await (await DB()).signIn(); }   // onAuth() below reacts and loads the panel
+      catch (ex) { err.textContent = FB_ERRORS[ex.code] || ex.message || 'Sign-in failed.'; err.hidden = false; }
+      finally { gbtn.disabled = false; gbtn.textContent = 'Sign in with Google'; }
+    });
+    const card = el('div', { class: 'card' }, el('h1', { text: 'Lamnian Admin' }), el('p', { text: 'Approve posts and manage the site.' }),
+      el('div', { class: 'form' }, gbtn), err, el('p', { class: 'fine' }, el('a', { href: '/', text: '← Back to the website' })));
     app.replaceChildren(el('div', { class: 'login' }, card));
   }
 
+  async function logout() { try { await (await DB()).signOut(); } catch { /* ignore */ } showLogin(); }
+
   async function load() {
-    try { S = await api('/api/admin/overview'); render(); }
-    catch (e) { if (e.status === 401) showLogin(); else app.replaceChildren(el('div', { class: 'login' }, el('div', { class: 'card' }, el('h1', { text: 'Lamnian Admin' }), el('p', { class: 'form-error', text: e.message }), el('button', { class: 'btn primary', text: 'Try again', onclick: load })))); }
+    try {
+      const d = await DB();
+      const [o, ai] = await Promise.all([d.adminOverview(), window.LAM.api('/api/ai').catch(() => ({ connected: false }))]);
+      S = { ...o, ai }; render();
+    } catch (e) {
+      if (e.code === 'permission-denied') { note = 'This Google account is not an admin. Sign in with the admin Gmail (the one listed in firestore.rules).'; showLogin(note); (await DB()).signOut().catch(() => {}); return; }
+      app.replaceChildren(el('div', { class: 'login' }, el('div', { class: 'card' }, el('h1', { text: 'Lamnian Admin' }), el('p', { class: 'form-error', text: e.message }), el('button', { class: 'btn primary', text: 'Try again', onclick: load }))));
+    }
   }
 
   const pendingCount = (n) => S.collections[n].filter((i) => i.status === 'pending').length;
@@ -73,7 +53,7 @@
 
   /* ---------------- actions ---------------- */
   async function act(name, id, action) {
-    try { await api(`/api/admin/item/${name}/${id}/${action}`, { method: 'POST', body: {} }); await load(); }
+    try { await (await DB()).adminAct(name, id, action); await load(); }
     catch (e) { alert(e.message); }
   }
   function confirmDelete(name, it) {
@@ -82,7 +62,7 @@
   function openEdit(name, it) {
     const def = FORMS[name]; let m;
     const form = buildForm(def, { values: it, allowImage: false, submitLabel: 'Save changes', onSubmit: async (p) => {
-      await api(`/api/admin/edit/${name}/${it.id}`, { method: 'POST', body: p }); m.close(); load();
+      await (await DB()).adminEdit(name, it.id, p); m.close(); load();
     } });
     m = openModal('Edit ' + def.label.toLowerCase(), form);
   }
@@ -91,7 +71,7 @@
     const feat = name === 'news' ? el('label', { class: 'field' }, el('input', { type: 'checkbox', id: 'featNew' }), ' Pin as featured') : null;
     const form = buildForm(def, { submitLabel: 'Publish now', extra: feat, onSubmit: async (p) => {
       if (feat) p.featured = form.querySelector('#featNew').checked;
-      await api(`/api/admin/create/${name}`, { method: 'POST', body: p }); m.close(); load();
+      await (await DB()).adminCreate(name, p); m.close(); load();
     } });
     m = openModal('Publish ' + def.label.toLowerCase(), form);
   }
@@ -144,7 +124,8 @@
     const saved = el('span', { class: 'note', hidden: true, text: '✓ Saved' });
     const alertForm = el('form', { class: 'form', onsubmit: async (e) => {
       e.preventDefault();
-      await api('/api/admin/settings', { method: 'POST', body: { text: text.value, level: level.value } }); saved.hidden = false; setTimeout(() => { saved.hidden = true; }, 2000);
+      try { await (await DB()).saveAlert(text.value, level.value); saved.hidden = false; setTimeout(() => { saved.hidden = true; }, 2000); }
+      catch (ex) { alert(ex.message); }
     } },
       el('div', { class: 'row2' }, el('div', { class: 'field' }, el('label', { for: 'alText', text: 'Message' }), text), el('div', { class: 'field' }, el('label', { for: 'alLevel', text: 'Style' }), level)),
       el('div', { class: 'form-actions' }, saved, el('button', { class: 'btn primary', type: 'submit', text: 'Save banner' })),
@@ -159,7 +140,7 @@
 
     const backup = el('div', { class: 'card' }, el('h3', { text: 'Backup' }),
       el('p', { class: 'note', text: 'Download all posts and settings as a JSON file (photos are not included; they stay in your Firebase database).' }),
-      el('a', { class: 'btn', href: '/api/admin/backup', text: '⬇ Download backup' }));
+      el('button', { class: 'btn', text: '⬇ Download backup', onclick: downloadBackup }));
 
     return el('div', { class: 'panel' }, el('div', { class: 'card' }, el('h3', { text: 'Site-wide alert banner' }), alertForm), aiCard, backup);
   }
@@ -167,7 +148,7 @@
   function render() {
     const top = el('div', { class: 'a-top' }, el('div', { class: 'wrap' }, el('h1', { text: 'Lamnian Admin' }),
       el('div', { class: 'sp' }, el('a', { class: 'btn sm', href: '/', text: 'View site' }),
-        el('button', { class: 'btn sm', text: 'Log out', onclick: async () => { await api('/api/admin/logout', { method: 'POST', body: {} }); showLogin(); } }))));
+        el('button', { class: 'btn sm', text: 'Log out', onclick: logout }))));
     const tabs = el('div', { class: 'tabs', role: 'tablist' },
       ...[['pending', 'Waiting for approval', totalPending()], ...NAMES.map((n) => [n, LABEL[n], pendingCount(n)]), ['settings', 'Settings', 0]].map(([k, l, c]) =>
         el('button', { class: 'tab', role: 'tab', 'aria-selected': String(tab === k), onclick: () => { tab = k; filter = 'all'; render(); } }, l, c ? el('span', { class: 'badge', text: String(c) }) : null)));
@@ -175,5 +156,16 @@
     document.title = (totalPending() ? `(${totalPending()}) ` : '') + 'Lamnian Admin';
   }
 
-  load();
+  // Backup file made in the browser from what is already loaded (photos left out to keep it small).
+  function downloadBackup() {
+    const strip = (list) => list.map(({ image, ...rest }) => ({ ...rest, hasPhoto: !!image }));
+    const out = { exportedAt: new Date().toISOString(), note: 'Photos are not included in this file.', settings: S.settings };
+    NAMES.forEach((n) => { out[n] = strip(S.collections[n]); });
+    const a = el('a', { href: URL.createObjectURL(new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' })), download: 'lamnian-backup.json' });
+    document.body.append(a); a.click(); a.remove();
+  }
+
+  // Start: show whoever is signed in; the Firestore rules decide whether they are really an admin.
+  DB().then((d) => d.onAuth((user) => { if (user) load(); else { showLogin(note); note = ''; } }))
+    .catch((e) => showLogin(e.message));
 })();

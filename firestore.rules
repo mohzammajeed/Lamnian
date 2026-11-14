@@ -1,0 +1,98 @@
+// Firebase console → Firestore Database → Rules → paste this file → Publish.
+//
+// How the site uses these rules:
+//   • Visitors can READ only posts with status "approved" and can CREATE new posts
+//     only as "pending" (they appear after the admin approves them).
+//   • The admin (signed in with Google, email listed below) can read, change and delete everything.
+//   • Private phone numbers (news + gallery) live in "contacts" and only the admin can read them.
+//
+// To add another admin, add the email to the list in isAdmin() and publish again.
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email in ['mohzammajeed@gmail.com'];
+    }
+
+    // ---- small checks ----
+    function opt(d, k, max)      { return !(k in d) || (d[k] is string && d[k].size() <= max); }
+    function need(d, k, min, max) { return k in d && d[k] is string && d[k].size() >= min && d[k].size() <= max; }
+    function okImage(d)          { return !('image' in d) || (d.image is string && d.image.size() <= 450000); }
+    // fields every new public post must have
+    function fresh(d) {
+      return d.status == 'pending' && d.featured == false && need(d, 'createdAt', 10, 40) && okImage(d);
+    }
+    function visible() { return isAdmin() || resource.data.status == 'approved'; }
+
+    // ---- posts ----
+    match /news/{id} {
+      allow read: if visible();
+      allow create: if isAdmin() || (fresh(request.resource.data)
+        && request.resource.data.keys().hasOnly(['status', 'featured', 'createdAt', 'image', 'title', 'body', 'author'])
+        && need(request.resource.data, 'title', 4, 120) && need(request.resource.data, 'body', 20, 5000)
+        && opt(request.resource.data, 'author', 60));
+      allow update, delete: if isAdmin();
+    }
+
+    match /gallery/{id} {
+      allow read: if visible();
+      allow create: if isAdmin() || (fresh(request.resource.data)
+        && 'image' in request.resource.data
+        && request.resource.data.keys().hasOnly(['status', 'featured', 'createdAt', 'image', 'caption', 'place', 'author'])
+        && opt(request.resource.data, 'caption', 160) && opt(request.resource.data, 'place', 80)
+        && opt(request.resource.data, 'author', 60));
+      allow update, delete: if isAdmin();
+    }
+
+    match /events/{id} {
+      allow read: if visible();
+      allow create: if isAdmin() || (fresh(request.resource.data)
+        && request.resource.data.keys().hasOnly(['status', 'featured', 'createdAt', 'image', 'title', 'date', 'time', 'place', 'description', 'author', 'contact'])
+        && need(request.resource.data, 'title', 4, 120)
+        && need(request.resource.data, 'date', 10, 10) && request.resource.data.date.matches('[0-9]{4}-[0-9]{2}-[0-9]{2}')
+        && need(request.resource.data, 'place', 2, 100)
+        && opt(request.resource.data, 'time', 20) && opt(request.resource.data, 'description', 1500)
+        && opt(request.resource.data, 'author', 60) && opt(request.resource.data, 'contact', 80));
+      allow update, delete: if isAdmin();
+    }
+
+    match /notices/{id} {
+      allow read: if visible();
+      allow create: if isAdmin() || (fresh(request.resource.data)
+        && request.resource.data.keys().hasOnly(['status', 'featured', 'createdAt', 'image', 'category', 'title', 'body', 'phone', 'author'])
+        && request.resource.data.category in ['Lost & Found', 'For Sale', 'Jobs', 'Help Needed', 'Rides & Transport', 'Announcement']
+        && need(request.resource.data, 'title', 4, 120) && need(request.resource.data, 'body', 10, 1500)
+        && opt(request.resource.data, 'phone', 30) && opt(request.resource.data, 'author', 60));
+      allow update, delete: if isAdmin();
+    }
+
+    match /directory/{id} {
+      allow read: if visible();
+      allow create: if isAdmin() || (fresh(request.resource.data)
+        && request.resource.data.keys().hasOnly(['status', 'featured', 'createdAt', 'image', 'name', 'category', 'phone', 'address', 'hours', 'description'])
+        && request.resource.data.category in ['Shop', 'Food', 'Health', 'Education', 'Transport', 'Repairs & Services', 'Stay', 'Government', 'Other']
+        && need(request.resource.data, 'name', 2, 100)
+        && opt(request.resource.data, 'phone', 40) && opt(request.resource.data, 'address', 140)
+        && opt(request.resource.data, 'hours', 80) && opt(request.resource.data, 'description', 300));
+      allow update, delete: if isAdmin();
+    }
+
+    // ---- private phone numbers (same id as the post) — only the admin can read ----
+    match /contacts/{id} {
+      allow create: if isAdmin() || (request.resource.data.keys().hasOnly(['col', 'contact'])
+        && request.resource.data.col in ['news', 'gallery']
+        && need(request.resource.data, 'contact', 1, 80));
+      allow read, update, delete: if isAdmin();
+    }
+
+    // ---- site banner: everyone reads, only the admin writes ----
+    match /settings/{doc} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}

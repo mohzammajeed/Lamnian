@@ -22,10 +22,12 @@ window.LAM = (() => {
     return n;
   }
 
+  // For the few server endpoints (/api/weather, /api/prayer, /api/ai). Posts, photos and the
+  // admin panel do NOT use this: they talk to Firebase directly through db.js.
   async function api(path, { method = 'GET', body } = {}) {
     const res = await fetch(path, {
-      method, credentials: 'same-origin',
-      headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'lamnian' },
+      method,
+      headers: { 'Content-Type': 'application/json' },
       body: body === undefined ? undefined : JSON.stringify(body),
     });
     let data = null;
@@ -34,19 +36,26 @@ window.LAM = (() => {
     return data;
   }
 
-  // Shrink photos in the browser before upload (saves data for phone users).
+  // Shrink photos in the browser before saving (photos live inside the Firestore document,
+  // so they must stay small: the result is kept under ~400 KB).
   async function resizeImage(file, maxDim = 1280, quality = 0.78) {
     if (!/^image\/(jpeg|png|webp)$/.test(file.type)) throw new Error('Please choose a JPG, PNG or WebP photo.');
     const url = URL.createObjectURL(file);
     try {
       const img = await new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = () => no(new Error('Could not read that photo.')); i.src = url; });
-      const scale = Math.min(1, maxDim / Math.max(img.naturalWidth, img.naturalHeight));
-      const c = document.createElement('canvas');
-      c.width = Math.round(img.naturalWidth * scale); c.height = Math.round(img.naturalHeight * scale);
-      const g = c.getContext('2d');
-      g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height);
-      g.drawImage(img, 0, 0, c.width, c.height);
-      return c.toDataURL('image/jpeg', quality);
+      let out = '';
+      for (let i = 0; i < 6; i++) {
+        const scale = Math.min(1, maxDim / Math.max(img.naturalWidth, img.naturalHeight));
+        const c = document.createElement('canvas');
+        c.width = Math.round(img.naturalWidth * scale); c.height = Math.round(img.naturalHeight * scale);
+        const g = c.getContext('2d');
+        g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height);
+        g.drawImage(img, 0, 0, c.width, c.height);
+        out = c.toDataURL('image/jpeg', quality);
+        if (out.length <= 400000) break;
+        quality = Math.max(0.5, quality - 0.08); maxDim = Math.round(maxDim * 0.85);
+      }
+      return out;
     } finally { URL.revokeObjectURL(url); }
   }
 
@@ -73,8 +82,8 @@ window.LAM = (() => {
 
   const FORMS = {
     news: { label: 'News', icon: '📰', blurb: 'Share something happening in our area.', image: 'optional', imageLabel: 'Photo (optional)', fields: [
-      { name: 'title', label: 'Headline', max: 120, req: true, placeholder: 'What happened?' },
-      { name: 'body', label: 'Details', type: 'textarea', max: 5000, req: true, placeholder: 'Write the full story here…' },
+      { name: 'title', label: 'Headline', min: 4, max: 120, req: true, placeholder: 'What happened?' },
+      { name: 'body', label: 'Details', type: 'textarea', min: 20, max: 5000, req: true, placeholder: 'Write the full story here…' },
       { name: 'author', label: 'Your name', max: 60, placeholder: 'Optional — shown with the story' },
       { name: 'contact', label: 'Phone / WhatsApp', max: 80, placeholder: 'Optional — only the admin sees this', hint: 'So the admin can verify the news.' }] },
     gallery: { label: 'Photo', icon: '📷', blurb: 'Show everyone the beauty of Lamnian.', image: 'required', imageLabel: 'Your photo', fields: [
@@ -83,21 +92,21 @@ window.LAM = (() => {
       { name: 'author', label: 'Photographer', max: 60, placeholder: 'Your name' },
       { name: 'contact', label: 'Phone / WhatsApp', max: 80, placeholder: 'Optional — only the admin sees this' }] },
     events: { label: 'Event', icon: '📅', blurb: 'Weddings, jalsas, matches, meetings, markets.', image: 'optional', imageLabel: 'Poster (optional)', fields: [
-      { name: 'title', label: 'Event name', max: 120, req: true },
+      { name: 'title', label: 'Event name', min: 4, max: 120, req: true },
       { name: 'date', label: 'Date', type: 'date', req: true },
       { name: 'time', label: 'Time', max: 20, placeholder: 'e.g. 4:00 PM' },
-      { name: 'place', label: 'Place', max: 100, req: true },
+      { name: 'place', label: 'Place', min: 2, max: 100, req: true },
       { name: 'description', label: 'Details', type: 'textarea', max: 1500 },
       { name: 'author', label: 'Organiser', max: 60 },
       { name: 'contact', label: 'Contact number', max: 80, placeholder: 'Shown publicly' }] },
     notices: { label: 'Notice', icon: '📌', blurb: 'Lost & found, things for sale, jobs, help needed.', image: 'optional', imageLabel: 'Photo (optional)', fields: [
       { name: 'category', label: 'Type', type: 'select', options: NOTICE_CATS, req: true },
-      { name: 'title', label: 'Title', max: 120, req: true },
-      { name: 'body', label: 'Details', type: 'textarea', max: 1500, req: true },
+      { name: 'title', label: 'Title', min: 4, max: 120, req: true },
+      { name: 'body', label: 'Details', type: 'textarea', min: 10, max: 1500, req: true },
       { name: 'phone', label: 'Phone number', max: 30, placeholder: 'Shown publicly if you add it' },
       { name: 'author', label: 'Your name', max: 60 }] },
     directory: { label: 'Business / Service', icon: '🏪', blurb: 'Add a shop, clinic, school, workshop or guest house.', image: 'optional', imageLabel: 'Photo (optional)', fields: [
-      { name: 'name', label: 'Name', max: 100, req: true },
+      { name: 'name', label: 'Name', min: 2, max: 100, req: true },
       { name: 'category', label: 'Category', type: 'select', options: DIR_CATS, req: true },
       { name: 'phone', label: 'Phone', max: 40 },
       { name: 'address', label: 'Where is it?', max: 140, placeholder: 'Bazaar, mohalla, landmark…' },
@@ -176,5 +185,8 @@ window.LAM = (() => {
     return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
   }
 
-  return { $, $$, el, api, resizeImage, openModal, buildForm, FORMS, timeAgo };
+  // The database code (db.js) is an ES module loaded on first use: LAM.db().then((db) => db.listApproved('news'))
+  const db = () => import('/db.js');
+
+  return { $, $$, el, api, db, resizeImage, openModal, buildForm, FORMS, NOTICE_CATS, DIR_CATS, timeAgo };
 })();

@@ -5,8 +5,5 @@
   "description": "Lamnian community website",
   "engines": {
     "node": "22.x"
-  },
-  "scripts": {
-    "start": "node server.js"
   }
 }

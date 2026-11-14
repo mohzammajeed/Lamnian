@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const { $, $$, el, api, openModal, buildForm, FORMS, timeAgo } = window.LAM;
+  const { $, $$, el, api, db, openModal, buildForm, FORMS, NOTICE_CATS, DIR_CATS, timeAgo } = window.LAM;
 
   let CFG = { location: {}, emergency: [], ai: {}, today: '', noticeCats: [], dirCats: [] };
   let WX = null;
@@ -314,14 +314,8 @@
 
   async function loadAll() {
     const names = ['news', 'gallery', 'events', 'notices', 'directory'];
-    const failed = [];
-    await Promise.all(names.map(async (n) => { try { DATA[n] = (await api('/api/' + n)).items; } catch (e) { DATA[n] = []; failed.push(e.message); } }));
+    await Promise.all(names.map(async (n) => { try { DATA[n] = await (await db()).listApproved(n); } catch (e) { console.error(n, e.message); DATA[n] = []; } }));
     renderNews(); renderGallery(); renderEvents(); renderNotices(); renderDirectory(); renderPulse();
-    if (failed.length) {
-      // Tell the visitor (and you) the real reason instead of silently showing empty sections.
-      const a = $('#alertBar');
-      if (a && a.hidden) { a.textContent = '⚠️ Posts could not be loaded: ' + failed[0]; a.className = 'alert-bar warning'; a.hidden = false; }
-    }
   }
 
   /* ---------------------------------------------------------------- */
@@ -333,9 +327,9 @@
     const form = buildForm(def, {
       submitLabel: 'Send for approval',
       onSubmit: async (payload) => {
-        const r = await api('/api/submit/' + kind, { method: 'POST', body: payload });
+        await (await db()).submit(kind, payload);
         modal.close();
-        openModal('Thank you!', el('div', { class: 'success' }, el('div', { class: 'big', text: '✅' }), el('p', { text: r.message || 'Your post will appear after approval.' }),
+        openModal('Thank you!', el('div', { class: 'success' }, el('div', { class: 'big', text: '✅' }), el('p', { text: 'Thank you! Your post will appear after the admin approves it.' }),
           el('button', { class: 'btn primary', text: 'Done', onclick: (e) => e.target.closest('.modal-overlay').querySelector('.icon-btn').click() })));
       },
     });
@@ -350,6 +344,11 @@
   /* AI chat                                                           */
   /* ---------------------------------------------------------------- */
   const history = [];
+  // Headlines and upcoming events the page already loaded; sent along so the assistant knows what is happening.
+  function aiFacts() {
+    return [...DATA.news.slice(0, 5).map((n) => 'News: ' + n.title),
+      ...DATA.events.filter((e) => e.date >= CFG.today).slice(0, 5).map((e) => `Event: ${e.title} (${e.date}, ${e.place})`)];
+  }
   function setupAI() {
     const on = !!CFG.ai.connected, name = CFG.ai.name || 'Lamnian AI';
     $('#aiTitle').textContent = name;
@@ -375,7 +374,7 @@
     const typing = addMsg('bot', 'Thinking…', 'typing');
     $('#chatSend').disabled = true;
     try {
-      const r = await api('/api/ai', { method: 'POST', body: { messages: history.slice(-10) } });
+      const r = await api('/api/ai', { method: 'POST', body: { messages: history.slice(-10), facts: aiFacts() } });
       typing.remove(); addMsg('bot', r.reply); history.push({ role: 'assistant', content: r.reply });
     } catch (err) { typing.remove(); addMsg('bot', '⚠️ ' + err.message); history.pop(); }
     finally { $('#chatSend').disabled = false; inp.focus(); }
@@ -403,7 +402,13 @@
 
   async function init() {
     initChrome();
-    try { CFG = await api('/api/config'); } catch { /* keep defaults */ }
+    try { CFG = { ...CFG, ...(await (await fetch('/config.json')).json()) }; } catch { /* keep defaults */ }
+    CFG.noticeCats = NOTICE_CATS; CFG.dirCats = DIR_CATS;
+    CFG.today = new Intl.DateTimeFormat('en-CA', { timeZone: CFG.location.timezone || 'Asia/Karachi', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+    await Promise.all([
+      api('/api/ai').then((a) => { CFG.ai = a; }).catch(() => { CFG.ai = {}; }),
+      db().then((d) => d.getAlert()).then((a) => { CFG.alert = a; }).catch(() => { /* the banner is optional */ }),
+    ]);
     $('#heroRegion').textContent = CFG.location.region || '';
     if (CFG.tagline) $('#heroTagline').textContent = CFG.tagline + ' — all in one place.';
     if (CFG.alert) { const a = $('#alertBar'); a.textContent = (CFG.alert.level === 'info' ? 'ℹ️ ' : '⚠️ ') + CFG.alert.text; a.className = 'alert-bar ' + CFG.alert.level; a.hidden = false; }

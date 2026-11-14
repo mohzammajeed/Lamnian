@@ -40,17 +40,9 @@
     }
   ],
   "ai": {
-    "provider": "none",
-    "model": "claude-sonnet-5-5",
-    "apiKeyEnv": "LAMNIAN_AI_KEY",
-    "baseUrl": "",
-    "webhookUrl": "",
     "assistantName": "Lamnian AI"
   },
   "firebase": {
-    "adminEmails": [
-      "mohzammajeed@gmail.com"
-    ],
     "config": {
       "apiKey": "AIzaSyBc2VA1OA3FfNw7qWTEzZauidFWuBcAdEQ",
       "authDomain": "lamnian-ai.firebaseapp.com",
