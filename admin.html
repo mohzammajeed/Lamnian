@@ -15,7 +15,7 @@ button.p{background:#2b7bd1;color:#fff;border-color:#2b7bd1}button.d{color:#b433
 <h1>Lamnian admin</h1>
 <div id="login" hidden><p>Sign in with the admin Google account.</p><button class="p" id="in">Sign in with Google</button><p class="m" id="err"></p></div>
 <div id="app" hidden>
-  <div class="bar"><b>All posts</b><span style="flex:1"></span><span class="m" id="who"></span><button id="out">Sign out</button></div>
+  <div class="bar"><button id="tP" class="on">Posts</button><button id="tR">Reports</button><span style="flex:1"></span><span class="m" id="who"></span><button id="out">Sign out</button></div>
   <div id="list"></div>
 </div></div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -33,7 +33,18 @@ auth.onAuthStateChanged(function(u){
   if(u&&!ok){auth.signOut();$('#err').textContent='This account is not allowed.'}
   $('#login').hidden=!!ok;$('#app').hidden=!ok;
   if(ok){$('#who').textContent=u.email;load()}});
-function load(){$('#list').innerHTML='<p class="m">Loading…</p>';
+var tab='p';
+$('#tP').onclick=function(){tab='p';$('#tP').className='on';$('#tR').className='';load()};
+$('#tR').onclick=function(){tab='r';$('#tR').className='on';$('#tP').className='';load()};
+function load(){if(tab==='r')loadReports();else loadPosts()}
+function loadReports(){$('#list').innerHTML='<p class="m">Loading…</p>';
+  db.collection('reports').get().then(function(s){var a=s.docs.map(function(d){return{id:d.id,d:d.data()}}).sort(function(x,y){return(y.d.created||'')>(x.d.created||'')?1:-1});
+    $('#list').innerHTML=a.map(function(r,i){return'<div class="c"><div class="t"><span class="tag">'+esc(r.d.col)+'</span> <span class="m">'+esc(r.d.created||'')+'</span><h3 style="margin:6px 0">'+esc(r.d.title)+'</h3><div>Reason: <b>'+esc(r.d.reason)+'</b></div></div><div><button class="d" data-a="rp" data-i="'+i+'">Delete post</button> <button data-a="rd" data-i="'+i+'">Dismiss</button></div></div>'}).join('')||'<p class="m">No reports. 🎉</p>';
+    $('#list').onclick=function(e){var b=e.target.closest('button');if(!b)return;var r=a[b.dataset.i],rr=db.collection('reports').doc(r.id);
+      if(b.dataset.a==='rd')rr.delete().then(load).catch(function(x){alert(x.message)});
+      else if(confirm('Delete the reported post?'))db.collection(r.d.col).doc(r.d.postId).delete().then(function(){return rr.delete()}).then(load).catch(function(x){alert(x.message)})}
+  }).catch(function(x){$('#list').innerHTML='<p class="m">Error: '+esc(x.message)+'</p>'})}
+function loadPosts(){$('#list').innerHTML='<p class="m">Loading…</p>';
   Promise.all(COLS.map(function(c){return db.collection(c).get().then(function(s){return s.docs.map(function(d){return{c:c,id:d.id,d:d.data()}})})})).then(function(r){
     var a=[].concat.apply([],r).sort(function(x,y){return(y.d.created||'')>(x.d.created||'')?1:-1});
     $('#list').innerHTML=a.map(function(p,i){var d=p.d;return'<div class="c">'+(/^data:image\//.test(d.image||'')?'<img alt="" src="'+d.image+'">':'')+'<div class="t"><span class="tag">'+p.c+'</span> <span class="m">'+esc(d.created||'')+'</span><h3 style="margin:6px 0">'+esc(d.title)+'</h3><div>'+esc(d.body)+'</div><div class="m">'+[d.author,d.cat,d.date,d.phone].filter(Boolean).map(esc).join(' · ')+'</div></div><div>'+'<button class="d" data-a="del" data-i="'+i+'">Delete</button></div></div>'}).join('')||'<p class="m">Nothing here.</p>';

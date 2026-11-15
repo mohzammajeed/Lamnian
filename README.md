@@ -31,6 +31,14 @@ Signed-in users can comment on posts (stored in the `comments` collection; users
 ## App feel
 Splash screen, bottom tab bar, slide-in pages, press feedback, safe-area padding for notches, Android back button closes windows before leaving, pull-to-refresh, offline mode. The admin link now lives in the account window (visible only to the admin).
 
+## Social features
+- **Likes:** shared like counts. Each like is one document in `likes` (`postId_uid`) and the post's `likeCount` changes in the same batch; the rules only allow +1/-1 together with that document.
+- **Profiles:** tap any name or picture to open a public profile (`users` collection: name, photo, bio, member since). Own profile has Posts and Saved tabs.
+- **⚙️ Settings:** one gear (header and own profile) holds profile edit, dark mode, password email, sign out, delete all posts, delete account.
+- **⋯ post menu:** Save, Share, Edit/Delete (own posts), Report (others); admin can delete any post.
+- **Reports:** stored in `reports` (admin only). Review them in `/admin` → Reports.
+- Search box and 🔥 Top (most liked) on the Home feed.
+
 ## Settings
 Edit the `CFG` block near the top of the script in `index.html`:
 - `lat`, `lon`: Lamnian's coordinates (weather, air quality, prayer times)

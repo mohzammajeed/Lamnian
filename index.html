@@ -278,6 +278,22 @@ button:active,.btn:active,#homeWx:active{opacity:.7;transform:scale(.97)}.bnav b
 #splash.out{opacity:0;pointer-events:none}#splash b{font:800 30px var(--sans)}@keyframes splashout{to{opacity:0;visibility:hidden}}
 .credits{text-align:center}
 @media(min-width:700px){body{background:#dfe2e7}.site-header{box-shadow:0 1px 2px rgba(0,0,0,.2)}}
+/* ===== Social ===== */
+[data-prof]{cursor:pointer}.hn{flex:1;min-width:0}
+.fh .pm{margin-left:auto;border:0;background:none;font-size:22px;line-height:1;color:var(--mut);padding:2px 8px;cursor:pointer;border-radius:50%}
+.fs{padding:6px 12px 2px;font-size:13px;color:var(--mut)}
+.fa .lk.on{color:#1877f2}.lk.pop{animation:pop .35s}@keyframes pop{40%{transform:scale(1.25)}}
+.fsearch{margin-top:10px;border-radius:99px;background:var(--alt);border:0}
+.pwrap{position:relative;margin-top:10px}.pcover{height:120px;border-radius:12px 12px 0 0;background:linear-gradient(135deg,#1877f2,#6cb2ff 60%,#f0b24a)}
+.gear{position:absolute;right:10px;top:10px}.phead{border-radius:0 0 12px 12px;text-align:center;padding:0 14px 14px;margin-bottom:10px}
+.av.big{width:88px;height:88px;flex:none;font-size:38px;margin:-44px auto 8px;border:4px solid var(--card)}.phead h2{font-size:22px}.bio{margin:4px 0}
+.pstats{display:flex;justify-content:center;gap:36px;margin:10px 0}.pstats b{display:block;font-size:19px}.pstats div{font-size:13px;color:var(--mut)}
+.mebox{gap:8px}.mebox h3{justify-self:start}.sg{justify-self:start;width:100%;font-weight:800;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);margin-top:8px;text-align:left}.sg.red{color:#c0392b}
+dialog{max-height:92vh;overflow:auto}
+dialog.sheet[open]{margin:auto auto 0;width:min(520px,100%);max-width:100%;border-radius:18px 18px 0 0;padding:10px 12px}
+.sh{display:flex;gap:12px;align-items:center;width:100%;border:0;background:none;color:var(--fg);font:600 16px var(--sans);padding:13px 8px;border-radius:10px;cursor:pointer;text-align:left}.sh:active{background:var(--alt)}.sh.red{color:#c0392b}
+.rad{display:flex!important;flex-direction:row;gap:10px;align-items:center;font-weight:600;font-size:15px;padding:4px 0}
+body[data-view=profile] .view[data-v=profile]{display:block}
 </style>
 </head>
 <body data-view="home">
@@ -293,9 +309,9 @@ button:active,.btn:active,#homeWx:active{opacity:.7;transform:scale(.97)}.bnav b
     </a>
         <div class="header-actions">
       <button class="icon-btn" id="plusBtn" aria-label="New post" title="New post">＋</button>
-      <button class="icon-btn" id="themeBtn" aria-label="Switch light or dark theme" title="Light / dark">🌙</button>
       <button class="btn primary sm" id="signBtn">Sign in</button>
-      <button class="icon-btn" id="meBtn" aria-label="My account" hidden></button>
+      <button class="icon-btn" id="gearBtn" data-gear aria-label="Settings" title="Settings" hidden>⚙️</button>
+      <button class="icon-btn" id="meBtn" aria-label="My profile" hidden></button>
       </div>
   </div>
 </header>
@@ -325,7 +341,8 @@ button:active,.btn:active,#homeWx:active{opacity:.7;transform:scale(.97)}.bnav b
 <section class="view" data-v="home" id="home"><div class="wrap">
 <div class="card composer"><div class="cr"><div class="av">L</div><button class="think" data-share="news">What’s happening in Lamnian?</button></div><div class="cb"><button data-share="news">📰 News</button><button data-share="gallery">🖼️ Photo</button><button data-share="events">📅 Event</button><button data-share="notices">📋 Notice</button></div></div>
   <div id="homeWx" role="button" tabindex="0" data-go="weather" aria-label="Open weather"><div class="skel h60" style="flex:1"></div></div>
-  <div class="chips fchips" id="feedChips"><button data-f="all" class="on">All</button><button data-f="news">📰 News</button><button data-f="gallery">🖼️ Photos</button><button data-f="events">📅 Events</button><button data-f="notices">📋 Notices</button></div>
+  <input class="fld fsearch" id="feedSearch" type="search" placeholder="🔍 Search posts…" aria-label="Search posts">
+  <div class="chips fchips" id="feedChips"><button data-f="all" class="on">All</button><button data-f="news">📰 News</button><button data-f="gallery">🖼️ Photos</button><button data-f="events">📅 Events</button><button data-f="notices">📋 Notices</button><button data-f="top">🔥 Top</button></div>
   <div id="feed" class="news-grid"></div>
 </div></section>
 <section class="section view" data-v="weather" id="weather"><div class="wrap">
@@ -400,6 +417,7 @@ button:active,.btn:active,#homeWx:active{opacity:.7;transform:scale(.97)}.bnav b
     </form>
   </div>
 </div></section>
+<section class="view" data-v="profile" id="profile"><div class="wrap"><div id="profBody"></div></div></section>
 </main>
 
 
@@ -438,16 +456,43 @@ button:active,.btn:active,#homeWx:active{opacity:.7;transform:scale(.97)}.bnav b
 </dialog>
 
 <dialog id="meDlg">
-  <div class="mebox"><div class="av" id="meAv"></div><b id="meName"></b><span id="meMail"></span>
+  <div class="mebox">
+    <h3>⚙️ Settings</h3>
+    <div class="sg">Profile</div>
     <label>Display name<input class="fld" id="meEdit" maxlength="40"></label>
-    <button class="btn primary" id="meSave">Save name</button>
+    <label>Bio<textarea class="fld" id="meBio" maxlength="160" placeholder="Tell people about yourself"></textarea></label>
+    <button class="btn primary" id="meSave">Save profile</button>
+    <div class="sg">Appearance</div>
+    <button class="btn" id="themeBtn">🌙 Switch to dark mode</button>
+    <div class="sg">Account</div>
+    <span id="meMail"></span>
     <button class="btn" id="mePw">Change password (email link)</button>
+    <a class="btn" id="meAdmin" href="/admin" hidden>Open admin panel</a>
+    <button class="btn" id="meOut">Sign out</button>
+    <div class="sg red">Danger zone</div>
     <button class="btn danger" id="mePosts">Delete all my posts</button>
     <button class="btn danger" id="meDel">Delete my account</button>
     <p class="err" id="meErr" role="alert"></p>
-    <a class="btn" id="meAdmin" href="/admin" hidden>Open admin panel</a>
-    <button class="btn" id="meOut">Sign out</button><button class="btn" id="meClose">Close</button></div>
+    <button class="btn" id="meClose">Close</button>
+    <p class="fine">Lamnian · Weather by Open-Meteo · Prayer times by Aladhan</p>
+  </div>
 </dialog>
+
+<dialog id="sheet" class="sheet"><div id="sheetBody"></div><button type="button" class="btn" id="sheetClose" style="width:100%;justify-content:center;margin-top:6px">Cancel</button></dialog>
+
+<dialog id="repDlg"><form id="repForm" method="dialog"><h3>Report post</h3><p class="muted" id="repTitle"></p>
+  <label class="rad"><input type="radio" name="rr" value="Spam" checked> Spam</label>
+  <label class="rad"><input type="radio" name="rr" value="Scam or fraud"> Scam or fraud</label>
+  <label class="rad"><input type="radio" name="rr" value="Inappropriate content"> Inappropriate content</label>
+  <label class="rad"><input type="radio" name="rr" value="Harassment or hate"> Harassment or hate</label>
+  <label class="rad"><input type="radio" name="rr" value="False information"> False information</label>
+  <label class="rad"><input type="radio" name="rr" value="Something else"> Something else</label>
+  <div class="row"><button type="button" class="btn" id="repCancel">Cancel</button><button class="btn primary" type="submit">Report</button></div></form></dialog>
+
+<dialog id="editDlg"><form id="editForm" method="dialog"><h3>Edit post</h3>
+  <label>Title<input class="fld" id="eTitle" required maxlength="120"></label>
+  <label>Details<textarea class="fld" id="eBody" maxlength="800"></textarea></label>
+  <div class="row"><button type="button" class="btn" id="eCancel">Cancel</button><button class="btn primary" type="submit">Save</button></div></form></dialog>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -541,11 +586,13 @@ var noticeCat='All',dirCat='All';
 function fillChips(el,items,cur,cb){var all=['All'].concat(items.filter(function(x,i,a){return a.indexOf(x)===i}));el.innerHTML=all.map(function(c){return'<button type="button" class="'+(c===cur?'on':'')+'">'+esc(c)+'</button>'}).join('');
   el.querySelectorAll('button').forEach(function(b){b.onclick=function(){cb(b.textContent)}})}
 function ago(t){var d=new Date(t);if(isNaN(d))return t||'';var m=(Date.now()-d)/6e4;return m<1?'Just now':m<60?Math.floor(m)+'m':m<1440?Math.floor(m/60)+'h':m<10080?Math.floor(m/1440)+'d':d.toLocaleDateString()}
-function postCard(n,tag){var a=n.author||'Lamnian Community';return'<article class="fb"><div class="fh"><div class="av">'+avatar(n)+'</div><div><b>'+esc(a)+'</b><span>'+esc(ago(n.created||n.date))+(tag?' · '+esc(tag):'')+' · 🌐</span></div></div><div class="ft"><b>'+esc(n.title)+'</b>'+(n.body?'<p>'+esc(n.body)+'</p>':'')+'</div>'+(n.image?'<img class="fi" loading="lazy" alt="'+esc(n.title)+'" src="'+esc(n.image)+'">':'')+'<div class="fa"><button type="button" data-like="'+esc(n.title)+'">👍 Like</button>'+cmBtn(n)+'<button type="button" data-share-post="'+esc(n.title)+'">↗ Share</button>'+delBtn(n)+'</div>'+cmPanel(n)+'</article>'}
+var MYL={},LK={},TAGS={news:'News',gallery:'Photo',events:'Event',notices:'Notice',directory:'Business'};
+function colOf(n){return n._n?n._n.split('/').slice(-2)[0]:''}
+function postCard(n,tag){var a=n.author||'Lamnian Community',id=pid(n),col=colOf(n),lc=n.likeCount||0,pf=n.uid?' data-prof="'+esc(n.uid)+'"':'';tag=tag||TAGS[col]||'';
+  return'<article class="fb" data-pid="'+id+'"><div class="fh"><div class="av"'+pf+'>'+avatar(n)+'</div><div class="hn"><b'+pf+'>'+esc(a)+'</b><span>'+esc(ago(n.created||n.date))+(n.edited?' · Edited':'')+(tag?' · '+esc(tag):'')+' · 🌐</span></div>'+(id?'<button type="button" class="pm" data-menu="'+id+'" aria-label="More options">⋯</button>':'')+'</div><div class="ft"><b>'+esc(n.title)+'</b>'+(n.body?'<p>'+esc(n.body)+'</p>':'')+'</div>'+(n.image?'<img class="fi" loading="lazy" alt="'+esc(n.title)+'" src="'+esc(n.image)+'">':'')+'<div class="fs"'+(lc?'':' hidden')+'><span class="lc" data-lc="'+id+'">👍 '+lc+'</span></div><div class="fa"><button type="button" class="lk'+(MYL[id]?' on':'')+'" data-like="'+id+'" data-col="'+col+'">👍 Like</button>'+cmBtn(n)+'<button type="button" data-share-post="'+esc(n.title)+'">↗ Share</button></div>'+cmPanel(n)+'</article>'}
 function mine(n){return USER&&n.uid&&n.uid===USER.uid&&n._n}
 function delBtn(n,c){return mine(n)?'<button type="button" class="'+(c||'dbtn')+'" data-del="'+esc(n._n)+'">🗑 Delete</button>':''}
-function likes(){try{return JSON.parse(localStorage.getItem('likes')||'[]')}catch(e){return[]}}
-function likeState(){var l=likes();document.querySelectorAll('[data-like]').forEach(function(b){b.classList.toggle('on',l.indexOf(b.dataset.like)>-1)})}
+function likeState(){document.querySelectorAll('[data-like]').forEach(function(b){b.classList.toggle('on',!!MYL[b.dataset.like])})}
 function renderNews(){$('#newsGrid').innerHTML=DATA.news.map(function(n){return postCard(n,'News')}).join('')||'<p class="empty">No news yet — be the first to share.</p>'}
 function renderGallery(){var cols=['#1b6b63','#c2703a','#4a6fa5','#7a5c8f'];$('#galleryGrid').innerHTML=DATA.gallery.map(function(g,i){return'<figure>'+(g.image?'<img loading="lazy" alt="'+esc(g.title)+'" src="'+esc(g.image)+'">':'<div class="ph" style="background:'+cols[i%4]+'">'+esc(g.emoji||'📷')+'</div>')+delBtn(g,'gdel')+'</figure>'}).join('')||'<p class="empty">No photos yet — upload the first one.</p>'}
 function renderEvents(){var M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];$('#eventsList').innerHTML=DATA.events.map(function(e){var d=new Date(e.date+'T12:00'),ok=!isNaN(d);return'<div class="ev"><div class="d">'+(ok?'<b>'+d.getDate()+'</b>'+M[d.getMonth()]:'<b>—</b>soon')+'</div><div><h3>'+esc(e.title)+'</h3><p>'+esc(e.body||'')+(e.place?' · 📍 '+esc(e.place):'')+'</p>'+delBtn(e)+'</div></div>'}).join('')||'<p class="empty">No upcoming events.</p>'}
@@ -571,13 +618,13 @@ $('#dlgForm').onsubmit=function(e){e.preventDefault();var c=$('#fType').value,x=
   dlg.close();e.target.reset();toast('Sending…');
   shrink(f).then(function(img){if(img)o.image=img;return postDoc(c,o)}).then(function(){toast('Posted!');return loadCol(c)}).then(function(r){if(r){DATA[c]=r;renderAll()}}).catch(function(){toast('Could not send. Please try again.')})};
 /* ===== theme, menu, AI placeholder ===== */
-$('#themeBtn').onclick=function(){var r=document.documentElement,t=r.dataset.theme==='dark'?'light':'dark';r.dataset.theme=t;document.querySelector('meta[name=theme-color]').content=t==='dark'?'#242526':'#ffffff';try{localStorage.setItem('theme',t)}catch(e){}};
+$('#themeBtn').onclick=function(){var r=document.documentElement,t=r.dataset.theme==='dark'?'light':'dark';r.dataset.theme=t;document.querySelector('meta[name=theme-color]').content=t==='dark'?'#242526':'#ffffff';try{localStorage.setItem('theme',t)}catch(e){}themeLbl()};
 $('#chatLog').innerHTML='<div class="msg">Assalam o Alaikum! Lamnian AI is coming soon.</div>';
 $('#suggest').innerHTML=['What’s the weather today?','Any events this week?','Road conditions?'].map(function(s){return'<button type="button">'+s+'</button>'}).join('');
 function aiSay(q){var l=$('#chatLog');l.insertAdjacentHTML('beforeend','<div class="msg me">'+esc(q)+'</div><div class="msg">The assistant isn’t connected yet. Please check back soon.</div>');l.scrollTop=l.scrollHeight}
 $('#suggest').onclick=function(e){if(e.target.tagName==='BUTTON')aiSay(e.target.textContent)};
 $('#chatForm').onsubmit=function(e){e.preventDefault();var i=$('#chatInput');if(i.value.trim()){aiSay(i.value.trim());i.value=''}};
-document.addEventListener('click',function(e){var cm=e.target.closest('[data-cm]');if(cm){toggleCm(cm.dataset.cm);return}var cd=e.target.closest('[data-cdel]');if(cd){delCm(cd.dataset.cdel,cd.dataset.cp);return}if(e.target.closest('[data-signin]')){openAuth('in');return}var g=e.target.closest('[data-go]');if(g){go(g.dataset.go);return}var f=e.target.closest('[data-f]');if(f){feedFilter=f.dataset.f;renderFeed();return}var b=e.target.closest('[data-like]');if(b){var l=likes(),i=l.indexOf(b.dataset.like);if(i>-1)l.splice(i,1);else l.push(b.dataset.like);try{localStorage.setItem('likes',JSON.stringify(l))}catch(x){}likeState();return}
+document.addEventListener('click',function(e){var mn=e.target.closest('[data-menu]');if(mn){openSheet(mn.dataset.menu);return}var pf=e.target.closest('[data-prof]');if(pf){go('profile/'+pf.dataset.prof);return}if(e.target.closest('[data-gear]')){$('#meErr').textContent='';$('#meDlg').showModal();return}var pt=e.target.closest('[data-ptab]');if(pt){paintProf(pt.dataset.ptab);return}var cm=e.target.closest('[data-cm]');if(cm){toggleCm(cm.dataset.cm);return}var cd=e.target.closest('[data-cdel]');if(cd){delCm(cd.dataset.cdel,cd.dataset.cp);return}if(e.target.closest('[data-signin]')){openAuth('in');return}var g=e.target.closest('[data-go]');if(g){go(g.dataset.go);return}var f=e.target.closest('[data-f]');if(f){feedFilter=f.dataset.f;renderFeed();return}var b=e.target.closest('[data-like]');if(b){toggleLike(b.dataset.like,b.dataset.col);return}
   var dl=e.target.closest('[data-del]');if(dl){if(!USER||!confirm('Delete this post? This cannot be undone.'))return;var nm=dl.dataset.del,col=nm.split('/').slice(-2)[0];
     USER.getIdToken().then(function(t){return fetch('https://firestore.googleapis.com/v1/'+nm+'?key='+FB.apiKey,{method:'DELETE',headers:{Authorization:'Bearer '+t}})}).then(function(r){if(!r.ok)throw 0;toast('Post deleted');return loadCol(col)}).then(function(r){if(r){DATA[col]=r;renderAll()}}).catch(function(){toast('Could not delete. Please try again.')});return}
   var sh=e.target.closest('[data-share-post]');if(sh){var u=location.href.split('#')[0];if(navigator.share)navigator.share({title:sh.dataset.sharePost,url:u}).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(u).then(function(){toast('Link copied')});return}
@@ -590,11 +637,11 @@ function avatar(n){var a=n.author||'L';return n.photo&&/^https:\/\//.test(n.phot
 function syncAuth(){var up=authMode==='up';$('#authTitle').textContent=up?'Create account':'Sign in';$('#aGo').textContent=up?'Create account':'Sign in';$('#aNameW').hidden=!up;$('#aName').required=up;$('#aSwitch').textContent=up?'I already have an account':'Create new account';$('#aPass').autocomplete=up?'new-password':'current-password'}
 function openAuth(m){authMode=m;syncAuth();$('#aErr').textContent='';$('#authDlg').showModal()}
 function authErr(e){var m={'auth/invalid-credential':'Wrong email or password.','auth/wrong-password':'Wrong email or password.','auth/user-not-found':'No account with this email.','auth/email-already-in-use':'This email already has an account. Try signing in.','auth/weak-password':'Password must be at least 6 characters.','auth/invalid-email':'Enter a valid email.','auth/popup-closed-by-user':'','auth/cancelled-popup-request':'','auth/too-many-requests':'Too many tries. Please wait and try again.','auth/network-request-failed':'No internet connection.','auth/unauthorized-domain':'This website address is not authorised in Firebase yet.'};$('#aErr').textContent=(e&&m[e.code]!==undefined)?m[e.code]:'Something went wrong. Please try again.'}
-function setUser(u){USER=u;var on=!!u,av=on?avatar({photo:u.photoURL,author:uname(u)}):'L';$('#signBtn').hidden=on;$('#meTabL').textContent=on?'Me':'Sign in';$('#meBtn').hidden=!on;
-  if(on){$('#meBtn').innerHTML=av;$('#meAv').innerHTML=av;$('#meName').textContent=uname(u);$('#meMail').textContent=u.email||'';$('#meEdit').value=uname(u);$('#meAdmin').hidden=u.email!==CFG.admin;$('#mePw').hidden=!u.providerData.some(function(p){return p.providerId==='password'});if($('#authDlg').open)$('#authDlg').close()}
+function setUser(u){USER=u;var on=!!u,av=on?avatar({photo:u.photoURL,author:uname(u)}):'L';$('#signBtn').hidden=on;$('#gearBtn').hidden=!on;$('#meTabL').textContent=on?'Me':'Sign in';$('#meBtn').hidden=!on;
+  if(on){$('#meBtn').innerHTML=av;$('#meMail').textContent=u.email||'';$('#meEdit').value=uname(u);$('#meAdmin').hidden=u.email!==CFG.admin;$('#mePw').hidden=!u.providerData.some(function(p){return p.providerId==='password'});if($('#authDlg').open)$('#authDlg').close()}
   document.querySelectorAll('.composer .av').forEach(function(a){a.innerHTML=av});
   $('.think').textContent=on?'What’s happening, '+uname(u).split(' ')[0]+'?':'What’s happening in Lamnian?';
-  renderAll();if(on&&pending){var t=pending;pending=null;openDlg(t)}}
+  if(on){loadLikes();ensureProfile(u)}else{MYL={}}renderAll();if(document.body.dataset.view==='profile')show(location.hash.slice(1));if(on&&pending){var t=pending;pending=null;openDlg(t)}}
 $('#signBtn').onclick=function(){openAuth('in')};
 $('#aClose').onclick=function(){$('#authDlg').close()};
 $('#aSwitch').onclick=function(){authMode=authMode==='up'?'in':'up';syncAuth()};
@@ -603,7 +650,7 @@ $('#authForm').onsubmit=function(e){e.preventDefault();if(!FBA)return;var em=$('
   var p=authMode==='up'?FBA.createUserWithEmailAndPassword(em,pw).then(function(c){return c.user.updateProfile({displayName:nm}).then(function(){setUser(FBA.currentUser)})}):FBA.signInWithEmailAndPassword(em,pw);
   p.then(function(){e.target.reset()}).catch(authErr)};
 $('#aForgot').onclick=function(){var em=$('#aEmail').value.trim();if(!em){$('#aErr').textContent='Type your email above first.';return}FBA.sendPasswordResetEmail(em).then(function(){$('#aErr').textContent='';toast('Password reset email sent')}).catch(authErr)};
-$('#meBtn').onclick=function(){$('#meErr').textContent='';$('#meDlg').showModal()};
+$('#meBtn').onclick=function(){go('profile')};
 $('#meClose').onclick=function(){$('#meDlg').close()};
 $('#meOut').onclick=function(){FBA.signOut();$('#meDlg').close();toast('Signed out')};
 var COLS=['news','gallery','events','notices','directory'];
@@ -612,25 +659,26 @@ function myPosts(){return USER.getIdToken().then(function(t){return Promise.all(
 function purge(){return myPosts().then(function(o){return Promise.all(o.names.map(function(n){return fetch('https://firestore.googleapis.com/v1/'+n+'?key='+FB.apiKey,{method:'DELETE',headers:{Authorization:'Bearer '+o.t}})})).then(function(){return o.names.length})})}
 function reauth(){var u=FBA.currentUser;if(u.providerData.some(function(p){return p.providerId==='google.com'}))return u.reauthenticateWithPopup(new firebase.auth.GoogleAuthProvider());
   var pw=prompt('Enter your password to confirm');if(!pw)return Promise.reject({code:'cancel'});return u.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(u.email,pw))}
-$('#meSave').onclick=function(){var n=$('#meEdit').value.trim();if(!n||!USER)return;USER.updateProfile({displayName:n}).then(function(){setUser(FBA.currentUser);toast('Name updated')}).catch(function(){toast('Could not update name')})};
+$('#meSave').onclick=function(){var n=$('#meEdit').value.trim(),b=$('#meBio').value.trim();if(!n||!USER)return;USER.updateProfile({displayName:n}).then(function(){setUser(FBA.currentUser);return patchUser({name:n,bio:b})}).then(function(){toast('Profile saved');refreshProfile()}).catch(function(){toast('Could not save profile')})};
 $('#mePw').onclick=function(){if(USER&&USER.email)FBA.sendPasswordResetEmail(USER.email).then(function(){toast('Password reset email sent')}).catch(function(){toast('Could not send email')})};
 $('#mePosts').onclick=function(){if(!USER||!confirm('Delete all your posts? This cannot be undone.'))return;purge().then(function(n){toast(n+' post(s) deleted');reloadAll()}).catch(function(){toast('Could not delete posts')})};
 $('#meDel').onclick=function(){if(!USER||!confirm('Delete your account and all your posts? This cannot be undone.'))return;var u=USER;$('#meErr').textContent='';
-  reauth().then(purge).then(function(){return u.delete()}).then(function(){$('#meDlg').close();toast('Your account was deleted');reloadAll()}).catch(function(e){$('#meErr').textContent=(e&&e.code==='cancel')?'':'Could not delete the account. Please try again.'})};
+  reauth().then(purge).then(delUserDoc).then(function(){return u.delete()}).then(function(){$('#meDlg').close();toast('Your account was deleted');reloadAll()}).catch(function(e){$('#meErr').textContent=(e&&e.code==='cancel')?'':'Could not delete the account. Please try again.'})};
 if(FBA)FBA.onAuthStateChanged(setUser);
 /* ===== app shell + feed ===== */
-var VIEWS=['home','weather','directory','ai'],feedFilter='all',feedReady=!FBON;
-function show(v){if(VIEWS.indexOf(v)<0)v='home';document.body.dataset.view=v;document.querySelectorAll('#bnav [data-go]').forEach(function(b){b.classList.toggle('on',b.dataset.go===v)});window.scrollTo({top:0,behavior:'instant'})}
+var VIEWS=['home','weather','directory','ai','profile'],feedFilter='all',feedReady=!FBON;
+function show(h){var pp=(h||'').split('/'),v=pp[0];if(VIEWS.indexOf(v)<0)v='home';document.body.dataset.view=v;$('#meTab').classList.toggle('on',v==='profile');if(v==='profile')renderProfile(pp[1]);document.querySelectorAll('#bnav [data-go]').forEach(function(b){b.classList.toggle('on',b.dataset.go===v)});window.scrollTo({top:0,behavior:'instant'})}
 function go(v){if(navigator.vibrate)navigator.vibrate(8);if(location.hash==='#'+v||(!location.hash&&v==='home'))window.scrollTo({top:0,behavior:'smooth'});else location.hash=v}
 window.addEventListener('hashchange',function(){show(location.hash.slice(1))});
 function feedItem(n,k){if(k!=='events')return n;var c={};for(var x in n)c[x]=n[x];c.body=(n.body||'')+(n.body?'\n':'')+'📅 '+(n.date||'')+(n.place?' · 📍 '+n.place:'');return c}
 function renderFeed(){if(!feedReady){$('#feed').innerHTML='<div class="skel h200" style="margin-bottom:10px"></div><div class="skel h200"></div>';return}var ff=feedFilter||'all',items=[];
-  [['news','News'],['gallery','Photo'],['events','Event'],['notices','Notice']].forEach(function(p){if(ff!=='all'&&ff!==p[0])return;(DATA[p[0]]||[]).forEach(function(n){items.push({n:feedItem(n,p[0]),t:p[1]})})});
-  items.sort(function(a,b){return(b.n.created||'')>(a.n.created||'')?1:-1});
+  [['news','News'],['gallery','Photo'],['events','Event'],['notices','Notice']].forEach(function(p){if(ff!=='all'&&ff!=='top'&&ff!==p[0])return;(DATA[p[0]]||[]).forEach(function(n){items.push({n:feedItem(n,p[0]),t:p[1]})})});
+  var q=($('#feedSearch').value||'').toLowerCase();if(q)items=items.filter(function(x){return((x.n.title||'')+' '+(x.n.body||'')+' '+(x.n.author||'')).toLowerCase().indexOf(q)>-1});
+  items.sort(ff==='top'?function(a,b){return(b.n.likeCount||0)-(a.n.likeCount||0)}:function(a,b){return(b.n.created||'')>(a.n.created||'')?1:-1});
   $('#feed').innerHTML=items.map(function(x){return postCard(x.n,x.t)}).join('')||'<p class="empty">Nothing here yet — be the first to post!</p>';
   document.querySelectorAll('#feedChips button').forEach(function(b){b.classList.toggle('on',b.dataset.f===ff)});likeState()}
 $('#plusBtn').onclick=function(){openDlg('news')};
-$('#meTab').onclick=function(){if(USER)$('#meBtn').click();else openAuth('in')};
+$('#meTab').onclick=function(){if(USER)go('profile');else openAuth('in')};
 /* ===== comments ===== */
 function pid(n){return n._n?n._n.split('/').pop():''}
 function cmBtn(n){return n._n?'<button type="button" data-cm="'+pid(n)+'">💬 Comment</button>':''}
@@ -644,6 +692,73 @@ function delCm(nm,id){if(!USER||!confirm('Delete this comment?'))return;USER.get
 document.addEventListener('submit',function(e){var f=e.target.closest&&e.target.closest('.cmf');if(!f)return;e.preventDefault();var id=f.dataset.cf,i=f.querySelector('input'),t=i.value.trim();if(!t||!USER)return;i.value='';
   USER.getIdToken().then(function(tk){var fl={postId:{stringValue:id},text:{stringValue:t},author:{stringValue:uname()},uid:{stringValue:USER.uid},created:{stringValue:new Date().toISOString()}};if(USER.photoURL)fl.photo={stringValue:USER.photoURL};
     return fetch(FSU('comments'),{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+tk},body:JSON.stringify({fields:fl})})}).then(function(r){if(!r.ok)throw 0;return cmFetch(id)}).then(function(l){cmRender(id,l)}).catch(function(){toast('Could not post comment')})});
+/* ===== social: likes, profiles, menu, report, edit ===== */
+var PROF=[],profUid='',SAVED=(function(){try{return JSON.parse(localStorage.getItem('saved')||'[]')}catch(e){return[]}})();
+function fbBase(){return'https://firestore.googleapis.com/v1/projects/'+FB.projectId+'/databases/(default)/documents'}
+function hdr(t){return{'Content-Type':'application/json',Authorization:'Bearer '+t}}
+function mapDocs(r){return r.filter(function(x){return x.document}).map(function(x){var o={_n:x.document.name};for(var k in x.document.fields)o[k]=fsVal(x.document.fields[k]);return o})}
+function runQ(c,field,val,lim){return fetch(fbBase()+':runQuery?key='+FB.apiKey,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({structuredQuery:{from:[{collectionId:c}],where:{fieldFilter:{field:{fieldPath:field},op:'EQUAL',value:{stringValue:val}}},limit:lim||60}})}).then(function(r){return r.json()}).then(mapDocs)}
+function qUid(uid){return Promise.all(COLS.map(function(c){return runQ(c,'uid',uid)})).then(function(a){return[].concat.apply([],a).sort(function(x,y){return(y.created||'')>(x.created||'')?1:-1})})}
+function allPosts(){var a=[];COLS.forEach(function(c){(DATA[c]||[]).forEach(function(n){a.push(n)})});return a.concat(PROF)}
+function findPost(id){var a=allPosts();for(var i=0;i<a.length;i++)if(pid(a[i])===id)return a[i]}
+function eachPost(id,fn){allPosts().forEach(function(n){if(pid(n)===id)fn(n)})}
+function paintLike(id){var p=findPost(id),c=p?(p.likeCount||0):0,on=!!MYL[id];
+  document.querySelectorAll('[data-lc="'+id+'"]').forEach(function(e){e.textContent='👍 '+c;e.parentNode.hidden=!c});
+  document.querySelectorAll('[data-like="'+id+'"]').forEach(function(b){b.classList.toggle('on',on);if(on){b.classList.add('pop');setTimeout(function(){b.classList.remove('pop')},350)}})}
+function loadLikes(){MYL={};if(!USER||!FBON){likeState();return}runQ('likes','uid',USER.uid,1000).then(function(l){l.forEach(function(o){if(o.postId)MYL[o.postId]=true});likeState()}).catch(function(){})}
+function toggleLike(id,col){if(!id){toast('This is a sample post');return}if(!USER){openAuth('in');toast('Sign in to like posts');return}if(LK[id])return;LK[id]=1;
+  var was=!!MYL[id],d=was?-1:1,base='projects/'+FB.projectId+'/databases/(default)/documents/',ln=base+'likes/'+id+'_'+USER.uid,pn=base+col+'/'+id;
+  MYL[id]=!was;eachPost(id,function(n){n.likeCount=Math.max(0,(n.likeCount||0)+d)});paintLike(id);
+  USER.getIdToken().then(function(t){var w=[{update:{name:pn},updateMask:{fieldPaths:[]},updateTransforms:[{fieldPath:'likeCount',increment:{integerValue:String(d)}}],currentDocument:{exists:true}}];
+    w.push(was?{delete:ln,currentDocument:{exists:true}}:{update:{name:ln,fields:{postId:{stringValue:id},uid:{stringValue:USER.uid},col:{stringValue:col}}},currentDocument:{exists:false}});
+    return fetch(fbBase()+':commit?key='+FB.apiKey,{method:'POST',headers:hdr(t),body:JSON.stringify({writes:w})})}).then(function(r){if(!r.ok)throw 0;delete LK[id]}).catch(function(){delete LK[id];MYL[id]=was;eachPost(id,function(n){n.likeCount=Math.max(0,(n.likeCount||0)-d)});paintLike(id);toast('Could not update like')})}
+/* users / profiles */
+function userURL(uid,mask){return fbBase()+'/users/'+uid+'?key='+FB.apiKey+(mask||[]).map(function(k){return'&updateMask.fieldPaths='+k}).join('')}
+function getUser(uid){return fetch(userURL(uid)).then(function(r){return r.ok?r.json():null}).then(function(d){if(!d)return null;var o={};for(var k in d.fields)o[k]=fsVal(d.fields[k]);return o})}
+function patchUser(o){return USER.getIdToken().then(function(t){var f={};for(var k in o)f[k]={stringValue:String(o[k])};return fetch(userURL(USER.uid,Object.keys(o)),{method:'PATCH',headers:hdr(t),body:JSON.stringify({fields:f})}).then(function(r){if(!r.ok)throw 0})})}
+function delUserDoc(){return USER.getIdToken().then(function(t){return fetch(userURL(USER.uid),{method:'DELETE',headers:{Authorization:'Bearer '+t}})}).catch(function(){})}
+function ensureProfile(u){getUser(u.uid).then(function(p){if(p){$('#meBio').value=p.bio||'';return}return patchUser({name:uname(u),photo:u.photoURL||'',bio:'',joined:new Date().toISOString()})}).catch(function(){})}
+function savedPosts(){var a=allPosts(),o=[];SAVED.forEach(function(id){for(var i=0;i<a.length;i++)if(pid(a[i])===id){o.push(a[i]);break}});return o}
+function paintProf(tab){var l=tab==='saved'?savedPosts():PROF;$('#profFeed').innerHTML=l.map(function(p){return postCard(feedItem(p,colOf(p)))}).join('')||'<p class="empty">'+(tab==='saved'?'Nothing saved yet. Tap ⋯ on a post to save it.':'No posts yet.')+'</p>';
+  document.querySelectorAll('#ptabs button').forEach(function(b){b.classList.toggle('on',b.dataset.ptab===tab)});likeState()}
+function refreshProfile(){if(document.body.dataset.view==='profile')renderProfile(profUid)}
+function renderProfile(uid){var el=$('#profBody');if(!uid&&USER)uid=USER.uid;profUid=uid||'';
+  if(!uid){el.innerHTML='<div class="card" style="text-align:center;padding:28px"><p>Sign in to see and edit your profile.</p><button class="btn primary" data-signin>Sign in</button></div>';return}
+  el.innerHTML='<div class="skel h200"></div>';
+  Promise.all([getUser(uid).catch(function(){return null}),qUid(uid).catch(function(){return[]})]).then(function(r){if(profUid!==uid)return;var u=r[0],posts=r[1];PROF=posts;
+    var f=posts[0]||{},name=(u&&u.name)||f.author||'Member',photo=(u&&u.photo)||f.photo||'',bio=(u&&u.bio)||'',me=USER&&USER.uid===uid,likes=posts.reduce(function(a,p){return a+(p.likeCount||0)},0);
+    el.innerHTML='<div class="pwrap"><div class="pcover"></div>'+(me?'<button class="icon-btn gear" data-gear aria-label="Settings">⚙️</button>':'')+'</div><div class="card phead"><div class="av big">'+avatar({photo:photo,author:name})+'</div><h2>'+esc(name)+'</h2>'
+      +(bio?'<p class="bio">'+esc(bio)+'</p>':(me?'<p class="bio muted">Add a bio in Settings ⚙️</p>':''))
+      +(u&&u.joined?'<p class="muted">Member since '+esc(new Date(u.joined).toLocaleDateString(undefined,{month:'long',year:'numeric'}))+'</p>':'')
+      +'<div class="pstats"><div><b>'+posts.length+'</b>Posts</div><div><b>'+likes+'</b>Likes</div></div>'
+      +(me?'<div class="chips" id="ptabs" style="justify-content:center;margin:0"><button data-ptab="posts" class="on">Posts</button><button data-ptab="saved">Saved</button></div>':'')+'</div><div id="profFeed" class="news-grid"></div>';
+    paintProf('posts')}).catch(function(){el.innerHTML='<p class="empty">Could not load this profile.</p>'})}
+/* post menu, edit, delete, report */
+function sh(a,id,t,red){return'<button type="button" class="sh'+(red?' red':'')+'" data-act="'+a+'" data-id="'+id+'">'+t+'</button>'}
+function openSheet(id){var p=findPost(id);if(!p)return;var own=USER&&p.uid&&p.uid===USER.uid,adm=USER&&USER.email===CFG.admin,h='';
+  h+=sh('save',id,SAVED.indexOf(id)>-1?'🔖 Remove from saved':'🔖 Save post')+sh('share',id,'↗ Share post');
+  if(own)h+=sh('edit',id,'✏️ Edit post');if(own||adm)h+=sh('del',id,'🗑 Delete post',1);if(!own)h+=sh('report',id,'🚩 Report post',1);
+  $('#sheetBody').innerHTML=h;$('#sheet').showModal()}
+function delDoc(nm){var col=nm.split('/').slice(-2)[0];return USER.getIdToken().then(function(t){return fetch('https://firestore.googleapis.com/v1/'+nm+'?key='+FB.apiKey,{method:'DELETE',headers:{Authorization:'Bearer '+t}})}).then(function(r){if(!r.ok)throw 0;toast('Post deleted');return loadCol(col)}).then(function(r){if(r){DATA[col]=r;renderAll()}profUid&&(PROF=PROF.filter(function(p){return p._n!==nm}));refreshProfile()}).catch(function(){toast('Could not delete. Please try again.')})}
+var editing=null,reporting=null;
+function openEdit(p){editing=p;$('#eTitle').value=p.title||'';$('#eBody').value=p.body||'';$('#editDlg').showModal()}
+function openReport(p){if(!USER){openAuth('in');toast('Sign in to report posts');return}reporting=p;$('#repTitle').textContent=p.title||'';$('#repDlg').showModal()}
+$('#sheetBody').onclick=function(e){var b=e.target.closest('[data-act]');if(!b)return;var id=b.dataset.id,p=findPost(id),a=b.dataset.act;$('#sheet').close();if(!p)return;
+  if(a==='save'){var i=SAVED.indexOf(id);if(i>-1)SAVED.splice(i,1);else SAVED.push(id);try{localStorage.setItem('saved',JSON.stringify(SAVED))}catch(x){}toast(i>-1?'Removed from saved':'Saved to your profile')}
+  else if(a==='share'){var u=location.href.split('#')[0];if(navigator.share)navigator.share({title:p.title,url:u}).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(u).then(function(){toast('Link copied')})}
+  else if(a==='edit')openEdit(p);
+  else if(a==='del'){if(USER&&confirm('Delete this post? This cannot be undone.'))delDoc(p._n)}
+  else if(a==='report')openReport(p)};
+$('#sheetClose').onclick=function(){$('#sheet').close()};
+$('#eCancel').onclick=function(){$('#editDlg').close()};
+$('#repCancel').onclick=function(){$('#repDlg').close()};
+$('#editForm').onsubmit=function(e){e.preventDefault();var p=editing,t=$('#eTitle').value.trim(),b=$('#eBody').value.trim();if(!p||!t||!USER)return;$('#editDlg').close();
+  USER.getIdToken().then(function(tk){return fetch('https://firestore.googleapis.com/v1/'+p._n+'?key='+FB.apiKey+'&updateMask.fieldPaths=title&updateMask.fieldPaths=body&updateMask.fieldPaths=edited',{method:'PATCH',headers:hdr(tk),body:JSON.stringify({fields:{title:{stringValue:t},body:{stringValue:b},edited:{stringValue:new Date().toISOString()}}})})}).then(function(r){if(!r.ok)throw 0;eachPost(pid(p),function(n){n.title=t;n.body=b;n.edited=1});toast('Post updated');renderAll();if(document.body.dataset.view==='profile')paintProf('posts')}).catch(function(){toast('Could not save changes')})};
+$('#repForm').onsubmit=function(e){e.preventDefault();var p=reporting;if(!p||!USER)return;var id=pid(p),reason=(document.querySelector('input[name=rr]:checked')||{}).value||'Something else';$('#repDlg').close();
+  USER.getIdToken().then(function(t){return fetch(fbBase()+'/reports?documentId='+encodeURIComponent(id+'_'+USER.uid)+'&key='+FB.apiKey,{method:'POST',headers:hdr(t),body:JSON.stringify({fields:{col:{stringValue:colOf(p)},postId:{stringValue:id},title:{stringValue:String(p.title||'').slice(0,120)},reason:{stringValue:reason},uid:{stringValue:USER.uid},created:{stringValue:new Date().toISOString()}}})})}).then(function(r){if(r.status===409||r.status===403)toast('You already reported this post');else if(!r.ok)throw 0;else toast('Thanks — we will review this post')}).catch(function(){toast('Could not send report')})};
+$('#feedSearch').oninput=function(){renderFeed()};
+function themeLbl(){var b=$('#themeBtn');if(b)b.textContent=document.documentElement.dataset.theme==='dark'?'☀️ Switch to light mode':'🌙 Switch to dark mode'}
+themeLbl();
 /* ===== pull to refresh ===== */
 (function(){var y0=null,pull=0,ind=document.createElement('div');ind.id='ptr';ind.textContent='↓';document.body.appendChild(ind);
   document.addEventListener('touchstart',function(e){y0=(window.scrollY<=0&&!document.querySelector('dialog[open],#lb'))?e.touches[0].clientY:null;pull=0},{passive:true});
