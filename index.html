@@ -2,11 +2,16 @@
 <html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Lamnian — Weather, News &amp; Community</title>
 <meta name="description" content="Lamnian community website: live weather forecast, local news, photos, events, notices, local directory and an AI assistant.">
-<meta name="theme-color" content="#0f3d3a">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230f3d3a'/%3E%3Cpath d='M6 50 24 22l9 13 7-9 18 24z' fill='%23fff'/%3E%3Ccircle cx='47' cy='17' r='6' fill='%23f0b24a'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#ffffff">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Lamnian">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%232b7bd1'/%3E%3Cpath d='M6 50 24 22l9 13 7-9 18 24z' fill='%23fff'/%3E%3Ccircle cx='47' cy='17' r='6' fill='%23f0b24a'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -150,8 +155,133 @@ dialog label{font-weight:700;font-size:13px;display:grid;gap:4px}dialog textarea
 @media(max-width:600px){.grid-wx{grid-template-columns:1fr}.span-2{grid-column:auto}.day{grid-template-columns:64px 28px 1fr 44px}.day .bar,.day span.lo{display:none}.hero-inner{padding:48px 0 150px}.site-footer .fine{text-align:left}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
 </style>
+<style>
+/* ===== RishtaCV-style UI: blue header, clean white cards, dark footer ===== */
+:root{--bg:#eef3fb;--alt:#e4ecf8;--fg:#1c2b3f;--mut:#5f7089;--card:#fff;--line:#dfe7f3;--brand:#2b7bd1;--brand2:#2b7bd1;--acc:#f5b301;--hd:#4d94dc;--sh:0 4px 18px rgba(43,100,170,.09);--r:16px;--serif:'Manrope',system-ui,-apple-system,Segoe UI,sans-serif}
+[data-theme=dark]{--bg:#0f1621;--alt:#131d2b;--fg:#e8eef7;--mut:#9aabc2;--card:#182335;--line:#26344a;--hd:#1f4f86;--sh:0 4px 18px rgba(0,0,0,.35)}
+body{background:linear-gradient(180deg,var(--bg),var(--alt) 100%);background-attachment:fixed}
+h1,h2{font-weight:800}
+.site-header{background:var(--hd);backdrop-filter:none;border:0;box-shadow:0 2px 10px rgba(20,60,120,.25)}
+.brand{color:#fff;font:800 21px var(--sans)}.brand b{color:#12263f;font-weight:800}[data-theme=dark] .brand{color:#fff}[data-theme=dark] .brand b{color:#9fc7f5}
+.nav a{color:rgba(255,255,255,.92)}.nav a:hover{background:rgba(255,255,255,.2);color:#fff}
+.pill-new{background:var(--acc);color:#3a2a00}
+.icon-btn,.site-header .btn.primary{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.55);color:#fff;border-radius:10px}
+.site-header .btn.primary:hover,.icon-btn:hover{background:rgba(255,255,255,.3)}
+.btn{border-radius:10px;border-color:#cfdcee}
+.btn.primary{background:#2b7bd1;border-color:#2b7bd1;color:#fff}.btn.primary:hover{background:#2468b3}
+.btn.light{color:#2b7bd1}
+.hero{background:linear-gradient(180deg,#3f86d3,#8fc1ee 70%,#d3e8f8)}
+.m3{fill:#1e5a9c}.m2{fill:#2b7bd1;opacity:.85}
+.card,.post,.ev,.pulse div{border-radius:16px;border-color:var(--line)}
+.kicker{color:#2b7bd1}
+.chips button{border-radius:10px}.chips button.on{background:#2b7bd1;border-color:#2b7bd1}
+.ev .d{background:#2b7bd1}.prayer li.next{background:#2b7bd1}
+.post .img{background:linear-gradient(135deg,#2b7bd1,#4d94dc)}
+.msg.me{background:#2b7bd1}
+.ai-fab{background:#2b7bd1;color:#fff}
+.site-footer{background:#1d2125;color:#c9d1d9;padding:34px 0;text-align:center}
+.foot-links{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 22px;margin-bottom:18px}
+.foot-links a{color:#f5b301;font-weight:700;text-decoration:none}.foot-links a:hover{text-decoration:underline}
+.site-footer .fine{color:#8e98a4;text-align:center;margin:6px 0 0}.site-footer .fine a{color:#f5b301}
+@media(max-width:900px){.nav{background:var(--hd);border-bottom:0}.nav a{padding:10px 12px}}
+@media(max-width:600px){.header-row{gap:8px}.brand{font-size:19px}.site-header .btn.sm{padding:8px 11px;font-size:13px}.icon-btn{width:36px;height:36px}}
+</style>
+<style>
+/* ===== Facebook-style layout ===== */
+:root{--bg:#f0f2f5;--alt:#e4e6eb;--card:#fff;--line:#dddfe2;--fg:#1c1e21;--mut:#65676b;--brand:#1877f2;--brand2:#1877f2;--hd:#fff;--sh:0 1px 2px rgba(0,0,0,.18);--r:10px}
+[data-theme=dark]{--bg:#18191a;--alt:#3a3b3c;--card:#242526;--line:#3e4042;--fg:#e4e6eb;--mut:#b0b3b8;--hd:#242526;--sh:0 1px 2px rgba(0,0,0,.6)}
+body{background:var(--bg);font-size:15px;line-height:1.45}
+.wrap{width:min(680px,100% - 16px)}.site-header .wrap{width:min(1000px,100% - 16px)}
+html{scroll-padding-top:112px}
+.site-header{background:var(--hd);box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.header-row{height:auto;flex-wrap:wrap;gap:0 8px;padding-top:6px}
+.brand,.brand b{color:#1877f2}.brand{font:800 24px var(--sans);margin-right:auto}[data-theme=dark] .brand,[data-theme=dark] .brand b{color:#4599ff}
+.icon-btn,.icon-btn:hover{background:var(--alt);border:0;color:var(--fg);border-radius:50%}
+.site-header .btn.primary,.site-header .btn.primary:hover{background:#1877f2;border:0;color:#fff;border-radius:8px}
+.menu-btn{display:none!important}
+.nav{display:flex!important;position:static!important;order:3;width:100%;margin:4px 0 0;padding:0;border:0;background:none;overflow-x:auto;gap:0;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav a{flex:1 0 auto;min-width:62px;text-align:center;border-radius:0;padding:6px 8px 5px;font-size:11.5px;font-weight:700;color:var(--mut);border-bottom:3px solid transparent;line-height:1.2}
+.nav a i{display:block;font-style:normal;font-size:20px}.nav a:hover{background:var(--alt);color:var(--fg)}.nav a.on{color:#1877f2;border-bottom-color:#1877f2}
+.hero-inner{grid-template-columns:1fr;padding:16px 0 70px;gap:12px}.hero h1{font-size:34px}.lead,.hero-cta{display:none}.eyebrow{margin:0}
+.wx-card.glass{padding:16px;border-radius:12px}.wx-temp{font-size:54px}.wx-ico{font-size:46px}.wx-row{margin-top:10px}.mountains{height:60px}
+.pulse-wrap{margin-top:-14px}.pulse{display:flex;overflow-x:auto;gap:8px;padding-bottom:2px}.pulse div{flex:0 0 auto;padding:8px 14px;border-radius:10px}.pulse b{font-size:17px}
+.section,.section.alt{background:none;padding:10px 0}
+.section-head{margin-bottom:8px}.section-head h2{font-size:19px}.kicker{display:none}
+.card,.fb,.ev,.dirrow{background:var(--card);border:0;border-radius:10px;box-shadow:var(--sh)}
+.card{padding:12px}.card-title{margin-bottom:8px}.card-title h3{font-size:16px}.grid-wx{gap:10px}
+.btn{border-radius:8px;border:0;background:var(--alt);color:var(--fg);padding:8px 14px;font-weight:700;font-size:14px}
+.btn.primary{background:#1877f2;color:#fff}.btn.primary:hover{background:#166fe0}.btn.light{background:#fff;color:#1877f2}
+.chips button{border:0;background:var(--alt);border-radius:99px;padding:6px 14px}.chips button.on{background:#e7f3ff;color:#1877f2}
+.composer{padding:10px 12px;margin-top:10px}.cr{display:flex;gap:8px;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.think{flex:1;text-align:left;border:0;background:var(--alt);color:var(--mut);border-radius:99px;padding:10px 14px;font:500 15px var(--sans);cursor:pointer}
+.cb{display:flex;justify-content:space-around;padding-top:6px}.cb button{border:0;background:none;color:var(--mut);font:700 13px var(--sans);padding:8px 6px;border-radius:8px;cursor:pointer}.cb button:hover{background:var(--alt)}
+.av{flex:0 0 40px;height:40px;border-radius:50%;background:#1877f2;color:#fff;display:grid;place-items:center;font-weight:800;font-size:17px}
+.news-grid,.notice-grid{display:grid;grid-template-columns:1fr;gap:10px}
+.fb{overflow:hidden}.fh{display:flex;gap:10px;align-items:center;padding:12px 12px 4px}.fh b{display:block;font-size:15px;line-height:1.2}.fh span{font-size:12.5px;color:var(--mut)}
+.ft{padding:6px 12px 10px}.ft b{font-size:16px}.ft p{margin:4px 0 0;white-space:pre-wrap}
+.fi{display:block;width:100%;max-height:640px;object-fit:cover;cursor:zoom-in;background:var(--alt)}
+.fa{display:flex;border-top:1px solid var(--line);margin:0 12px}.fa button{flex:1;border:0;background:none;color:var(--mut);font:700 14px var(--sans);padding:9px;border-radius:6px;cursor:pointer}.fa button:hover{background:var(--alt)}.fa button.on{color:#1877f2}
+.gallery{columns:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:3px;border-radius:10px;overflow:hidden}
+.gallery figure{margin:0;aspect-ratio:1;border-radius:0;box-shadow:none;position:relative;overflow:hidden}.gallery img{width:100%;height:100%;object-fit:cover;cursor:zoom-in}.gallery .ph{aspect-ratio:auto;height:100%}.gallery figcaption{display:none}
+.events{gap:10px}.ev{padding:12px;gap:12px}.ev .d{flex:0 0 54px;background:#1877f2;border-radius:8px}.ev .d b{font-size:22px}.ev h3{font-size:16px}
+.dir-grid{grid-template-columns:1fr;gap:8px}.dirrow{display:flex;gap:12px;align-items:center;padding:10px 12px}.dirrow .g{flex:1;min-width:0}.dirrow b{display:block}.dirrow span{font-size:13px;color:var(--mut)}.dirrow .av{background:var(--alt);font-size:20px}
+.emergency{grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}.emergency a{border-radius:10px;padding:8px 10px;font-size:11.5px}.emergency b{font-size:20px}
+.dir-tools input{border-radius:99px;background:var(--alt);border:0}
+.ai-wrap{grid-template-columns:1fr;gap:12px}.chat{height:360px}.site-footer{margin-top:14px}.ai-fab{display:none}
+#lb{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:100;display:grid;place-items:center;cursor:zoom-out}#lb img{max-width:100%;max-height:100%}
+@media(max-width:600px){.emergency{grid-template-columns:repeat(2,1fr)}.brand{font-size:22px}.hero h1{font-size:30px}}
+#meBtn{padding:0;overflow:hidden;background:#1877f2;color:#fff;font-weight:800}#meBtn img,.av img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block}
+.lnk{background:none;border:0;color:#1877f2;font:700 13.5px var(--sans);cursor:pointer;padding:0}.err{color:#c0392b;font-size:13px;margin:0;min-height:1.2em}.or{text-align:center;color:var(--mut);margin:0;font-size:13px}
+.gbtn{justify-content:center;width:100%;background:var(--card);border:1px solid var(--line)}.gbtn b{color:#4285f4;font-size:18px}
+.mebox{display:grid;gap:10px;justify-items:center;text-align:center}.mebox .av{width:64px;height:64px;flex:none;font-size:28px}.mebox span{color:var(--mut);font-size:14px}
+.dbtn{border:0;background:none;color:#c0392b;font:700 13px var(--sans);cursor:pointer;padding:6px 8px;border-radius:6px}.fa .dbtn{color:#c0392b}.ev .dbtn{padding:2px 0;margin-top:4px}
+.gdel{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.65);color:#fff;border:0;border-radius:99px;font:700 12px var(--sans);padding:4px 9px;cursor:pointer}
+.mebox label{width:100%;text-align:left}.mebox .btn{width:100%;justify-content:center}.btn.danger{color:#c0392b}
+/* ===== Mobile app shell ===== */
+*{-webkit-tap-highlight-color:transparent}
+body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
+.view{display:none}
+body[data-view=home] .view[data-v=home],body[data-view=weather] .view[data-v=weather],body[data-view=directory] .view[data-v=directory],body[data-view=ai] .view[data-v=ai]{display:block}
+#news,#gallery,#events,#notices,.pulse-wrap,.hero-copy{display:none!important}
+.header-row{height:54px;padding-top:0;flex-wrap:nowrap}
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(680px,100%);display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:60}
+.bnav button{flex:1;border:0;background:none;color:var(--mut);font:700 10.5px var(--sans);padding:7px 0 6px;cursor:pointer;line-height:1.2}
+.bnav i{display:block;font-style:normal;font-size:22px;margin-bottom:1px}.bnav button.on{color:#1877f2}
+.toast{bottom:84px}.fld{font-size:16px}
+.hero-inner{padding:10px 0 52px}.mountains{height:48px}.wx-loc{font-weight:700;margin-bottom:6px;opacity:.95}
+#homeWx{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;color:#fff;margin-top:10px;cursor:pointer;background:linear-gradient(135deg,#3f86d3,#8fc1ee);box-shadow:var(--sh)}
+#homeWx[data-sky=clear-night]{background:linear-gradient(135deg,#081428,#2b4a7a)}#homeWx[data-sky=cloudy]{background:linear-gradient(135deg,#5d7587,#9fb2bf)}#homeWx[data-sky=rain]{background:linear-gradient(135deg,#34495a,#8aa1ae)}#homeWx[data-sky=snow]{background:linear-gradient(135deg,#7d95ab,#c1d1de)}#homeWx[data-sky=storm]{background:linear-gradient(135deg,#232c3a,#667690)}
+#homeWx .mi{font-size:36px}#homeWx b{display:block;font-size:16px}#homeWx div span{font-size:12.5px;opacity:.92}#homeWx i{margin-left:auto;font-style:normal;font-size:26px}
+.fchips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:10px 0}.fchips::-webkit-scrollbar{display:none}.fchips button{flex:0 0 auto}
+@media(max-width:600px){dialog[open]{margin:auto auto 0;width:100%;max-width:100%;border-radius:18px 18px 0 0;max-height:92vh;overflow:auto}
+.chart-wrap{overflow-x:auto}.chart-wrap svg{min-width:560px}
+.stats{grid-template-columns:1fr 1fr}.stats div{flex-direction:column;border:0;background:var(--alt);border-radius:10px;padding:8px 10px}.stats dd{font-size:17px}
+.day{grid-template-columns:52px 26px 1fr 44px 34px 34px;gap:6px}.day .bar,.day span.lo{display:block}.wx-temp{font-size:64px}}
+.cm{padding:4px 12px 12px;border-top:1px solid var(--line)}.cmi{display:flex;gap:8px;margin:8px 0}.av.s{flex:0 0 32px;height:32px;font-size:14px}
+.cmb{background:var(--alt);border-radius:14px;padding:6px 12px;min-width:0}.cmb b{font-size:13px}.cmb p{margin:0;font-size:14.5px;word-break:break-word;white-space:pre-wrap}.cmb span{font-size:11.5px;color:var(--mut)}
+.cmf{display:flex;gap:8px;margin-top:8px}.cmf input{flex:1;min-width:0;padding:9px 14px;border-radius:99px;border:0;background:var(--alt);color:var(--fg);font:500 16px var(--sans)}
+body{overscroll-behavior-y:contain}
+#ptr{position:fixed;top:54px;left:50%;transform:translate(-50%,-50px);opacity:0;width:36px;height:36px;border-radius:50%;background:var(--card);box-shadow:var(--sh);display:grid;place-items:center;z-index:80;font-weight:800;color:#1877f2}
+#offb{position:fixed;left:0;right:0;bottom:calc(62px + env(safe-area-inset-bottom));background:#333;color:#fff;text-align:center;padding:6px 10px;font-size:13px;z-index:70}
+/* ===== Native app feel ===== */
+html{-webkit-text-size-adjust:100%}
+body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
+.ft b,.ft p,.cmb p,input,textarea,.fld{-webkit-user-select:text;user-select:text}
+.site-header{padding-top:env(safe-area-inset-top)}
+html{scroll-padding-top:calc(60px + env(safe-area-inset-top));scroll-behavior:auto}
+#ptr{top:calc(54px + env(safe-area-inset-top))}
+.view{animation:vin .22s ease}@keyframes vin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+button,.btn,#homeWx{transition:opacity .12s,transform .12s}
+button:active,.btn:active,#homeWx:active{opacity:.7;transform:scale(.97)}.bnav button:active{transform:scale(.9)}
+#splash{position:fixed;inset:0;background:#1877f2;color:#fff;display:grid;place-content:center;justify-items:center;gap:12px;z-index:300;transition:opacity .35s;animation:splashout 0s 4s forwards}
+#splash.out{opacity:0;pointer-events:none}#splash b{font:800 30px var(--sans)}@keyframes splashout{to{opacity:0;visibility:hidden}}
+.credits{text-align:center}
+@media(min-width:700px){body{background:#dfe2e7}.site-header{box-shadow:0 1px 2px rgba(0,0,0,.2)}}
+</style>
 </head>
-<body>
+<body data-view="home">
+<div id="splash"><svg viewBox="0 0 64 64" width="84" height="84" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#fff" opacity=".2"/><path d="M6 50 24 22l9 13 7-9 18 24z" fill="#fff"/><circle cx="47" cy="17" r="6" fill="#f0b24a"/></svg><b>Lamnian</b></div>
 <a class="skip" href="#weather">Skip to content</a>
 <div id="alertBar" class="alert-bar" hidden></div>
 
@@ -159,20 +289,18 @@ dialog label{font-weight:700;font-size:13px;display:grid;gap:4px}dialog textarea
   <div class="wrap header-row">
     <a class="brand" href="#top" aria-label="Lamnian home">
       <svg viewBox="0 0 64 64" width="34" height="34" aria-hidden="true"><rect width="64" height="64" rx="16" fill="currentColor" opacity=".16"/><path d="M6 50 24 22l9 13 7-9 18 24z" fill="currentColor"/><circle cx="47" cy="17" r="6" fill="#f0b24a"/></svg>
-      <span>Lamnian</span>
+      <span>Lam<b>nian</b></span>
     </a>
-    <nav class="nav" id="nav" aria-label="Main">
-      <a href="#weather">Weather</a><a href="#news">News</a><a href="#gallery">Gallery</a><a href="#events">Events</a><a href="#notices">Notices</a><a href="#directory">Directory</a><a href="#ai">Ask AI <span class="pill-new">soon</span></a>
-    </nav>
-    <div class="header-actions">
-      <button class="icon-btn" id="themeBtn" aria-label="Switch light or dark theme" title="Light / dark">🌓</button>
-      <button class="btn primary sm" id="contributeBtn">＋ Contribute</button>
-      <button class="icon-btn menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">☰</button>
-    </div>
+        <div class="header-actions">
+      <button class="icon-btn" id="plusBtn" aria-label="New post" title="New post">＋</button>
+      <button class="icon-btn" id="themeBtn" aria-label="Switch light or dark theme" title="Light / dark">🌙</button>
+      <button class="btn primary sm" id="signBtn">Sign in</button>
+      <button class="icon-btn" id="meBtn" aria-label="My account" hidden></button>
+      </div>
   </div>
 </header>
 
-<section class="hero" id="top" data-sky="clear-day">
+<section class="hero view" id="top" data-v="weather" data-sky="clear-day">
   <div class="sky-fx" id="skyFx" aria-hidden="true"></div>
   <div class="wrap hero-inner">
     <div class="hero-copy">
@@ -194,7 +322,13 @@ dialog label{font-weight:700;font-size:13px;display:grid;gap:4px}dialog textarea
 <div class="wrap pulse-wrap"><div class="pulse" id="pulse"></div></div>
 
 <main>
-<section class="section" id="weather"><div class="wrap">
+<section class="view" data-v="home" id="home"><div class="wrap">
+<div class="card composer"><div class="cr"><div class="av">L</div><button class="think" data-share="news">What’s happening in Lamnian?</button></div><div class="cb"><button data-share="news">📰 News</button><button data-share="gallery">🖼️ Photo</button><button data-share="events">📅 Event</button><button data-share="notices">📋 Notice</button></div></div>
+  <div id="homeWx" role="button" tabindex="0" data-go="weather" aria-label="Open weather"><div class="skel h60" style="flex:1"></div></div>
+  <div class="chips fchips" id="feedChips"><button data-f="all" class="on">All</button><button data-f="news">📰 News</button><button data-f="gallery">🖼️ Photos</button><button data-f="events">📅 Events</button><button data-f="notices">📋 Notices</button></div>
+  <div id="feed" class="news-grid"></div>
+</div></section>
+<section class="section view" data-v="weather" id="weather"><div class="wrap">
   <header class="section-head"><div><p class="kicker">Forecast</p><h2>Weather in Lamnian</h2></div><p class="muted" id="wxUpdated"></p></header>
   <div class="grid-wx">
     <div class="card span-2">
@@ -212,6 +346,7 @@ dialog label{font-weight:700;font-size:13px;display:grid;gap:4px}dialog textarea
     <div class="card"><div class="card-title"><h3>Sun</h3></div><div id="sunBox"></div></div>
     <div class="card"><div class="card-title"><h3>Prayer times</h3><span class="chip" id="hijri"></span></div><ul class="prayer" id="prayerList"><li class="skel h120"></li></ul></div>
     <div class="card"><div class="card-title"><h3>Air quality</h3></div><div id="aqiBox"></div></div>
+    <p class="fine credits span-2">Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> · Prayer times by <a href="https://aladhan.com/" target="_blank" rel="noopener">Aladhan</a><br>For official warnings check PMD / NDMA.</p>
   </div>
 </div></section>
 
@@ -236,7 +371,7 @@ dialog label{font-weight:700;font-size:13px;display:grid;gap:4px}dialog textarea
   <div id="noticeGrid" class="notice-grid"></div>
 </div></section>
 
-<section class="section alt" id="directory"><div class="wrap">
+<section class="section alt view" data-v="directory" id="directory"><div class="wrap">
   <header class="section-head"><div><p class="kicker">Useful numbers</p><h2>Local directory</h2></div><button class="btn primary" data-share="directory">＋ Add business</button></header>
   <div class="emergency" id="emergency"></div>
   <div class="dir-tools"><input id="dirSearch" type="search" placeholder="Search shops, clinics, services…" aria-label="Search directory"></div>
@@ -244,7 +379,7 @@ dialog label{font-weight:700;font-size:13px;display:grid;gap:4px}dialog textarea
   <div id="dirGrid" class="dir-grid"></div>
 </div></section>
 
-<section class="section" id="ai"><div class="wrap ai-wrap">
+<section class="section view" data-v="ai" id="ai"><div class="wrap ai-wrap">
   <div class="ai-intro">
     <p class="kicker">Assistant</p>
     <h2 id="aiTitle">Lamnian AI</h2>
@@ -267,12 +402,12 @@ dialog label{font-weight:700;font-size:13px;display:grid;gap:4px}dialog textarea
 </div></section>
 </main>
 
-<footer class="site-footer"><div class="wrap foot-row">
-  <div><strong class="foot-brand">Lamnian</strong><p>A community website by and for the people of Lamnian.</p></div>
-  <p class="fine">Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> · Prayer times by <a href="https://aladhan.com/" target="_blank" rel="noopener">Aladhan</a><br>Community posts are reviewed by the site admin before publishing. <a href="/admin">Admin</a></p>
-</div></footer>
 
 <a class="ai-fab" href="#ai" aria-label="Ask Lamnian AI">✨ <span>Ask AI</span></a>
+
+<nav class="bnav" id="bnav" aria-label="Main">
+  <button data-go="home" class="on"><i>🏠</i>Home</button><button data-go="weather"><i>⛅</i>Weather</button><button data-go="directory"><i>📞</i>Directory</button><button data-go="ai"><i>✨</i>Ask AI</button><button id="meTab"><i>👤</i><span id="meTabL">Sign in</span></button>
+</nav>
 
 <dialog id="dlg">
   <form id="dlgForm" method="dialog">
@@ -283,16 +418,46 @@ dialog label{font-weight:700;font-size:13px;display:grid;gap:4px}dialog textarea
     <label id="fCatWrap">Category<input class="fld" id="fCat" maxlength="40" placeholder="e.g. Jobs, Lost &amp; found, Shops, Clinics"></label>
     <label id="fExtraWrap"><span id="fExtraLbl">Date / phone</span><input class="fld" id="fExtra" maxlength="40"></label>
     <label id="fImgWrap">Photo<input class="fld" id="fImg" type="file" accept="image/*"></label>
-    <div class="row"><button class="btn" type="button" id="fCancel">Cancel</button><button class="btn primary" type="submit">Send for review</button></div>
+    <div class="row"><button class="btn" type="button" id="fCancel">Cancel</button><button class="btn primary" type="submit">Post</button></div>
   </form>
 </dialog>
 
+<dialog id="authDlg">
+  <form id="authForm" method="dialog">
+    <h3 id="authTitle">Sign in</h3>
+    <button type="button" class="btn gbtn" id="gBtn"><b>G</b> Continue with Google</button>
+    <p class="or">or use email</p>
+    <label id="aNameW" hidden>Your name<input class="fld" id="aName" maxlength="40" autocomplete="name"></label>
+    <label>Email<input class="fld" id="aEmail" type="email" required autocomplete="email"></label>
+    <label>Password<input class="fld" id="aPass" type="password" required minlength="6" autocomplete="current-password"></label>
+    <p class="err" id="aErr" role="alert"></p>
+    <button class="btn primary" type="submit" id="aGo" style="justify-content:center">Sign in</button>
+    <div class="row" style="justify-content:space-between"><button type="button" class="lnk" id="aSwitch">Create new account</button><button type="button" class="lnk" id="aForgot">Forgot password?</button></div>
+    <button type="button" class="btn" id="aClose" style="justify-content:center">Close</button>
+  </form>
+</dialog>
+
+<dialog id="meDlg">
+  <div class="mebox"><div class="av" id="meAv"></div><b id="meName"></b><span id="meMail"></span>
+    <label>Display name<input class="fld" id="meEdit" maxlength="40"></label>
+    <button class="btn primary" id="meSave">Save name</button>
+    <button class="btn" id="mePw">Change password (email link)</button>
+    <button class="btn danger" id="mePosts">Delete all my posts</button>
+    <button class="btn danger" id="meDel">Delete my account</button>
+    <p class="err" id="meErr" role="alert"></p>
+    <a class="btn" id="meAdmin" href="/admin" hidden>Open admin panel</a>
+    <button class="btn" id="meOut">Sign out</button><button class="btn" id="meClose">Close</button></div>
+</dialog>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script>
 /* ===== SETTINGS — edit these ===== */
 var CFG={
   lat:34.2404, lon:73.7768,        // Lamnian (check on Google Maps and adjust if needed)
   region:'Azad Kashmir, Pakistan',
-  firebase:{apiKey:'AIzaSyBc2VA1OA3FfNw7qWTEzZauidFWuBcAdEQ',projectId:'lamnian-ai'},
+  admin:'mohzammajeed@gmail.com',
+  firebase:{apiKey:'AIzaSyBc2VA1OA3FfNw7qWTEzZauidFWuBcAdEQ',authDomain:'lamnian-ai.firebaseapp.com',projectId:'lamnian-ai',appId:'1:90954222339:web:92e8d710bd9c2f08973736'},
   prayerMethod:1                     // 1 = Karachi (Univ. of Islamic Sciences)
 };
 /* ===== helpers ===== */
@@ -308,7 +473,7 @@ function fx(type){var f=$('#skyFx'),h='';var n=type==='rain'||type==='storm'?60:
     else h+='<i class="'+(type==='snow'?'s':'')+'" style="left:'+l+'%;animation-duration:'+d+'s;animation-delay:'+dl+'s"></i>'}
   f.innerHTML=h}
 /* ===== weather ===== */
-function wxGet(t,direct){return getJSON('/api/weather?type='+t+'&lat='+CFG.lat+'&lon='+CFG.lon).catch(function(){return getJSON(direct)})}
+function wxGet(t,direct){var k='wx_'+t;return getJSON('/api/weather?type='+t+'&lat='+CFG.lat+'&lon='+CFG.lon).catch(function(){return getJSON(direct)}).then(function(d){try{localStorage.setItem(k,JSON.stringify(d))}catch(e){}return d}).catch(function(){var d=null;try{d=JSON.parse(localStorage.getItem(k))}catch(e){}if(d)return d;throw 0})}
 function loadWeather(){
   var u='https://api.open-meteo.com/v1/forecast?latitude='+CFG.lat+'&longitude='+CFG.lon+'&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m,pressure_msl,is_day&hourly=temperature_2m,precipitation_probability&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,uv_index_max&timezone=auto&forecast_days=7';
   wxGet('forecast',u).then(renderWx).catch(function(){$('#heroWx').innerHTML='<p>Weather is unavailable right now. Please try again shortly.</p>';$('#dailyList').innerHTML='<p class="muted">Forecast unavailable.</p>'});
@@ -317,8 +482,8 @@ function loadWeather(){
 }
 function renderWx(d){
   var c=d.current,day=!!c.is_day,w=wc(c.weather_code,day),dl=d.daily,h=d.hourly;
-  var s=sky(c.weather_code,day);$('#top').dataset.sky=s;fx(s);
-  $('#heroWx').innerHTML='<div class="wx-top"><div class="wx-temp">'+Math.round(c.temperature_2m)+'°</div><div class="wx-ico">'+w[1]+'</div></div><div class="wx-desc">'+w[0]+'</div><div class="wx-sub">Feels like '+Math.round(c.apparent_temperature)+'° · High '+Math.round(dl.temperature_2m_max[0])+'° / Low '+Math.round(dl.temperature_2m_min[0])+'°</div><div class="wx-row"><div><b>'+c.relative_humidity_2m+'%</b>Humidity</div><div><b>'+Math.round(c.wind_speed_10m)+' km/h</b>Wind</div><div><b>'+dl.precipitation_probability_max[0]+'%</b>Rain</div></div>';
+  var s=sky(c.weather_code,day);$('#top').dataset.sky=s;fx(s);var hw=$('#homeWx');hw.dataset.sky=s;hw.innerHTML='<span class="mi">'+w[1]+'</span><div><b>'+Math.round(c.temperature_2m)+'° · '+w[0]+'</b><span>Lamnian · H '+Math.round(dl.temperature_2m_max[0])+'° L '+Math.round(dl.temperature_2m_min[0])+'° · 💧'+dl.precipitation_probability_max[0]+'%</span></div><i>›</i>';
+  $('#heroWx').innerHTML='<div class="wx-loc">📍 Lamnian · '+esc(CFG.region)+'</div><div class="wx-top"><div class="wx-temp">'+Math.round(c.temperature_2m)+'°</div><div class="wx-ico">'+w[1]+'</div></div><div class="wx-desc">'+w[0]+'</div><div class="wx-sub">Feels like '+Math.round(c.apparent_temperature)+'° · High '+Math.round(dl.temperature_2m_max[0])+'° / Low '+Math.round(dl.temperature_2m_min[0])+'°</div><div class="wx-row"><div><b>'+c.relative_humidity_2m+'%</b>Humidity</div><div><b>'+Math.round(c.wind_speed_10m)+' km/h</b>Wind</div><div><b>'+dl.precipitation_probability_max[0]+'%</b>Rain</div></div>';
   $('#wxUpdated').textContent='Updated '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
   /* hourly */
   var now=c.time.slice(0,13)+':00',i0=Math.max(0,h.time.indexOf(now)),T=h.temperature_2m.slice(i0,i0+24),P=h.precipitation_probability.slice(i0,i0+24),HT=h.time.slice(i0,i0+24);
@@ -369,21 +534,27 @@ var DATA={
 var FB=CFG.firebase,FBON=FB.projectId&&FB.apiKey,FSU=function(c){return'https://firestore.googleapis.com/v1/projects/'+FB.projectId+'/databases/(default)/documents/'+c+'?key='+FB.apiKey};
 function fsVal(v){return v.stringValue!=null?v.stringValue:v.booleanValue!=null?v.booleanValue:v.integerValue!=null?+v.integerValue:''}
 function loadCol(c){if(!FBON)return Promise.resolve(null);
-  return fetch('https://firestore.googleapis.com/v1/projects/'+FB.projectId+'/databases/(default)/documents:runQuery?key='+FB.apiKey,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({structuredQuery:{from:[{collectionId:c}],where:{fieldFilter:{field:{fieldPath:'approved'},op:'EQUAL',value:{booleanValue:true}}},limit:60}})}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(r){return r.filter(function(x){return x.document}).map(function(x){var o={};for(var k in x.document.fields)o[k]=fsVal(x.document.fields[k]);return o}).sort(function(a,b){return(b.created||'')>(a.created||'')?1:-1})}).catch(function(){return null})}
-function postDoc(c,o){if(!FBON)return Promise.reject();var f={approved:{booleanValue:false},created:{stringValue:new Date().toISOString()}};for(var k in o)f[k]={stringValue:String(o[k])};
-  return fetch(FSU(c),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({fields:f})}).then(function(r){if(!r.ok)throw 0})}
+  return fetch('https://firestore.googleapis.com/v1/projects/'+FB.projectId+'/databases/(default)/documents:runQuery?key='+FB.apiKey,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({structuredQuery:{from:[{collectionId:c}],orderBy:[{field:{fieldPath:'created'},direction:'DESCENDING'}],limit:60}})}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(r){return r.filter(function(x){return x.document}).map(function(x){var o={_n:x.document.name};for(var k in x.document.fields)o[k]=fsVal(x.document.fields[k]);return o}).sort(function(a,b){return(b.created||'')>(a.created||'')?1:-1})}).then(function(r){try{localStorage.setItem('col_'+c,JSON.stringify(r.map(function(o){var l={};for(var k in o)if(k!=='image')l[k]=o[k];return l})))}catch(e){}return r}).catch(function(){try{return JSON.parse(localStorage.getItem('col_'+c))}catch(e){return null}})}
+function postDoc(c,o){if(!FBON||!USER)return Promise.reject();return USER.getIdToken().then(function(t){var f={created:{stringValue:new Date().toISOString()}};for(var k in o)f[k]={stringValue:String(o[k])};
+  return fetch(FSU(c),{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+t},body:JSON.stringify({fields:f})}).then(function(r){if(!r.ok)throw 0})})}
 var noticeCat='All',dirCat='All';
 function fillChips(el,items,cur,cb){var all=['All'].concat(items.filter(function(x,i,a){return a.indexOf(x)===i}));el.innerHTML=all.map(function(c){return'<button type="button" class="'+(c===cur?'on':'')+'">'+esc(c)+'</button>'}).join('');
   el.querySelectorAll('button').forEach(function(b){b.onclick=function(){cb(b.textContent)}})}
-function renderNews(){$('#newsGrid').innerHTML=DATA.news.map(function(n){return'<article class="post"><div class="img">'+(n.image?'<img loading="lazy" alt="" src="'+esc(n.image)+'">':esc(n.emoji||'📰'))+'</div><div class="body"><span class="meta">'+esc(n.date||'')+'</span><h3>'+esc(n.title)+'</h3><p>'+esc(n.body)+'</p></div></article>'}).join('')||'<p class="empty">No news yet — be the first to share.</p>'}
-function renderGallery(){$('#galleryGrid').innerHTML=DATA.gallery.map(function(g,i){var cols=['#1b6b63','#c2703a','#4a6fa5','#7a5c8f'];return'<figure>'+(g.image?'<img loading="lazy" alt="'+esc(g.title)+'" src="'+esc(g.image)+'">':'<div class="ph" style="background:'+cols[i%4]+'">'+esc(g.emoji||'📷')+'</div>')+'<figcaption>'+esc(g.title)+'</figcaption></figure>'}).join('')||'<p class="empty">No photos yet — upload the first one.</p>'}
-function renderEvents(){var M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];$('#eventsList').innerHTML=DATA.events.map(function(e){var d=new Date(e.date+'T12:00'),ok=!isNaN(d);return'<div class="ev"><div class="d">'+(ok?'<b>'+d.getDate()+'</b>'+M[d.getMonth()]:'<b>—</b>soon')+'</div><div><h3>'+esc(e.title)+'</h3><p>'+esc(e.body||'')+(e.place?' · 📍 '+esc(e.place):'')+'</p></div></div>'}).join('')||'<p class="empty">No upcoming events.</p>'}
-function renderNotices(){fillChips($('#noticeChips'),DATA.notices.map(function(n){return n.cat}),noticeCat,function(c){noticeCat=c;renderNotices()});
-  $('#noticeGrid').innerHTML=DATA.notices.filter(function(n){return noticeCat==='All'||n.cat===noticeCat}).map(function(n){return'<article class="post"><div class="body"><span class="tag">'+esc(n.cat||'Notice')+'</span><h3>'+esc(n.title)+'</h3><p>'+esc(n.body)+'</p></div></article>'}).join('')||'<p class="empty">Nothing here yet.</p>'}
+function ago(t){var d=new Date(t);if(isNaN(d))return t||'';var m=(Date.now()-d)/6e4;return m<1?'Just now':m<60?Math.floor(m)+'m':m<1440?Math.floor(m/60)+'h':m<10080?Math.floor(m/1440)+'d':d.toLocaleDateString()}
+function postCard(n,tag){var a=n.author||'Lamnian Community';return'<article class="fb"><div class="fh"><div class="av">'+avatar(n)+'</div><div><b>'+esc(a)+'</b><span>'+esc(ago(n.created||n.date))+(tag?' · '+esc(tag):'')+' · 🌐</span></div></div><div class="ft"><b>'+esc(n.title)+'</b>'+(n.body?'<p>'+esc(n.body)+'</p>':'')+'</div>'+(n.image?'<img class="fi" loading="lazy" alt="'+esc(n.title)+'" src="'+esc(n.image)+'">':'')+'<div class="fa"><button type="button" data-like="'+esc(n.title)+'">👍 Like</button>'+cmBtn(n)+'<button type="button" data-share-post="'+esc(n.title)+'">↗ Share</button>'+delBtn(n)+'</div>'+cmPanel(n)+'</article>'}
+function mine(n){return USER&&n.uid&&n.uid===USER.uid&&n._n}
+function delBtn(n,c){return mine(n)?'<button type="button" class="'+(c||'dbtn')+'" data-del="'+esc(n._n)+'">🗑 Delete</button>':''}
+function likes(){try{return JSON.parse(localStorage.getItem('likes')||'[]')}catch(e){return[]}}
+function likeState(){var l=likes();document.querySelectorAll('[data-like]').forEach(function(b){b.classList.toggle('on',l.indexOf(b.dataset.like)>-1)})}
+function renderNews(){$('#newsGrid').innerHTML=DATA.news.map(function(n){return postCard(n,'News')}).join('')||'<p class="empty">No news yet — be the first to share.</p>'}
+function renderGallery(){var cols=['#1b6b63','#c2703a','#4a6fa5','#7a5c8f'];$('#galleryGrid').innerHTML=DATA.gallery.map(function(g,i){return'<figure>'+(g.image?'<img loading="lazy" alt="'+esc(g.title)+'" src="'+esc(g.image)+'">':'<div class="ph" style="background:'+cols[i%4]+'">'+esc(g.emoji||'📷')+'</div>')+delBtn(g,'gdel')+'</figure>'}).join('')||'<p class="empty">No photos yet — upload the first one.</p>'}
+function renderEvents(){var M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];$('#eventsList').innerHTML=DATA.events.map(function(e){var d=new Date(e.date+'T12:00'),ok=!isNaN(d);return'<div class="ev"><div class="d">'+(ok?'<b>'+d.getDate()+'</b>'+M[d.getMonth()]:'<b>—</b>soon')+'</div><div><h3>'+esc(e.title)+'</h3><p>'+esc(e.body||'')+(e.place?' · 📍 '+esc(e.place):'')+'</p>'+delBtn(e)+'</div></div>'}).join('')||'<p class="empty">No upcoming events.</p>'}
+function renderNotices(){fillChips($('#noticeChips'),DATA.notices.map(function(n){return n.cat}),noticeCat,function(c){noticeCat=c;renderNotices();likeState()});
+  $('#noticeGrid').innerHTML=DATA.notices.filter(function(n){return noticeCat==='All'||n.cat===noticeCat}).map(function(n){return postCard(n,n.cat||'Notice')}).join('')||'<p class="empty">Nothing here yet.</p>'}
 function renderDir(){fillChips($('#dirChips'),DATA.directory.map(function(n){return n.cat}),dirCat,function(c){dirCat=c;renderDir()});
-  var q=$('#dirSearch').value.toLowerCase();
-  $('#dirGrid').innerHTML=DATA.directory.filter(function(n){return(dirCat==='All'||n.cat===dirCat)&&(n.title+n.body+n.cat).toLowerCase().indexOf(q)>-1}).map(function(n){return'<article class="post"><div class="body"><span class="tag">'+esc(n.cat)+'</span><h3>'+esc(n.title)+'</h3><p>'+esc(n.body)+'</p>'+(n.phone?'<p><a href="tel:'+esc(n.phone)+'"><b>📞 '+esc(n.phone)+'</b></a></p>':'')+'</div></article>'}).join('')||'<p class="empty">No matches. Try another search.</p>'}
-function renderAll(){renderNews();renderGallery();renderEvents();renderNotices();renderDir()}
+  var q=$('#dirSearch').value.toLowerCase(),em={Clinics:'🏥',Shops:'🛒',Transport:'🚕'};
+  $('#dirGrid').innerHTML=DATA.directory.filter(function(n){return(dirCat==='All'||n.cat===dirCat)&&((n.title||'')+(n.body||'')+(n.cat||'')).toLowerCase().indexOf(q)>-1}).map(function(n){return'<article class="dirrow"><div class="av">'+(em[n.cat]||'📍')+'</div><div class="g"><b>'+esc(n.title)+'</b><span>'+esc(n.cat||'')+(n.body?' · '+esc(n.body):'')+'</span></div>'+(n.phone?'<a class="btn primary" href="tel:'+esc(n.phone)+'">📞 Call</a>':'')+delBtn(n)+'</article>'}).join('')||'<p class="empty">No matches. Try another search.</p>'}
+function renderAll(){renderNews();renderGallery();renderEvents();renderNotices();renderDir();renderFeed();likeState()}
 $('#emergency').innerHTML=[['Rescue','1122'],['Police','15'],['Ambulance (Edhi)','115'],['Fire','16']].map(function(e){return'<a href="tel:'+e[1]+'"><b>'+e[1]+'</b>'+e[0]+'</a>'}).join('');
 $('#dirSearch').oninput=renderDir;
 /* ===== contribute dialog ===== */
@@ -391,27 +562,108 @@ var dlg=$('#dlg');
 function syncDlg(){var t=$('#fType').value;$('#fCatWrap').hidden=!(t==='notices'||t==='directory');$('#fExtraWrap').hidden=!(t==='events'||t==='directory');$('#fImgWrap').hidden=!(t==='news'||t==='gallery'||t==='notices');$('#fImg').required=t==='gallery';$('#fExtra').type=t==='events'?'date':'tel';$('#fExtraLbl').textContent=t==='events'?'Event date':'Phone number'}
 $('#fType').onchange=syncDlg;
 function shrink(f){return new Promise(function(ok){if(!f)return ok('');var r=new FileReader();r.onload=function(){var i=new Image();i.onload=function(){var s=Math.min(1,900/Math.max(i.width,i.height)),cv=document.createElement('canvas');cv.width=Math.round(i.width*s);cv.height=Math.round(i.height*s);cv.getContext('2d').drawImage(i,0,0,cv.width,cv.height);ok(cv.toDataURL('image/jpeg',.72))};i.onerror=function(){ok('')};i.src=r.result};r.readAsDataURL(f)})}
-function openDlg(t){$('#fType').value=t||'news';syncDlg();dlg.showModal()}
-$('#contributeBtn').onclick=function(){openDlg()};
+function openDlg(t){if(!USER){pending=t||'news';openAuth('in');return}$('#fType').value=t||'news';syncDlg();dlg.showModal()}
+
 document.querySelectorAll('[data-share]').forEach(function(b){b.onclick=function(){openDlg(b.dataset.share)}});
 $('#fCancel').onclick=function(){dlg.close()};
 $('#dlgForm').onsubmit=function(e){e.preventDefault();var c=$('#fType').value,x=$('#fExtra').value.trim(),f=$('#fImg').files[0],o={title:$('#fTitle').value.trim(),body:$('#fBody').value.trim(),cat:$('#fCat').value.trim()||'General'};
-  if(c==='events')o.date=x;if(c==='directory')o.phone=x;if(c==='news')o.date=new Date().toLocaleDateString();
+  o.author=uname();o.uid=USER.uid;if(USER.photoURL)o.photo=USER.photoURL;if(c==='events')o.date=x;if(c==='directory')o.phone=x;if(c==='news')o.date=new Date().toLocaleDateString();
   dlg.close();e.target.reset();toast('Sending…');
-  shrink(f).then(function(img){if(img)o.image=img;return postDoc(c,o)}).then(function(){toast('Thank you! Your post will appear after review.')}).catch(function(){toast('Could not send. Please try again.')})};
+  shrink(f).then(function(img){if(img)o.image=img;return postDoc(c,o)}).then(function(){toast('Posted!');return loadCol(c)}).then(function(r){if(r){DATA[c]=r;renderAll()}}).catch(function(){toast('Could not send. Please try again.')})};
 /* ===== theme, menu, AI placeholder ===== */
-$('#themeBtn').onclick=function(){var r=document.documentElement,t=r.dataset.theme==='dark'?'light':'dark';r.dataset.theme=t;try{localStorage.setItem('theme',t)}catch(e){}};
-$('#menuBtn').onclick=function(){var o=$('#nav').classList.toggle('open');$('#menuBtn').setAttribute('aria-expanded',o)};
-$('#nav').onclick=function(){$('#nav').classList.remove('open')};
+$('#themeBtn').onclick=function(){var r=document.documentElement,t=r.dataset.theme==='dark'?'light':'dark';r.dataset.theme=t;document.querySelector('meta[name=theme-color]').content=t==='dark'?'#242526':'#ffffff';try{localStorage.setItem('theme',t)}catch(e){}};
 $('#chatLog').innerHTML='<div class="msg">Assalam o Alaikum! Lamnian AI is coming soon.</div>';
 $('#suggest').innerHTML=['What’s the weather today?','Any events this week?','Road conditions?'].map(function(s){return'<button type="button">'+s+'</button>'}).join('');
 function aiSay(q){var l=$('#chatLog');l.insertAdjacentHTML('beforeend','<div class="msg me">'+esc(q)+'</div><div class="msg">The assistant isn’t connected yet. Please check back soon.</div>');l.scrollTop=l.scrollHeight}
 $('#suggest').onclick=function(e){if(e.target.tagName==='BUTTON')aiSay(e.target.textContent)};
 $('#chatForm').onsubmit=function(e){e.preventDefault();var i=$('#chatInput');if(i.value.trim()){aiSay(i.value.trim());i.value=''}};
+document.addEventListener('click',function(e){var cm=e.target.closest('[data-cm]');if(cm){toggleCm(cm.dataset.cm);return}var cd=e.target.closest('[data-cdel]');if(cd){delCm(cd.dataset.cdel,cd.dataset.cp);return}if(e.target.closest('[data-signin]')){openAuth('in');return}var g=e.target.closest('[data-go]');if(g){go(g.dataset.go);return}var f=e.target.closest('[data-f]');if(f){feedFilter=f.dataset.f;renderFeed();return}var b=e.target.closest('[data-like]');if(b){var l=likes(),i=l.indexOf(b.dataset.like);if(i>-1)l.splice(i,1);else l.push(b.dataset.like);try{localStorage.setItem('likes',JSON.stringify(l))}catch(x){}likeState();return}
+  var dl=e.target.closest('[data-del]');if(dl){if(!USER||!confirm('Delete this post? This cannot be undone.'))return;var nm=dl.dataset.del,col=nm.split('/').slice(-2)[0];
+    USER.getIdToken().then(function(t){return fetch('https://firestore.googleapis.com/v1/'+nm+'?key='+FB.apiKey,{method:'DELETE',headers:{Authorization:'Bearer '+t}})}).then(function(r){if(!r.ok)throw 0;toast('Post deleted');return loadCol(col)}).then(function(r){if(r){DATA[col]=r;renderAll()}}).catch(function(){toast('Could not delete. Please try again.')});return}
+  var sh=e.target.closest('[data-share-post]');if(sh){var u=location.href.split('#')[0];if(navigator.share)navigator.share({title:sh.dataset.sharePost,url:u}).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(u).then(function(){toast('Link copied')});return}
+  var im=e.target.closest('.fi,.gallery img');if(im){var d=document.createElement('div');d.id='lb';d.innerHTML='<img alt="" src="'+im.src+'">';d.onclick=function(){d.remove();if(history.state&&history.state.d)history.back()};document.body.appendChild(d);history.pushState({d:1},'')}});
+/* ===== accounts ===== */
+var USER=null,pending=null,authMode='in',FBA=null;
+try{firebase.initializeApp(CFG.firebase);FBA=firebase.auth()}catch(e){}
+function uname(u){u=u||USER;return u?(u.displayName||(u.email||'Member').split('@')[0]):''}
+function avatar(n){var a=n.author||'L';return n.photo&&/^https:\/\//.test(n.photo)?'<img referrerpolicy="no-referrer" alt="" src="'+esc(n.photo)+'">':esc(a.charAt(0).toUpperCase())}
+function syncAuth(){var up=authMode==='up';$('#authTitle').textContent=up?'Create account':'Sign in';$('#aGo').textContent=up?'Create account':'Sign in';$('#aNameW').hidden=!up;$('#aName').required=up;$('#aSwitch').textContent=up?'I already have an account':'Create new account';$('#aPass').autocomplete=up?'new-password':'current-password'}
+function openAuth(m){authMode=m;syncAuth();$('#aErr').textContent='';$('#authDlg').showModal()}
+function authErr(e){var m={'auth/invalid-credential':'Wrong email or password.','auth/wrong-password':'Wrong email or password.','auth/user-not-found':'No account with this email.','auth/email-already-in-use':'This email already has an account. Try signing in.','auth/weak-password':'Password must be at least 6 characters.','auth/invalid-email':'Enter a valid email.','auth/popup-closed-by-user':'','auth/cancelled-popup-request':'','auth/too-many-requests':'Too many tries. Please wait and try again.','auth/network-request-failed':'No internet connection.','auth/unauthorized-domain':'This website address is not authorised in Firebase yet.'};$('#aErr').textContent=(e&&m[e.code]!==undefined)?m[e.code]:'Something went wrong. Please try again.'}
+function setUser(u){USER=u;var on=!!u,av=on?avatar({photo:u.photoURL,author:uname(u)}):'L';$('#signBtn').hidden=on;$('#meTabL').textContent=on?'Me':'Sign in';$('#meBtn').hidden=!on;
+  if(on){$('#meBtn').innerHTML=av;$('#meAv').innerHTML=av;$('#meName').textContent=uname(u);$('#meMail').textContent=u.email||'';$('#meEdit').value=uname(u);$('#meAdmin').hidden=u.email!==CFG.admin;$('#mePw').hidden=!u.providerData.some(function(p){return p.providerId==='password'});if($('#authDlg').open)$('#authDlg').close()}
+  document.querySelectorAll('.composer .av').forEach(function(a){a.innerHTML=av});
+  $('.think').textContent=on?'What’s happening, '+uname(u).split(' ')[0]+'?':'What’s happening in Lamnian?';
+  renderAll();if(on&&pending){var t=pending;pending=null;openDlg(t)}}
+$('#signBtn').onclick=function(){openAuth('in')};
+$('#aClose').onclick=function(){$('#authDlg').close()};
+$('#aSwitch').onclick=function(){authMode=authMode==='up'?'in':'up';syncAuth()};
+$('#gBtn').onclick=function(){if(FBA)FBA.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(authErr)};
+$('#authForm').onsubmit=function(e){e.preventDefault();if(!FBA)return;var em=$('#aEmail').value.trim(),pw=$('#aPass').value,nm=$('#aName').value.trim();$('#aErr').textContent='';
+  var p=authMode==='up'?FBA.createUserWithEmailAndPassword(em,pw).then(function(c){return c.user.updateProfile({displayName:nm}).then(function(){setUser(FBA.currentUser)})}):FBA.signInWithEmailAndPassword(em,pw);
+  p.then(function(){e.target.reset()}).catch(authErr)};
+$('#aForgot').onclick=function(){var em=$('#aEmail').value.trim();if(!em){$('#aErr').textContent='Type your email above first.';return}FBA.sendPasswordResetEmail(em).then(function(){$('#aErr').textContent='';toast('Password reset email sent')}).catch(authErr)};
+$('#meBtn').onclick=function(){$('#meErr').textContent='';$('#meDlg').showModal()};
+$('#meClose').onclick=function(){$('#meDlg').close()};
+$('#meOut').onclick=function(){FBA.signOut();$('#meDlg').close();toast('Signed out')};
+var COLS=['news','gallery','events','notices','directory'];
+function reloadAll(){COLS.forEach(function(c){loadCol(c).then(function(r){if(r){DATA[c]=r;renderAll()}})})}
+function myPosts(){return USER.getIdToken().then(function(t){return Promise.all(COLS.concat(['comments']).map(function(c){return fetch('https://firestore.googleapis.com/v1/projects/'+FB.projectId+'/databases/(default)/documents:runQuery?key='+FB.apiKey,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({structuredQuery:{from:[{collectionId:c}],where:{fieldFilter:{field:{fieldPath:'uid'},op:'EQUAL',value:{stringValue:USER.uid}}},limit:500}})}).then(function(r){return r.json()}).then(function(r){return r.filter(function(x){return x.document}).map(function(x){return x.document.name})})})).then(function(a){return{t:t,names:[].concat.apply([],a)}})})}
+function purge(){return myPosts().then(function(o){return Promise.all(o.names.map(function(n){return fetch('https://firestore.googleapis.com/v1/'+n+'?key='+FB.apiKey,{method:'DELETE',headers:{Authorization:'Bearer '+o.t}})})).then(function(){return o.names.length})})}
+function reauth(){var u=FBA.currentUser;if(u.providerData.some(function(p){return p.providerId==='google.com'}))return u.reauthenticateWithPopup(new firebase.auth.GoogleAuthProvider());
+  var pw=prompt('Enter your password to confirm');if(!pw)return Promise.reject({code:'cancel'});return u.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(u.email,pw))}
+$('#meSave').onclick=function(){var n=$('#meEdit').value.trim();if(!n||!USER)return;USER.updateProfile({displayName:n}).then(function(){setUser(FBA.currentUser);toast('Name updated')}).catch(function(){toast('Could not update name')})};
+$('#mePw').onclick=function(){if(USER&&USER.email)FBA.sendPasswordResetEmail(USER.email).then(function(){toast('Password reset email sent')}).catch(function(){toast('Could not send email')})};
+$('#mePosts').onclick=function(){if(!USER||!confirm('Delete all your posts? This cannot be undone.'))return;purge().then(function(n){toast(n+' post(s) deleted');reloadAll()}).catch(function(){toast('Could not delete posts')})};
+$('#meDel').onclick=function(){if(!USER||!confirm('Delete your account and all your posts? This cannot be undone.'))return;var u=USER;$('#meErr').textContent='';
+  reauth().then(purge).then(function(){return u.delete()}).then(function(){$('#meDlg').close();toast('Your account was deleted');reloadAll()}).catch(function(e){$('#meErr').textContent=(e&&e.code==='cancel')?'':'Could not delete the account. Please try again.'})};
+if(FBA)FBA.onAuthStateChanged(setUser);
+/* ===== app shell + feed ===== */
+var VIEWS=['home','weather','directory','ai'],feedFilter='all',feedReady=!FBON;
+function show(v){if(VIEWS.indexOf(v)<0)v='home';document.body.dataset.view=v;document.querySelectorAll('#bnav [data-go]').forEach(function(b){b.classList.toggle('on',b.dataset.go===v)});window.scrollTo({top:0,behavior:'instant'})}
+function go(v){if(navigator.vibrate)navigator.vibrate(8);if(location.hash==='#'+v||(!location.hash&&v==='home'))window.scrollTo({top:0,behavior:'smooth'});else location.hash=v}
+window.addEventListener('hashchange',function(){show(location.hash.slice(1))});
+function feedItem(n,k){if(k!=='events')return n;var c={};for(var x in n)c[x]=n[x];c.body=(n.body||'')+(n.body?'\n':'')+'📅 '+(n.date||'')+(n.place?' · 📍 '+n.place:'');return c}
+function renderFeed(){if(!feedReady){$('#feed').innerHTML='<div class="skel h200" style="margin-bottom:10px"></div><div class="skel h200"></div>';return}var ff=feedFilter||'all',items=[];
+  [['news','News'],['gallery','Photo'],['events','Event'],['notices','Notice']].forEach(function(p){if(ff!=='all'&&ff!==p[0])return;(DATA[p[0]]||[]).forEach(function(n){items.push({n:feedItem(n,p[0]),t:p[1]})})});
+  items.sort(function(a,b){return(b.n.created||'')>(a.n.created||'')?1:-1});
+  $('#feed').innerHTML=items.map(function(x){return postCard(x.n,x.t)}).join('')||'<p class="empty">Nothing here yet — be the first to post!</p>';
+  document.querySelectorAll('#feedChips button').forEach(function(b){b.classList.toggle('on',b.dataset.f===ff)});likeState()}
+$('#plusBtn').onclick=function(){openDlg('news')};
+$('#meTab').onclick=function(){if(USER)$('#meBtn').click();else openAuth('in')};
+/* ===== comments ===== */
+function pid(n){return n._n?n._n.split('/').pop():''}
+function cmBtn(n){return n._n?'<button type="button" data-cm="'+pid(n)+'">💬 Comment</button>':''}
+function cmPanel(n){return n._n?'<div class="cm" id="cm-'+pid(n)+'" hidden></div>':''}
+function cmFetch(id){return fetch('https://firestore.googleapis.com/v1/projects/'+FB.projectId+'/databases/(default)/documents:runQuery?key='+FB.apiKey,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({structuredQuery:{from:[{collectionId:'comments'}],where:{fieldFilter:{field:{fieldPath:'postId'},op:'EQUAL',value:{stringValue:id}}},limit:100}})}).then(function(r){return r.json()}).then(function(r){return r.filter(function(x){return x.document}).map(function(x){var o={_n:x.document.name};for(var k in x.document.fields)o[k]=fsVal(x.document.fields[k]);return o}).sort(function(a,b){return(a.created||'')>(b.created||'')?1:-1})})}
+function cmRender(id,list){var p=document.getElementById('cm-'+id),b=document.querySelector('[data-cm="'+id+'"]');if(!p)return;if(b)b.textContent='💬 '+(list.length||'Comment');
+  var me=USER;p.innerHTML=list.map(function(c){var own=me&&c._n&&(c.uid===me.uid||me.email===CFG.admin);return'<div class="cmi"><div class="av s">'+avatar({photo:c.photo,author:c.author})+'</div><div class="cmb"><b>'+esc(c.author||'Member')+'</b><p>'+esc(c.text)+'</p><span>'+esc(ago(c.created))+(own?' · <button type="button" class="lnk" data-cdel="'+esc(c._n)+'" data-cp="'+esc(id)+'">Delete</button>':'')+'</span></div></div>'}).join('')
+    +(me?'<form class="cmf" data-cf="'+esc(id)+'"><input maxlength="500" placeholder="Write a comment…" aria-label="Comment" required><button class="btn primary" type="submit">Send</button></form>':'<button type="button" class="btn" data-signin>Sign in to comment</button>')}
+function toggleCm(id){var p=document.getElementById('cm-'+id);if(!p)return;if(!p.hidden){p.hidden=true;return}p.hidden=false;p.innerHTML='<p class="muted">Loading…</p>';cmFetch(id).then(function(l){cmRender(id,l)}).catch(function(){p.innerHTML='<p class="muted">Could not load comments.</p>'})}
+function delCm(nm,id){if(!USER||!confirm('Delete this comment?'))return;USER.getIdToken().then(function(t){return fetch('https://firestore.googleapis.com/v1/'+nm+'?key='+FB.apiKey,{method:'DELETE',headers:{Authorization:'Bearer '+t}})}).then(function(r){if(!r.ok)throw 0;return cmFetch(id)}).then(function(l){cmRender(id,l)}).catch(function(){toast('Could not delete comment')})}
+document.addEventListener('submit',function(e){var f=e.target.closest&&e.target.closest('.cmf');if(!f)return;e.preventDefault();var id=f.dataset.cf,i=f.querySelector('input'),t=i.value.trim();if(!t||!USER)return;i.value='';
+  USER.getIdToken().then(function(tk){var fl={postId:{stringValue:id},text:{stringValue:t},author:{stringValue:uname()},uid:{stringValue:USER.uid},created:{stringValue:new Date().toISOString()}};if(USER.photoURL)fl.photo={stringValue:USER.photoURL};
+    return fetch(FSU('comments'),{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+tk},body:JSON.stringify({fields:fl})})}).then(function(r){if(!r.ok)throw 0;return cmFetch(id)}).then(function(l){cmRender(id,l)}).catch(function(){toast('Could not post comment')})});
+/* ===== pull to refresh ===== */
+(function(){var y0=null,pull=0,ind=document.createElement('div');ind.id='ptr';ind.textContent='↓';document.body.appendChild(ind);
+  document.addEventListener('touchstart',function(e){y0=(window.scrollY<=0&&!document.querySelector('dialog[open],#lb'))?e.touches[0].clientY:null;pull=0},{passive:true});
+  document.addEventListener('touchmove',function(e){if(y0===null)return;pull=e.touches[0].clientY-y0;if(pull>0){ind.style.transform='translate(-50%,'+(Math.min(pull/2,60)-50)+'px)';ind.style.opacity=Math.min(1,pull/110);ind.textContent=pull>110?'↻':'↓'}},{passive:true});
+  document.addEventListener('touchend',function(){if(y0===null)return;ind.style.transform='';ind.style.opacity=0;if(pull>110){toast('Refreshing…');reloadAll();loadWeather()}y0=null;pull=0},{passive:true})})();
+/* ===== native app behaviour ===== */
+var _sm=HTMLDialogElement.prototype.showModal;HTMLDialogElement.prototype.showModal=function(){_sm.call(this);history.pushState({d:1},'')};
+document.querySelectorAll('dialog').forEach(function(d){d.addEventListener('close',function(){if(history.state&&history.state.d)history.back()})});
+window.addEventListener('popstate',function(){var l=document.getElementById('lb');if(l){l.remove();return}var o=document.querySelector('dialog[open]');if(o)o.close()});
+document.querySelector('meta[name=theme-color]').content=document.documentElement.dataset.theme==='dark'?'#242526':'#ffffff';
+(function(){var sp=150;try{if(!sessionStorage.getItem('sp'))sp=900;sessionStorage.setItem('sp',1)}catch(e){}setTimeout(function(){var el=$('#splash');if(!el)return;el.classList.add('out');setTimeout(function(){el.remove()},400)},sp)})();
+/* ===== offline ===== */
+function net(){var o=document.getElementById('offb');if(!o){o=document.createElement('div');o.id='offb';o.textContent='You’re offline — showing saved content';document.body.appendChild(o)}o.hidden=navigator.onLine}
+window.addEventListener('online',function(){net();reloadAll();loadWeather()});window.addEventListener('offline',net);net();
+if('serviceWorker' in navigator)window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){})});
+show(location.hash.slice(1));
 /* ===== start ===== */
 $('#heroRegion').textContent=CFG.region;
-renderAll();loadWeather();
-['news','gallery','events','notices','directory'].forEach(function(c){loadCol(c).then(function(r){if(r){DATA[c]=r;renderAll()}})});
+if(FBON)for(var k0 in DATA)DATA[k0]=[];renderAll();loadWeather();
+Promise.all(COLS.map(function(c){return loadCol(c).then(function(r){if(r)DATA[c]=r})})).then(function(){feedReady=true;renderAll()});
 </script>
 </body>
 </html>

@@ -7,18 +7,37 @@ service cloud.firestore {
         && request.auth.token.email_verified == true;
     }
     match /{col}/{id} {
-      allow read: if col in ['news','gallery','events','notices','directory']
-                  && (resource.data.approved == true || isAdmin());
+      // anyone can read posts
+      allow read: if col in ['news','gallery','events','notices','directory'];
+      // signed-in users can post as themselves
       allow create: if col in ['news','gallery','events','notices','directory']
-                    && request.resource.data.approved == false
+                    && request.auth != null
+                    && request.resource.data.uid == request.auth.uid
                     && request.resource.data.title is string
                     && request.resource.data.title.size() > 0
                     && request.resource.data.title.size() <= 120
-                    && request.resource.data.keys().size() <= 10
+                    && request.resource.data.keys().size() <= 12
+                    && (!('body' in request.resource.data) || request.resource.data.body.size() <= 1000)
                     && (!('image' in request.resource.data)
                         || (request.resource.data.image is string
                             && request.resource.data.image.size() < 400000));
-      allow update, delete: if isAdmin();
+      // the admin can remove any post; users can remove their own
+      allow delete: if isAdmin()
+                    || (request.auth != null && resource.data.uid == request.auth.uid);
+    }
+
+    match /comments/{id} {
+      allow read: if true;
+      allow create: if request.auth != null
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.postId is string
+                    && request.resource.data.postId.size() <= 100
+                    && request.resource.data.text is string
+                    && request.resource.data.text.size() > 0
+                    && request.resource.data.text.size() <= 500
+                    && request.resource.data.keys().size() <= 8;
+      allow delete: if isAdmin()
+                    || (request.auth != null && resource.data.uid == request.auth.uid);
     }
   }
 }

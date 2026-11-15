@@ -1,0 +1,10 @@
+{
+  "name": "Lamnian",
+  "short_name": "Lamnian",
+  "description": "Weather, news and community of Lamnian",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f0f2f5",
+  "theme_color": "#1877f2",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}
