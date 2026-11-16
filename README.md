@@ -13,7 +13,8 @@ Community website for Lamnian: live weather, prayer times, local news, photo gal
 | `manifest.webmanifest` | Lets people install the site on their phone home screen |
 | `sw.js` | Service worker: opens the app shell offline |
 | `404.html` | Not-found page |
-| `favicon.svg`, `robots.txt` | Icon; keeps `/admin` out of search |
+| `icons/`, `assets/` | Your logo as favicon, app icons (192/512/1024), maskable and Apple icons, plus the original logo |
+| `robots.txt` | Keeps `/admin` out of search |
 
 ## Setup
 1. **Firestore:** create the database, then paste `firestore.rules` into Rules and Publish.
@@ -38,6 +39,9 @@ Splash screen, bottom tab bar, slide-in pages, press feedback, safe-area padding
 - **⋯ post menu:** Save, Share, Edit/Delete (own posts), Report (others); admin can delete any post.
 - **Reports:** stored in `reports` (admin only). Review them in `/admin` → Reports.
 - Search box and 🔥 Top (most liked) on the Home feed.
+
+## Icons
+All symbols in the site are inline SVG icons (one sprite at the top of `index.html`), not emojis. The logo icon is used for the favicon, header, splash screen, home-screen install and the future mobile app (`icons/icon-1024.png`, `icons/maskable-512.png`).
 
 ## Settings
 Edit the `CFG` block near the top of the script in `index.html`:

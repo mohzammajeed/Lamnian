@@ -1,6 +1,6 @@
 // Lamnian service worker: app shell works offline. Weather, posts and sign-in always use the network first.
-const V = 'lamnian-v1';
-const SHELL = ['/', '/index.html', '/favicon.svg', '/manifest.webmanifest'];
+const V = 'lamnian-v2';
+const SHELL = ['/', '/index.html', '/manifest.webmanifest', '/icons/icon-192.png', '/icons/icon-512.png', '/icons/favicon-32.png'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(V).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
