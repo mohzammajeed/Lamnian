@@ -1,6 +1,6 @@
 # Lamnian
 
-Community website for Lamnian: live weather, prayer times, local news, photo gallery, events, notices and a local directory. Static site on Vercel, Firebase (Spark plan) for data.
+Community website for Lamnian: live weather, prayer times, local news, photos, events, notices, businesses (shops, hotels, taxis, fruit and vegetables) and places (visiting spots, mosques, schools, hospitals). Static site on Vercel, Firebase (Spark plan) for data.
 
 ## Files
 | File | Purpose |
@@ -12,6 +12,7 @@ Community website for Lamnian: live weather, prayer times, local news, photo gal
 | `vercel.json` | Clean URLs (`/admin`) and security headers |
 | `manifest.webmanifest` | Lets people install the site on their phone home screen |
 | `sw.js` | Service worker: opens the app shell offline |
+| `offline.html` | Shown when the app can't open and nothing is saved |
 | `404.html` | Not-found page |
 | `icons/`, `assets/` | Your logo as favicon, app icons (192/512/1024), maskable and Apple icons, plus the original logo |
 | `robots.txt` | Keeps `/admin` out of search |
@@ -29,6 +30,14 @@ Users can change their name, request a password reset email, delete all their ow
 ## Comments, refresh, offline
 Signed-in users can comment on posts (stored in the `comments` collection; users delete their own, the admin can delete any). Pulling down at the top of a page refreshes the feed and weather. When offline the site shows the last saved weather and posts (without photos).
 
+## PWA (installable web app)
+- **Install:** Android Chrome shows an "Install Lamnian" card (or menu → Install app). On iPhone use Safari → Share → Add to Home Screen; the card explains this.
+- **Home-screen shortcuts:** long-press the icon for New post, Business, Places, Weather.
+- **Share to Lamnian:** on Android, sharing text or a link from another app can open the new-post window with it filled in.
+- **Offline:** the app opens without internet; the last weather and posts are shown. Firebase scripts and fonts are saved after the first visit.
+- **Updates:** when you deploy a new version, people see "A new version is ready. Reload".
+- Test with Chrome DevTools → Lighthouse → Progressive Web App, and Application → Manifest.
+
 ## App feel
 Splash screen, bottom tab bar, slide-in pages, press feedback, safe-area padding for notches, Android back button closes windows before leaving, pull-to-refresh, offline mode. The admin link now lives in the account window (visible only to the admin).
 
@@ -39,6 +48,22 @@ Splash screen, bottom tab bar, slide-in pages, press feedback, safe-area padding
 - **⋯ post menu:** Save, Share, Edit/Delete (own posts), Report (others); admin can delete any post.
 - **Reports:** stored in `reports` (admin only). Review them in `/admin` → Reports.
 - Search box and 🔥 Top (most liked) on the Home feed.
+
+## Layout (v4)
+- **Bottom bar:** Home, Business, Places, Weather, More. Nothing else is repeated in the header.
+- **More** holds everything personal: sign in / profile card, Ask Lamnian AI, My profile, Account settings, dark mode, install app and (admin only) the admin panel.
+- **Home** is one feed of everything: news, photos, events, notices, businesses and places. Filter chips: All, News, Business, Places, Photos, Events, Notices, Top. The round shortcuts under the weather card jump straight to a category.
+- **Business** and **Places** pages show every category as a tile with a count, a search box, and full listings (name, category, details, address, Call button, photo).
+
+### Categories
+Edit the `HUBS` block in `index.html`: `[name, icon, short label]`.
+- Business: Shops, Hotels & Stay, Restaurants & Cafes, Taxi & Transport, Fruits & Vegetables, Farm & Dairy, Repair & Trades, Pharmacy, Mobile & Electronics, Tailors & Fashion, Professional Services, Other Services
+- Places: Visiting places, Mosques, Schools, Hospitals & Clinics, Public offices
+
+### Listing your business or service
+Signed-in users tap **List yours** (Business) or **Add** (Places). The form asks for name, details, category, address, phone, WhatsApp, opening hours and a photo. Each listing shows Call, WhatsApp and Directions buttons. Owners can edit their listing from the ⋯ menu.
+
+Listings are stored in the existing `directory` collection (the `cat` field decides Business or Places). New fields: `addr`, `whatsapp`, `hours`. **Republish `firestore.rules`** so owners can edit those fields; creating listings works with the old rules too. Old entries with categories like `Clinics`, `Shops`, `Transport` or `Electrician` are mapped automatically.
 
 ## Icons
 All symbols in the site are inline SVG icons (one sprite at the top of `index.html`), not emojis. The logo icon is used for the favicon, header, splash screen, home-screen install and the future mobile app (`icons/icon-1024.png`, `icons/maskable-512.png`).

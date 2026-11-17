@@ -1,11 +1,25 @@
 {
-  "name": "Lamnian",
+  "id": "/",
+  "name": "Lamnian — Weather, News & Community",
   "short_name": "Lamnian",
-  "description": "Weather, news and community of Lamnian",
-  "start_url": "/",
+  "description": "Live weather, local news, photos, events, notices, businesses and places in Lamnian.",
+  "start_url": "/?source=pwa",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#f0f2f5",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "portrait",
+  "background_color": "#ffffff",
   "theme_color": "#1877f2",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": [
+    "social",
+    "news",
+    "weather"
+  ],
   "icons": [
     {
       "src": "/icons/icon-192.png",
@@ -25,5 +39,66 @@
       "type": "image/png",
       "purpose": "maskable"
     }
-  ]
+  ],
+  "shortcuts": [
+    {
+      "name": "New post",
+      "short_name": "Post",
+      "url": "/?action=compose",
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Business",
+      "short_name": "Business",
+      "url": "/#business",
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Places",
+      "short_name": "Places",
+      "url": "/#places",
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Weather",
+      "short_name": "Weather",
+      "url": "/#weather",
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "share_target": {
+    "action": "/",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "launch_handler": {
+    "client_mode": [
+      "navigate-existing",
+      "auto"
+    ]
+  }
 }

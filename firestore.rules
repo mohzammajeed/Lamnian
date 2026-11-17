@@ -19,10 +19,10 @@ service cloud.firestore {
          || (request.resource.data.likeCount == old - 1 && old > 0 && exists(likePath(lid)) && !existsAfter(likePath(lid))));
     }
 
-    // the author can edit only title, body and the edited stamp
+    // the author can edit title, body and listing details (category, address, phone, WhatsApp, hours)
     function ownerEdit() {
       return resource.data.uid == request.auth.uid
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['title', 'body', 'edited'])
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['title', 'body', 'edited', 'cat', 'addr', 'phone', 'whatsapp', 'hours'])
         && request.resource.data.title is string
         && request.resource.data.title.size() > 0
         && request.resource.data.title.size() <= 120
@@ -40,7 +40,7 @@ service cloud.firestore {
                     && request.resource.data.title is string
                     && request.resource.data.title.size() > 0
                     && request.resource.data.title.size() <= 120
-                    && request.resource.data.keys().size() <= 12
+                    && request.resource.data.keys().size() <= 14
                     && (!('body' in request.resource.data) || request.resource.data.body.size() <= 1000)
                     && (!('image' in request.resource.data)
                         || (request.resource.data.image is string
