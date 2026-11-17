@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "app.vercel.lamnian.twa",
+        "sha256_cert_fingerprints": ["28:4C:C4:22:B9:E1:6D:3E:C2:4F:63:9D:ED:1E:2B:8C:53:EF:18:6D:C0:CD:FB:C5:30:A9:13:2B:4D:30:68:43"]
+      }
+    }]
