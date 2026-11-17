@@ -374,6 +374,18 @@ body[data-view=business] .view[data-v=business],body[data-view=places] .view[dat
 .lby{margin:10px 12px 0;font-size:11.5px;color:var(--mut)}
 .fm{flex-direction:column;align-items:flex-start;gap:3px}.fb .acts{margin:0 12px 10px}
 #fHint{margin:0;font-size:13px}
+/* ===== polish v5 ===== */
+.grid-wx>*,.card{min-width:0}.grid-wx{grid-template-columns:minmax(0,1fr)}
+@media(min-width:900px){.grid-wx{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:none;grid-auto-flow:row;grid-auto-columns:auto;overflow:visible;gap:8px}
+.tile.more{background:transparent;box-shadow:none;border:1.5px dashed var(--line);color:var(--mut)}.tile.more .ico{color:var(--mut)}
+.av.big{position:relative;z-index:1}
+.composer{margin-bottom:10px}.slider{margin:0 0 10px}.sbox{margin-top:0}
+.emergency{grid-template-columns:repeat(4,1fr)!important;gap:6px!important;margin-bottom:10px!important}
+.emergency a{border-radius:10px!important;padding:6px 4px!important;text-align:center;font-size:10.5px!important}.emergency b{font-size:17px!important}
+.site-header .wrap{width:min(680px,100% - 16px)}
+.view[data-v=ai]>.wrap,.view[data-v=more]>.wrap{padding-top:6px}
+.sl-track>#homeWx{margin:0;border-radius:0;box-shadow:none}
 </style>
 </head>
 <body data-view="home">
@@ -696,9 +708,12 @@ function dirActs(n){var h='';if(n.phone)h+='<a class="act call" href="'+esc(telH
 function dirMeta(n){if(colOf(n)!=='directory')return'';var m=(n.hours?'<span>'+ic('clock')+' '+esc(n.hours)+'</span>':'')+(n.addr?'<span>'+ic('pin')+' '+esc(n.addr)+'</span>':'');return(m?'<div class="fm">'+m+'</div>':'')+dirActs(n)}
 function hubCard(n){var id=pid(n);return'<article class="lst" data-pid="'+id+'">'+(n.image?'<img class="lcover" loading="lazy" alt="'+esc(n.title)+'" src="'+esc(n.image)+'">':'')+'<div class="lh"><div class="lav">'+ic(catIcon(n))+'</div><div class="lt"><b>'+esc(n.title)+'</b><span class="cat">'+esc(catName(n))+'</span></div>'+(id?'<button type="button" class="pm" data-menu="'+id+'" aria-label="More options">'+ic('more')+'</button>':'')+'</div>'+(n.body?'<p class="ld">'+esc(n.body)+'</p>':'')+((n.hours||n.addr)?'<div class="lm">'+(n.hours?'<span>'+ic('clock')+' '+esc(n.hours)+'</span>':'')+(n.addr?'<span>'+ic('pin')+' '+esc(n.addr)+'</span>':'')+'</div>':'')+dirActs(n)+'<div class="lby">Listed by '+esc(n.author||'a neighbour')+(n.created?' · '+esc(ago(n.created)):'')+'</div></article>'}
 function tile(h,key,icon,label,count){return'<button type="button" class="tile'+(HUBCAT[h]===key?' on':'')+'" data-h="'+h+'" data-tile="'+esc(key)+'">'+ic(icon)+esc(label)+'<small>'+count+'</small></button>'}
+var HUBMAX={business:7},HUBOPEN={business:false,places:true};
 function renderHub(h){var H=HUBS[h],cur=HUBCAT[h],q=($('#'+h+'Search').value||'').toLowerCase(),all=(DATA.directory||[]).filter(function(n){return hubOf(n)===h}),cnt={};
   all.forEach(function(n){var c=catName(n);cnt[c]=(cnt[c]||0)+1});
-  $('#'+h+'Tiles').innerHTML=tile(h,'All','grid','All',all.length)+H.cats.map(function(c){return tile(h,c[0],c[1],c[2],cnt[c[0]]||0)}).join('');
+  var tl=[tile(h,'All','grid','All',all.length)].concat(H.cats.map(function(c){return tile(h,c[0],c[1],c[2],cnt[c[0]]||0)})),mx=HUBMAX[h],selIdx=cur==='All'?0:H.cats.map(function(c){return c[0]}).indexOf(cur)+1;
+  if(mx&&tl.length>mx+1){var open=HUBOPEN[h]||selIdx>=mx;tl=open?tl.concat('<button type="button" class="tile more" data-more="'+h+'">'+ic('chevron')+'Less<small>&nbsp;</small></button>'):tl.slice(0,mx).concat('<button type="button" class="tile more" data-more="'+h+'">'+ic('more')+'More<small>+'+(tl.length-mx)+'</small></button>')}
+  $('#'+h+'Tiles').innerHTML=tl.join('');
   var list=all.filter(function(n){return(cur==='All'||catName(n)===cur)&&((n.title||'')+' '+(n.body||'')+' '+(n.addr||'')+' '+catName(n)).toLowerCase().indexOf(q)>-1}),cc=cur==='All'?'':cur;
   $('#'+h+'Add').dataset.cat=cc;
   $('#'+h+'List').innerHTML=list.map(hubCard).join('')||'<div class="empty">'+(q?'No matches. Try another search.':'Nothing listed in '+(cc?esc(cc):'this section')+' yet. '+(h==='business'?'Own a business or offer a service? List it free.':'Know a place? Add it for everyone.')+'<br><button type="button" class="btn primary sm" data-share="'+h+'" data-cat="'+esc(cc)+'" style="margin-top:10px">'+ic('plus')+' Add the first one</button>')+'</div>'}
@@ -717,9 +732,9 @@ function slideAuto(){clearInterval(SL.t);if(window.matchMedia('(prefers-reduced-
   sl.addEventListener('touchend',function(e){SL.hold=false;if(x0===null)return;var dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)>40)slideTo(SL.i+(dx<0?1:-1));slideAuto()},{passive:true});
   sl.addEventListener('mouseenter',function(){SL.hold=true});sl.addEventListener('mouseleave',function(){SL.hold=false})})();
 function renderAll(){renderHub('business');renderHub('places');renderSlides();renderFeed();likeState()}
-$('#emergency').innerHTML=[['Rescue','1122'],['Police','15'],['Ambulance (Edhi)','115'],['Fire','16']].map(function(e){return'<a href="tel:'+e[1]+'"><b>'+e[1]+'</b>'+e[0]+'</a>'}).join('');
+$('#emergency').innerHTML=[['Rescue','1122'],['Police','15'],['Ambulance','115'],['Fire','16']].map(function(e){return'<a href="tel:'+e[1]+'"><b>'+e[1]+'</b>'+e[0]+'</a>'}).join('');
 $('#businessSearch').oninput=function(){renderHub('business')};$('#placesSearch').oninput=function(){renderHub('places')};
-slideAuto();
+slideAuto();paintMe(null);
 /* ===== contribute dialog ===== */
 var dlg=$('#dlg'),pendingCat='';
 function isDirType(t){return t==='business'||t==='places'}
@@ -742,7 +757,7 @@ $('#suggest').innerHTML=['What’s the weather today?','Any events this week?','
 function aiSay(q){var l=$('#chatLog');l.insertAdjacentHTML('beforeend','<div class="msg me">'+esc(q)+'</div><div class="msg">The assistant isn’t connected yet. Please check back soon.</div>');l.scrollTop=l.scrollHeight}
 $('#suggest').onclick=function(e){if(e.target.tagName==='BUTTON')aiSay(e.target.textContent)};
 $('#chatForm').onsubmit=function(e){e.preventDefault();var i=$('#chatInput');if(i.value.trim()){aiSay(i.value.trim());i.value=''}};
-document.addEventListener('click',function(e){var sb=e.target.closest('[data-share]');if(sb){openDlg(sb.dataset.share,sb.dataset.cat);return}var dt=e.target.closest('[data-dot]');if(dt){slideTo(+dt.dataset.dot);slideAuto();return}var hb=e.target.closest('[data-hub]');if(hb){HUBCAT[hb.dataset.hub]=hb.dataset.cat||'All';renderHub(hb.dataset.hub);go(hb.dataset.hub);return}var tl=e.target.closest('[data-tile]');if(tl){HUBCAT[tl.dataset.h]=tl.dataset.tile;renderHub(tl.dataset.h);return}var mn=e.target.closest('[data-menu]');if(mn){openSheet(mn.dataset.menu);return}var pf=e.target.closest('[data-prof]');if(pf){go('profile/'+pf.dataset.prof);return}if(e.target.closest('[data-gear]')){$('#meErr').textContent='';$('#meDlg').showModal();return}var pt=e.target.closest('[data-ptab]');if(pt){paintProf(pt.dataset.ptab);return}var cm=e.target.closest('[data-cm]');if(cm){toggleCm(cm.dataset.cm);return}var cd=e.target.closest('[data-cdel]');if(cd){delCm(cd.dataset.cdel,cd.dataset.cp);return}if(e.target.closest('[data-signin]')){openAuth('in');return}var g=e.target.closest('[data-go]');if(g){go(g.dataset.go);return}var f=e.target.closest('[data-f]');if(f){feedFilter=f.dataset.f;renderFeed();return}var b=e.target.closest('[data-like]');if(b){toggleLike(b.dataset.like,b.dataset.col);return}
+document.addEventListener('click',function(e){var sb=e.target.closest('[data-share]');if(sb){openDlg(sb.dataset.share,sb.dataset.cat);return}var dt=e.target.closest('[data-dot]');if(dt){slideTo(+dt.dataset.dot);slideAuto();return}var hb=e.target.closest('[data-hub]');if(hb){HUBCAT[hb.dataset.hub]=hb.dataset.cat||'All';renderHub(hb.dataset.hub);go(hb.dataset.hub);return}var mo=e.target.closest('[data-more]');if(mo){var mh=mo.dataset.more;HUBOPEN[mh]=!(HUBOPEN[mh]||false);if(!HUBOPEN[mh])HUBCAT[mh]='All';renderHub(mh);return}var tl=e.target.closest('[data-tile]');if(tl){HUBCAT[tl.dataset.h]=tl.dataset.tile;renderHub(tl.dataset.h);return}var mn=e.target.closest('[data-menu]');if(mn){openSheet(mn.dataset.menu);return}var pf=e.target.closest('[data-prof]');if(pf){go('profile/'+pf.dataset.prof);return}if(e.target.closest('[data-gear]')){$('#meErr').textContent='';$('#meDlg').showModal();return}var pt=e.target.closest('[data-ptab]');if(pt){paintProf(pt.dataset.ptab);return}var cm=e.target.closest('[data-cm]');if(cm){toggleCm(cm.dataset.cm);return}var cd=e.target.closest('[data-cdel]');if(cd){delCm(cd.dataset.cdel,cd.dataset.cp);return}if(e.target.closest('[data-signin]')){openAuth('in');return}var g=e.target.closest('[data-go]');if(g){go(g.dataset.go);return}var f=e.target.closest('[data-f]');if(f){feedFilter=f.dataset.f;renderFeed();return}var b=e.target.closest('[data-like]');if(b){toggleLike(b.dataset.like,b.dataset.col);return}
   var dl=e.target.closest('[data-del]');if(dl){if(!USER||!confirm('Delete this post? This cannot be undone.'))return;var nm=dl.dataset.del,col=nm.split('/').slice(-2)[0];
     USER.getIdToken().then(function(t){return fetch('https://firestore.googleapis.com/v1/'+nm+'?key='+FB.apiKey,{method:'DELETE',headers:{Authorization:'Bearer '+t}})}).then(function(r){if(!r.ok)throw 0;toast('Post deleted');return loadCol(col)}).then(function(r){if(r){DATA[col]=r;renderAll()}}).catch(function(){toast('Could not delete. Please try again.')});return}
   var sh=e.target.closest('[data-share-post]');if(sh){var u=location.href.split('#')[0];if(navigator.share)navigator.share({title:sh.dataset.sharePost,url:u}).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(u).then(function(){toast('Link copied')});return}
@@ -755,11 +770,10 @@ function avatar(n){var a=n.author||'L';return n.photo&&/^https:\/\//.test(n.phot
 function syncAuth(){var up=authMode==='up';$('#authTitle').textContent=up?'Create account':'Sign in';$('#aGo').textContent=up?'Create account':'Sign in';$('#aNameW').hidden=!up;$('#aName').required=up;$('#aSwitch').textContent=up?'I already have an account':'Create new account';$('#aPass').autocomplete=up?'new-password':'current-password'}
 function openAuth(m){authMode=m;syncAuth();$('#aErr').textContent='';$('#authDlg').showModal()}
 function authErr(e){var m={'auth/invalid-credential':'Wrong email or password.','auth/wrong-password':'Wrong email or password.','auth/user-not-found':'No account with this email.','auth/email-already-in-use':'This email already has an account. Try signing in.','auth/weak-password':'Password must be at least 6 characters.','auth/invalid-email':'Enter a valid email.','auth/popup-closed-by-user':'','auth/cancelled-popup-request':'','auth/too-many-requests':'Too many tries. Please wait and try again.','auth/network-request-failed':'No internet connection.','auth/unauthorized-domain':'This website address is not authorised in Firebase yet.'};$('#aErr').textContent=(e&&m[e.code]!==undefined)?m[e.code]:'Something went wrong. Please try again.'}
-function setUser(u){USER=u;var on=!!u,av=on?avatar({photo:u.photoURL,author:uname(u)}):'L',mc=$('#meCard');
+function paintMe(u){var on=!!u,mc=$('#meCard');if(on){mc.setAttribute('data-go','profile');mc.setAttribute('role','button');mc.innerHTML='<div class="av">'+avatar({photo:u.photoURL,author:uname(u)})+'</div><div class="t"><b>'+esc(uname(u))+'</b><span>'+esc(u.email||'View your profile')+'</span></div>'+ic('chevron')}else{mc.removeAttribute('data-go');mc.removeAttribute('role');mc.innerHTML='<div class="av">'+ic('user')+'</div><div class="t"><b>Welcome to Lamnian</b><span>Sign in to post, like and comment</span></div><button type="button" class="btn primary sm" data-signin>Sign in</button>'}}
+function setUser(u){USER=u;var on=!!u,av=on?avatar({photo:u.photoURL,author:uname(u)}):'L';paintMe(u);
   $('#mProf').hidden=!on;$('#mSet').hidden=!on;$('#meAdmin').hidden=!(on&&u.email===CFG.admin);
-  if(on){mc.setAttribute('data-go','profile');mc.setAttribute('role','button');mc.innerHTML='<div class="av">'+av+'</div><div class="t"><b>'+esc(uname(u))+'</b><span>'+esc(u.email||'View your profile')+'</span></div>'+ic('chevron');
-    $('#meMail').textContent=u.email||'';$('#meEdit').value=uname(u);$('#mePw').hidden=!u.providerData.some(function(p){return p.providerId==='password'});if($('#authDlg').open)$('#authDlg').close()}
-  else{mc.removeAttribute('data-go');mc.removeAttribute('role');mc.innerHTML='<div class="av">'+ic('user')+'</div><div class="t"><b>Welcome to Lamnian</b><span>Sign in to post, like and comment</span></div><button type="button" class="btn primary sm" data-signin>Sign in</button>'}
+  if(on){$('#meMail').textContent=u.email||'';$('#meEdit').value=uname(u);$('#mePw').hidden=!u.providerData.some(function(p){return p.providerId==='password'});if($('#authDlg').open)$('#authDlg').close()}
   document.querySelectorAll('.composer .av').forEach(function(a){a.innerHTML=av});
   $('.think').textContent=on?'What’s happening, '+uname(u).split(' ')[0]+'?':'What’s happening in Lamnian?';
   if(on){loadLikes();ensureProfile(u)}else{MYL={}}renderAll();if(document.body.dataset.view==='profile')show(location.hash.slice(1));if(on&&pending){var t=pending;pending=null;openDlg(t,pendingCat)}}
