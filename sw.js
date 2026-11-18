@@ -2,7 +2,7 @@
 // - App shell opens instantly and works offline
 // - Firebase scripts and Google Fonts are saved after the first visit
 // - Weather, posts and sign-in always go to the network (the app keeps its own saved copy)
-const V = 'lamnian-v4';
+const V = 'lamnian-v5';
 const LIBS = 'lamnian-libs-v1';
 const SHELL = ['/', '/offline', '/manifest.webmanifest', '/icons/icon-192.png', '/icons/icon-512.png', '/icons/favicon-32.png', '/icons/apple-touch-icon.png'];
 
@@ -50,6 +50,7 @@ self.addEventListener('fetch', (e) => {
     return; // everything else (Firestore, Auth, weather APIs) goes straight to the network
   }
   if (u.pathname.startsWith('/api/') || u.pathname.startsWith('/admin')) return;
+  if (u.pathname.endsWith('.apk')) return; // downloads go straight to the network
 
   if (r.mode === 'navigate') {
     if (u.pathname === '/' || u.pathname === '/index.html') {

@@ -31,7 +31,7 @@ Users can change their name, request a password reset email, delete all their ow
 Signed-in users can comment on posts (stored in the `comments` collection; users delete their own, the admin can delete any). Pulling down at the top of a page refreshes the feed and weather. When offline the site shows the last saved weather and posts (without photos).
 
 ## PWA (installable web app)
-- **Install:** Android Chrome shows an "Install Lamnian" card (or menu → Install app). On iPhone use Safari → Share → Add to Home Screen; the card explains this.
+- **Get the app:** on Android a popup (once per visit) and an animated banner slide offer the APK download (`/Lamnian.apk`). Put `Lamnian.apk` in the repo root next to `index.html`; replace the file to publish an update. If the file is missing, Android visitors get the normal browser install prompt instead. iPhone visitors see "Share → Add to Home Screen". Nothing is shown inside the installed app.
 - **Home-screen shortcuts:** long-press the icon for New post, Business, Places, Weather.
 - **Share to Lamnian:** on Android, sharing text or a link from another app can open the new-post window with it filled in.
 - **Offline:** the app opens without internet; the last weather and posts are shown. Firebase scripts and fonts are saved after the first visit.
