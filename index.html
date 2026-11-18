@@ -7,6 +7,9 @@
 <meta name="description" content="Lamnian community website: live weather forecast, local news, photos, events, notices, local businesses (shops, hotels, taxis, fruit and vegetables), places (visiting spots, mosques, schools, hospitals) and an AI assistant.">
 <meta name="theme-color" content="#ffffff">
 <meta name="mobile-web-app-capable" content="yes">
+<link rel="canonical" href="https://lamnian.vercel.app/">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Lamnian"><meta property="og:title" content="Lamnian — Weather, News &amp; Community"><meta property="og:description" content="Live weather, prayer times, local news, events, businesses and places in Lamnian, Azad Kashmir."><meta property="og:url" content="https://lamnian.vercel.app/"><meta property="og:image" content="https://lamnian.vercel.app/icons/icon-512.png">
+<meta name="twitter:card" content="summary">
 <link rel="manifest" href="/manifest.webmanifest">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Lamnian">
@@ -326,7 +329,7 @@ body[data-view=profile] .view[data-v=profile]{display:block}
 #updBar{position:fixed;left:8px;right:8px;bottom:calc(72px + env(safe-area-inset-bottom));background:#1c1e21;color:#fff;border-radius:12px;padding:8px 8px 8px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px;z-index:90;box-shadow:0 6px 20px rgba(0,0,0,.35)}
 
 /* ===== v4: one menu, Business + Places hubs ===== */
-body[data-view=community] .view[data-v=community],body[data-view=business] .view[data-v=business],body[data-view=places] .view[data-v=places],body[data-view=more] .view[data-v=more]{display:block}
+body[data-view=business] .view[data-v=business],body[data-view=places] .view[data-v=places],body[data-view=more] .view[data-v=more]{display:block}
 .composer .cr{border:0;padding-bottom:0}
 .hubhead{display:flex;align-items:center;gap:10px;margin:14px 2px 10px}.hubhead h2{font:800 22px/1.2 var(--sans)}.hubhead p{margin:0;font-size:13px;color:var(--mut);line-height:1.3}.hubhead .btn{margin-left:auto;flex:none}
 .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
@@ -409,7 +412,7 @@ body.noscroll{overflow:hidden}
 @keyframes apbg{to{background-position:-200% 0}}@keyframes apbob{50%{transform:translateY(-7px)}}@keyframes apring{from{transform:scale(.8);opacity:.9}to{transform:scale(3);opacity:0}}@keyframes apsp{from{transform:translateY(0);opacity:0}15%{opacity:1}to{transform:translateY(-190px);opacity:0}}
 @keyframes getpulse{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.55)}50%{box-shadow:0 0 0 9px rgba(34,197,94,0)}}@keyframes apdrop{0%,100%{transform:translateY(-3px)}50%{transform:translateY(3px)}}@keyframes apshine{0%{left:-60%}60%,100%{left:130%}}@keyframes dlring{to{box-shadow:0 0 0 16px rgba(255,255,255,0)}}
 @media(prefers-reduced-motion:reduce){.appcard,.apppop{transition:none}.apppop *,.slide.dl,.slide.dl *,.getbtn::after,.slide.dl em::after{animation:none!important}}
-/* ===== v6: community, language, next prayer ===== */
+/* ===== v6: language, next prayer ===== */
 .langpill{margin-inline-start:auto;border:1.5px solid var(--line);background:var(--card);color:#1877f2;border-radius:99px;padding:6px 14px;font:800 14px var(--sans);cursor:pointer;line-height:1.2}
 .nextp{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:12px;box-shadow:var(--sh);padding:9px 14px;margin:0 0 10px}
 .nextp[hidden]{display:none}.nextp .np-i{width:38px;height:38px;border-radius:50%;background:#e3f6ea;color:#16a34a;display:grid;place-items:center;flex:none}.nextp .np-i .ico{width:22px;height:22px;margin:0}
@@ -442,6 +445,7 @@ html[lang=ur] .tile,html[lang=ur] .bnav button,html[lang=ur] .chips button,html[
 [dir=rtl] .brand,[dir=rtl] .toast,[dir=rtl] .bnav{direction:rtl}
 [dir=rtl] .ft p,[dir=rtl] .ft b,[dir=rtl] .ft,[dir=rtl] .ld,[dir=rtl] .lt>b,[dir=rtl] .hn>b,[dir=rtl] .cmb,[dir=rtl] .bio,[dir=rtl] .fm span,[dir=rtl] .lm span{unicode-bidi:plaintext}
 [dir=rtl] .langpill{font-family:'Noto Naskh Arabic',var(--sans)}
+.ckb{position:fixed;left:12px;right:12px;bottom:84px;z-index:60;max-width:560px;margin:0 auto;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh);padding:12px 14px;display:flex;gap:12px;align-items:center;font-size:13px}.ckb[hidden]{display:none}.ckb button{border:0;background:var(--brand);color:#fff;border-radius:99px;padding:8px 18px;font-weight:700;cursor:pointer}
 </style>
 </head>
 <body data-view="home">
@@ -506,7 +510,7 @@ html[lang=ur] .tile,html[lang=ur] .bnav button,html[lang=ur] .chips button,html[
   </div>
   <div class="nextp" id="nextP" hidden></div>
   <div class="sbox"><svg class="ico" aria-hidden="true"><use href="#i-search"/></svg><input class="fld fsearch" id="feedSearch" type="search" placeholder="Search everything…" aria-label="Search the feed"></div>
-  <div class="chips fchips" id="feedChips"><button data-f="all" class="on">All</button><button data-f="news"><svg class="ico" aria-hidden="true"><use href="#i-news"/></svg> News</button><button data-f="business"><svg class="ico" aria-hidden="true"><use href="#i-store"/></svg> Business</button><button data-f="places"><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg> Places</button><button data-f="community"><svg class="ico" aria-hidden="true"><use href="#i-megaphone"/></svg> Community</button><button data-f="gallery"><svg class="ico" aria-hidden="true"><use href="#i-image"/></svg> Photos</button><button data-f="events"><svg class="ico" aria-hidden="true"><use href="#i-calendar"/></svg> Events</button><button data-f="notices"><svg class="ico" aria-hidden="true"><use href="#i-clipboard"/></svg> Notices</button><button data-f="top"><svg class="ico" aria-hidden="true"><use href="#i-flame"/></svg> Top</button></div>
+  <div class="chips fchips" id="feedChips"><button data-f="all" class="on">All</button><button data-f="news"><svg class="ico" aria-hidden="true"><use href="#i-news"/></svg> News</button><button data-f="business"><svg class="ico" aria-hidden="true"><use href="#i-store"/></svg> Business</button><button data-f="places"><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg> Places</button><button data-f="gallery"><svg class="ico" aria-hidden="true"><use href="#i-image"/></svg> Photos</button><button data-f="events"><svg class="ico" aria-hidden="true"><use href="#i-calendar"/></svg> Events</button><button data-f="notices"><svg class="ico" aria-hidden="true"><use href="#i-clipboard"/></svg> Notices</button><button data-f="top"><svg class="ico" aria-hidden="true"><use href="#i-flame"/></svg> Top</button></div>
   <div id="feed" class="news-grid"></div>
 </div></section>
 <section class="section view" data-v="weather" id="weather"><div class="wrap">
@@ -544,23 +548,6 @@ html[lang=ur] .tile,html[lang=ur] .bnav button,html[lang=ur] .chips button,html[
   <div class="sbox"><svg class="ico" aria-hidden="true"><use href="#i-search"/></svg><input class="fld fsearch" id="placesSearch" type="search" placeholder="Search places…" aria-label="Search Places"></div>
   <div id="placesList" class="dir-grid" style="margin-top:10px"></div>
 </div></section>
-<section class="view" data-v="community" id="community"><div class="wrap">
-  <div class="hubhead"><div><h2>Community</h2><p>Government schemes, jobs, scholarships, politics &amp; civic issues, and local voices</p></div><button type="button" class="btn primary sm" id="communityAdd" data-share="community"><svg class="ico" aria-hidden="true"><use href="#i-plus"/></svg> Post</button></div>
-  <details class="card oflinks"><summary><svg class="ico" aria-hidden="true"><use href="#i-landmark"/></svg> Official links <svg class="ico chev" aria-hidden="true"><use href="#i-chevron"/></svg></summary>
-    <div class="lkgrid">
-      <a href="https://ajk.gov.pk" target="_blank" rel="noopener"><b>AJ&amp;K Government portal</b><span>Departments and public services</span></a>
-      <a href="https://bisp.gov.pk" target="_blank" rel="noopener"><b>Benazir Income Support Programme</b><span>Support programme information</span></a>
-      <a href="https://www.nadra.gov.pk" target="_blank" rel="noopener"><b>NADRA</b><span>CNIC and B-Form services</span></a>
-      <a href="https://pndajk.gov.pk" target="_blank" rel="noopener"><b>Planning &amp; Development (AJK)</b><span>Development projects and data</span></a>
-      <a href="https://sdmagok.pk" target="_blank" rel="noopener"><b>State Disaster Management Authority (AJK)</b><span>Alerts and emergency help</span></a>
-    </div>
-    <p class="fine">Always check the web address. Never share your OTP, PIN or CNIC photos with anyone.</p>
-  </details>
-  <div class="tiles" id="communityTiles"></div>
-  <div class="cnote" id="communityNote" hidden></div>
-  <div class="sbox"><svg class="ico" aria-hidden="true"><use href="#i-search"/></svg><input class="fld fsearch" id="communitySearch" type="search" placeholder="Search schemes, jobs, notices…" aria-label="Search Community"></div>
-  <div id="communityList" class="dir-grid" style="margin-top:10px"></div>
-</div></section>
 <section class="view" data-v="more" id="more"><div class="wrap">
   <div class="card mecard" id="meCard"></div>
   <div class="card mlist">
@@ -571,7 +558,14 @@ html[lang=ur] .tile,html[lang=ur] .bnav button,html[lang=ur] .chips button,html[
     <button type="button" id="setInstall" hidden><svg class="ico" aria-hidden="true"><use href="#i-download"/></svg><span><b>Install app</b></span></button>
     <a id="meAdmin" href="/admin" hidden><svg class="ico" aria-hidden="true"><use href="#i-lock"/></svg><span><b>Admin panel</b><small>Delete posts, review reports</small></span></a>
   </div>
-  <p class="fine" style="text-align:center;margin-top:14px">Lamnian · Weather by Open-Meteo · Prayer times by Aladhan</p>
+  <div class="card mlist">
+    <a href="/about"><svg class="ico" aria-hidden="true"><use href="#i-globe"/></svg><span><b>About Lamnian</b><small>Who we are and what the site offers</small></span><svg class="ico chev" aria-hidden="true"><use href="#i-chevron"/></svg></a>
+    <a href="/contact"><svg class="ico" aria-hidden="true"><use href="#i-comment"/></svg><span><b>Contact us</b><small>Questions, corrections and removal requests</small></span><svg class="ico chev" aria-hidden="true"><use href="#i-chevron"/></svg></a>
+    <a href="/privacy-policy"><svg class="ico" aria-hidden="true"><use href="#i-lock"/></svg><span><b>Privacy Policy</b><small>How your data and cookies are handled</small></span><svg class="ico chev" aria-hidden="true"><use href="#i-chevron"/></svg></a>
+    <a href="/terms"><svg class="ico" aria-hidden="true"><use href="#i-clipboard"/></svg><span><b>Terms of Use</b><small>Rules and disclaimer</small></span><svg class="ico chev" aria-hidden="true"><use href="#i-chevron"/></svg></a>
+    <a href="/community-guidelines"><svg class="ico" aria-hidden="true"><use href="#i-flag"/></svg><span><b>Community Guidelines</b><small>What can be posted</small></span><svg class="ico chev" aria-hidden="true"><use href="#i-chevron"/></svg></a>
+  </div>
+  <p class="fine" style="text-align:center;margin-top:14px">© 2026 Lamnian Community · Weather by Open-Meteo · Prayer times by Aladhan</p>
 </div></section>
 <section class="section view" data-v="ai" id="ai"><div class="wrap ai-wrap">
   <div class="ai-intro">
@@ -602,13 +596,13 @@ html[lang=ur] .tile,html[lang=ur] .bnav button,html[lang=ur] .chips button,html[
 <div id="updBar" hidden><span>A new version is ready.</span><button class="btn primary" id="updBtn" type="button">Reload</button></div>
 
 <nav class="bnav" id="bnav" aria-label="Main">
-  <button data-go="home" class="on"><svg class="ico" aria-hidden="true"><use href="#i-home"/></svg>Home</button><button data-go="business"><svg class="ico" aria-hidden="true"><use href="#i-store"/></svg>Business</button><button data-go="places"><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg>Places</button><button data-go="community"><svg class="ico" aria-hidden="true"><use href="#i-megaphone"/></svg>Community</button><button data-go="weather"><svg class="ico" aria-hidden="true"><use href="#i-cloud"/></svg>Weather</button><button data-go="more"><svg class="ico" aria-hidden="true"><use href="#i-menu"/></svg>More</button>
+  <button data-go="home" class="on"><svg class="ico" aria-hidden="true"><use href="#i-home"/></svg>Home</button><button data-go="business"><svg class="ico" aria-hidden="true"><use href="#i-store"/></svg>Business</button><button data-go="places"><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg>Places</button><button data-go="weather"><svg class="ico" aria-hidden="true"><use href="#i-cloud"/></svg>Weather</button><button data-go="more"><svg class="ico" aria-hidden="true"><use href="#i-menu"/></svg>More</button>
 </nav>
 
 <dialog id="dlg">
   <form id="dlgForm" method="dialog">
     <h3 id="dlgTitle">Contribute</h3>
-    <label>What are you sharing?<select class="fld" id="fType"><option value="news">Post / News</option><option value="gallery">Photo</option><option value="events">Event</option><option value="notices">Notice</option><option value="business">Business or service</option><option value="places">Place (visit, mosque, school…)</option><option value="community">Community (scheme, job, civic…)</option></select></label>
+    <label>What are you sharing?<select class="fld" id="fType"><option value="news">Post / News</option><option value="gallery">Photo</option><option value="events">Event</option><option value="notices">Notice</option><option value="business">Business or service</option><option value="places">Place (visit, mosque, school…)</option></select></label>
     <p class="muted" id="fHint" hidden>Free listing. It shows on the Business or Places page and in the Home feed.</p>
     <label>Title<input class="fld" id="fTitle" required maxlength="120"></label>
     <label>Details<textarea class="fld" id="fBody" maxlength="800"></textarea></label>
@@ -617,8 +611,6 @@ html[lang=ur] .tile,html[lang=ur] .bnav button,html[lang=ur] .chips button,html[
     <label id="fAddrWrap" hidden><span id="fAddrLbl">Address / location</span><input class="fld" id="fAddr" maxlength="100" placeholder="e.g. Main bazaar, near the bridge"></label>
     <label id="fExtraWrap"><span id="fExtraLbl">Date / phone</span><input class="fld" id="fExtra" maxlength="40"></label>
     <label id="fWaWrap" hidden>WhatsApp number (optional)<input class="fld" id="fWa" type="tel" maxlength="20" placeholder="e.g. 0300 1234567"></label>
-    <label id="fDateWrap" hidden><span id="fDateLbl">Deadline / date (optional)</span><input class="fld" id="fDate" type="date"></label>
-    <label id="fLinkWrap" hidden>Official link (optional)<input class="fld" id="fLink" type="url" maxlength="300" placeholder="https://…"></label>
     <label id="fHoursWrap" hidden>Opening hours<input class="fld" id="fHours" maxlength="60" placeholder="e.g. Mon–Sat 9am–8pm"></label>
     <label id="fImgWrap">Photo<input class="fld" id="fImg" type="file" accept="image/*"></label>
     <div class="row"><button class="btn" type="button" id="fCancel">Cancel</button><button class="btn primary" type="submit">Post</button></div>
@@ -678,8 +670,7 @@ html[lang=ur] .tile,html[lang=ur] .bnav button,html[lang=ur] .chips button,html[
     <label>Address / location<input class="fld" id="eAddr" maxlength="100"></label>
     <label>Phone number<input class="fld" id="ePhone" type="tel" maxlength="40"></label>
     <label id="eWaWrap">WhatsApp number<input class="fld" id="eWa" type="tel" maxlength="20"></label>
-    <label><span id="eHoursLbl">Opening hours</span><input class="fld" id="eHours" maxlength="60"></label>
-    <label id="eLinkWrap" hidden>Official link<input class="fld" id="eLink" type="url" maxlength="300" placeholder="https://…"></label>
+    <label>Opening hours<input class="fld" id="eHours" maxlength="60"></label>
   </div>
   <div class="row"><button type="button" class="btn" id="eCancel">Cancel</button><button class="btn primary" type="submit">Save</button></div></form></dialog>
 
@@ -693,6 +684,7 @@ var CFG={
   region:'Azad Kashmir, Pakistan',
   admin:'mohzammajeed@gmail.com',
   firebase:{apiKey:'AIzaSyBc2VA1OA3FfNw7qWTEzZauidFWuBcAdEQ',authDomain:'lamnian-ai.firebaseapp.com',projectId:'lamnian-ai',appId:'1:90954222339:web:92e8d710bd9c2f08973736'},
+  adsense:'',                        // AdSense publisher ID once approved, e.g. 'ca-pub-1234567890123456'
   prayerMethod:1                     // 1 = Karachi (Univ. of Islamic Sciences)
 };
 /* ===== helpers ===== */
@@ -789,10 +781,9 @@ function likeState(){document.querySelectorAll('[data-like]').forEach(function(b
 /* ===== Business and Places hubs ===== */
 var HUBS={
   business:{cats:[['Shops','store','Shops'],['Hotels & Stay','bed','Hotels'],['Restaurants & Cafes','food','Food'],['Taxi & Transport','car','Taxi'],['Fruits & Vegetables','leaf','Fruit & Veg'],['Farm & Dairy','farm','Farm'],['Repair & Trades','tool','Repairs'],['Pharmacy','pill','Pharmacy'],['Mobile & Electronics','mobile','Mobiles'],['Tailors & Fashion','scissors','Tailors'],['Professional Services','briefcase','Experts'],['Other Services','more','Other']]},
-  places:{cats:[['Visiting places','mountain','Visit'],['Mosques','mosque','Mosques'],['Schools','school','Schools'],['Hospitals & Clinics','hospital','Hospitals'],['Public offices','building','Offices']]},
-  community:{cats:[['Government Schemes','award','Schemes'],['Politics & Civic','landmark','Politics'],['Jobs & Careers','briefcase','Jobs'],['Scholarships & Study','school','Study'],['Complaints & Ideas','megaphone','Voice'],['Help & Donations','heart','Help'],['Sports & Youth','trophy','Sports'],['Farming & Livestock','farm','Farming']]}
+  places:{cats:[['Visiting places','mountain','Visit'],['Mosques','mosque','Mosques'],['Schools','school','Schools'],['Hospitals & Clinics','hospital','Hospitals'],['Public offices','building','Offices']]}
 };
-var HUBCAT={business:'All',places:'All',community:'All'},CATMAP={},ALIAS={clinic:'Hospitals & Clinics',clinics:'Hospitals & Clinics',hospital:'Hospitals & Clinics',hospitals:'Hospitals & Clinics',health:'Hospitals & Clinics',transport:'Taxi & Transport',taxi:'Taxi & Transport',driver:'Taxi & Transport',shop:'Shops',store:'Shops',hotel:'Hotels & Stay',hotels:'Hotels & Stay',guesthouse:'Hotels & Stay',mosque:'Mosques',school:'Schools',fruit:'Fruits & Vegetables',fruits:'Fruits & Vegetables',vegetable:'Fruits & Vegetables',vegetables:'Fruits & Vegetables',restaurant:'Restaurants & Cafes',restaurants:'Restaurants & Cafes',cafe:'Restaurants & Cafes',cafes:'Restaurants & Cafes',farm:'Farm & Dairy',dairy:'Farm & Dairy',electrician:'Repair & Trades',plumber:'Repair & Trades',mechanic:'Repair & Trades',carpenter:'Repair & Trades',repair:'Repair & Trades',repairs:'Repair & Trades',trades:'Repair & Trades',medical:'Pharmacy',medicine:'Pharmacy',mobile:'Mobile & Electronics',electronics:'Mobile & Electronics',tailor:'Tailors & Fashion',tailors:'Tailors & Fashion',fashion:'Tailors & Fashion',lawyer:'Professional Services',tutor:'Professional Services',services:'Other Services',service:'Other Services',place:'Visiting places',places:'Visiting places',tourism:'Visiting places',office:'Public offices',scheme:'Government Schemes',schemes:'Government Schemes',government:'Government Schemes',politics:'Politics & Civic',political:'Politics & Civic',civic:'Politics & Civic',election:'Politics & Civic',elections:'Politics & Civic',job:'Jobs & Careers',jobs:'Jobs & Careers',career:'Jobs & Careers',careers:'Jobs & Careers',scholarship:'Scholarships & Study',scholarships:'Scholarships & Study',study:'Scholarships & Study',education:'Scholarships & Study',complaint:'Complaints & Ideas',complaints:'Complaints & Ideas',ideas:'Complaints & Ideas',suggestion:'Complaints & Ideas',donation:'Help & Donations',donations:'Help & Donations',charity:'Help & Donations',help:'Help & Donations',sports:'Sports & Youth',youth:'Sports & Youth',livestock:'Farming & Livestock',farming:'Farming & Livestock',agriculture:'Farming & Livestock'};
+var HUBCAT={business:'All',places:'All'},CATMAP={},ALIAS={clinic:'Hospitals & Clinics',clinics:'Hospitals & Clinics',hospital:'Hospitals & Clinics',hospitals:'Hospitals & Clinics',health:'Hospitals & Clinics',transport:'Taxi & Transport',taxi:'Taxi & Transport',driver:'Taxi & Transport',shop:'Shops',store:'Shops',hotel:'Hotels & Stay',hotels:'Hotels & Stay',guesthouse:'Hotels & Stay',mosque:'Mosques',school:'Schools',fruit:'Fruits & Vegetables',fruits:'Fruits & Vegetables',vegetable:'Fruits & Vegetables',vegetables:'Fruits & Vegetables',restaurant:'Restaurants & Cafes',restaurants:'Restaurants & Cafes',cafe:'Restaurants & Cafes',cafes:'Restaurants & Cafes',farm:'Farm & Dairy',dairy:'Farm & Dairy',electrician:'Repair & Trades',plumber:'Repair & Trades',mechanic:'Repair & Trades',carpenter:'Repair & Trades',repair:'Repair & Trades',repairs:'Repair & Trades',trades:'Repair & Trades',medical:'Pharmacy',medicine:'Pharmacy',mobile:'Mobile & Electronics',electronics:'Mobile & Electronics',tailor:'Tailors & Fashion',tailors:'Tailors & Fashion',fashion:'Tailors & Fashion',lawyer:'Professional Services',tutor:'Professional Services',services:'Other Services',service:'Other Services',place:'Visiting places',places:'Visiting places',tourism:'Visiting places',office:'Public offices'};
 for(var hk in HUBS)HUBS[hk].cats.forEach(function(c){CATMAP[c[0].toLowerCase()]=[hk,c]});
 function catName(n){var c=String(n.cat||'').trim().toLowerCase();if(CATMAP[c])return CATMAP[c][1][0];return ALIAS[c]||'Other Services'}
 function catInfo(n){return CATMAP[catName(n).toLowerCase()]}
@@ -801,26 +792,21 @@ function catIcon(n){return catInfo(n)[1][1]}
 function telHref(p){return'tel:'+String(p||'').replace(/[^\d+]/g,'')}
 function waHref(p){var d=String(p||'').replace(/\D/g,'');if(d.charAt(0)==='0')d='92'+d.slice(1);return'https://wa.me/'+d}
 function mapHref(n){return'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent([n.title,n.addr,CFG.region].filter(Boolean).join(', '))}
-function dirActs(n){var h='',cm=hubOf(n)==='community';if(n.link)h+='<a class="act call" target="_blank" rel="noopener" href="'+esc(n.link)+'">'+ic('ext')+' Official source</a>';if(n.phone)h+='<a class="act'+(cm&&n.link?'':' call')+'" href="'+esc(telHref(n.phone))+'">'+ic('phone')+' Call</a>';if(n.whatsapp&&!cm)h+='<a class="act wa" target="_blank" rel="noopener" href="'+esc(waHref(n.whatsapp))+'">'+ic('comment')+' WhatsApp</a>';if(n.addr&&!cm)h+='<a class="act" target="_blank" rel="noopener" href="'+esc(mapHref(n))+'">'+ic('nav')+' Directions</a>';return h?'<div class="acts">'+h+'</div>':''}
-var DLCATS={'Government Schemes':1,'Jobs & Careers':1,'Scholarships & Study':1},HUBNOTE={'':'Community posts, not official statements. Please be respectful and check the official source.','Government Schemes':'Shared by neighbours. Always check the official source before applying, and never share your OTP, PIN or CNIC photos.','Politics & Civic':'Community posts, not official statements. Keep it respectful: no hate, personal attacks or unverified claims. You can report any post.','Jobs & Careers':'Never pay money to get a job. Check the employer before you apply.','Scholarships & Study':'Check dates and requirements on the official source.','Help & Donations':'Give only to causes you can verify.'};
-function dlInfo(n){var v=n.hours||'';if(!/^\d{4}-\d{2}-\d{2}$/.test(v))return null;var d=new Date(v+'T23:59:59'),k=Math.ceil((d-Date.now())/864e5),dl=!!DLCATS[catName(n)],st=k<0?(dl?['closed','Closed']:['closed','Passed']):k===0?['hot','Today']:k===1?['hot','Tomorrow']:[k<=7?'soon':'ok',dl?k+' days left':'In '+k+' days'];return{label:dl?'Deadline':'Date',date:d.toLocaleDateString(LOC,{day:'numeric',month:'short',year:'numeric'}),cls:st[0],st:st[1],dl:dl}}
-function dlHtml(n){var i=dlInfo(n);return i?'<div class="dline '+i.cls+'">'+ic('calendar')+'<b>'+i.label+':</b> <span>'+esc(i.date)+'</span><em>'+i.st+'</em></div>':''}
-function commNote(n){var c=catName(n);return c==='Government Schemes'?'Check the official source before applying.':c==='Politics & Civic'?'Community post, not an official statement.':c==='Jobs & Careers'?'Never pay money to get a job.':''}
-function dirMeta(n){if(colOf(n)!=='directory')return'';var cm=hubOf(n)==='community',m=(cm?'':(n.hours?'<span>'+ic('clock')+' '+esc(n.hours)+'</span>':''))+(n.addr?'<span>'+ic(cm?(DLCATS[catName(n)]?'clipboard':'pin'):'pin')+' '+esc(n.addr)+'</span>':'');return(cm?dlHtml(n):'')+(m?'<div class="fm">'+m+'</div>':'')+dirActs(n)}
-function hubCard(n){return hubOf(n)==='community'?commCard(n):bizCard(n)}
-function commCard(n){var id=pid(n),dl=!!DLCATS[catName(n)],nt=commNote(n);return'<article class="lst comm" data-pid="'+id+'">'+(n.image?'<img class="lcover" loading="lazy" alt="'+esc(n.title)+'" src="'+esc(n.image)+'">':'')+'<div class="lh"><div class="lav">'+ic(catIcon(n))+'</div><div class="lt"><b>'+esc(n.title)+'</b><span class="cat">'+esc(catName(n))+'</span></div>'+(id?'<button type="button" class="pm" data-menu="'+id+'" aria-label="More options">'+ic('more')+'</button>':'')+'</div>'+dlHtml(n)+(n.body?'<p class="ld">'+esc(n.body)+'</p>':'')+(n.addr?'<div class="lm"><span>'+ic(dl?'clipboard':'pin')+' <b>'+(dl?'How to apply:':'Where:')+'</b> '+esc(n.addr)+'</span></div>':'')+dirActs(n)+(nt?'<div class="lnote">'+nt+'</div>':'')+'<div class="lby">Posted by '+esc(n.author||'a neighbour')+(n.created?' · '+esc(ago(n.created)):'')+'</div></article>'}
+function dirActs(n){var h='';if(n.phone)h+='<a class="act call" href="'+esc(telHref(n.phone))+'">'+ic('phone')+' Call</a>';if(n.whatsapp)h+='<a class="act wa" target="_blank" rel="noopener" href="'+esc(waHref(n.whatsapp))+'">'+ic('comment')+' WhatsApp</a>';if(n.addr)h+='<a class="act" target="_blank" rel="noopener" href="'+esc(mapHref(n))+'">'+ic('nav')+' Directions</a>';return h?'<div class="acts">'+h+'</div>':''}
+function dirMeta(n){if(colOf(n)!=='directory')return'';var m=(n.hours?'<span>'+ic('clock')+' '+esc(n.hours)+'</span>':'')+(n.addr?'<span>'+ic('pin')+' '+esc(n.addr)+'</span>':'');return(m?'<div class="fm">'+m+'</div>':'')+dirActs(n)}
+function hubCard(n){return bizCard(n)}
 function bizCard(n){var id=pid(n);return'<article class="lst" data-pid="'+id+'">'+(n.image?'<img class="lcover" loading="lazy" alt="'+esc(n.title)+'" src="'+esc(n.image)+'">':'')+'<div class="lh"><div class="lav">'+ic(catIcon(n))+'</div><div class="lt"><b>'+esc(n.title)+'</b><span class="cat">'+esc(catName(n))+'</span></div>'+(id?'<button type="button" class="pm" data-menu="'+id+'" aria-label="More options">'+ic('more')+'</button>':'')+'</div>'+(n.body?'<p class="ld">'+esc(n.body)+'</p>':'')+((n.hours||n.addr)?'<div class="lm">'+(n.hours?'<span>'+ic('clock')+' '+esc(n.hours)+'</span>':'')+(n.addr?'<span>'+ic('pin')+' '+esc(n.addr)+'</span>':'')+'</div>':'')+dirActs(n)+'<div class="lby">Listed by '+esc(n.author||'a neighbour')+(n.created?' · '+esc(ago(n.created)):'')+'</div></article>'}
 function tile(h,key,icon,label,count){return'<button type="button" class="tile'+(HUBCAT[h]===key?' on':'')+'" data-h="'+h+'" data-tile="'+esc(key)+'">'+ic(icon)+esc(label)+'<small>'+count+'</small></button>'}
-var HUBMAX={business:7,community:7},HUBOPEN={business:false,community:false,places:true};
+var HUBMAX={business:7},HUBOPEN={business:false,places:true};
 function renderHub(h){var H=HUBS[h],cur=HUBCAT[h],q=($('#'+h+'Search').value||'').toLowerCase(),all=(DATA.directory||[]).filter(function(n){return hubOf(n)===h}),cnt={};
   all.forEach(function(n){var c=catName(n);cnt[c]=(cnt[c]||0)+1});
   var tl=[tile(h,'All','grid','All',all.length)].concat(H.cats.map(function(c){return tile(h,c[0],c[1],c[2],cnt[c[0]]||0)})),mx=HUBMAX[h],selIdx=cur==='All'?0:H.cats.map(function(c){return c[0]}).indexOf(cur)+1;
   if(mx&&tl.length>mx+1){var open=HUBOPEN[h]||selIdx>=mx;tl=open?tl.concat('<button type="button" class="tile more" data-more="'+h+'">'+ic('chevron')+'Less<small>&nbsp;</small></button>'):tl.slice(0,mx).concat('<button type="button" class="tile more" data-more="'+h+'">'+ic('more')+'More<small>+'+(tl.length-mx)+'</small></button>')}
   $('#'+h+'Tiles').innerHTML=tl.join('');
   var list=all.filter(function(n){return(cur==='All'||catName(n)===cur)&&((n.title||'')+' '+(n.body||'')+' '+(n.addr||'')+' '+catName(n)).toLowerCase().indexOf(q)>-1}),cc=cur==='All'?'':cur;
-  $('#'+h+'Add').dataset.cat=cc;var nt=$('#'+h+'Note');if(nt){var tx=HUBNOTE[cc]||HUBNOTE[''];nt.textContent=tx;nt.hidden=!tx}
-  $('#'+h+'List').innerHTML=list.map(hubCard).join('')||'<div class="empty">'+(q?'No matches. Try another search.':'Nothing listed in '+(cc?esc(cc):'this section')+' yet. '+(h==='business'?'Own a business or offer a service? List it free.':h==='community'?'Know something useful? Share it with everyone.':'Know a place? Add it for everyone.')+'<br><button type="button" class="btn primary sm" data-share="'+h+'" data-cat="'+esc(cc)+'" style="margin-top:10px">'+ic('plus')+' Add the first one</button>')+'</div>'}
-var EXP=[['community','Government Schemes','#0f766e','#14b8a6'],['community','Politics & Civic','#7c3aed','#a78bfa'],['community','Jobs & Careers','#0369a1','#38bdf8'],['business','Shops','#f59e0b','#ef6c3a'],['business','Hotels & Stay','#6366f1','#8b5cf6'],['business','Taxi & Transport','#eab308','#f97316'],['business','Fruits & Vegetables','#16a34a','#84cc16'],['places','Visiting places','#0ea5e9','#14b8a6'],['places','Mosques','#059669','#0d9488'],['places','Schools','#2563eb','#4f46e5'],['places','Hospitals & Clinics','#dc2626','#f43f5e']];
+  $('#'+h+'Add').dataset.cat=cc;
+  $('#'+h+'List').innerHTML=list.map(hubCard).join('')||'<div class="empty">'+(q?'No matches. Try another search.':'Nothing listed in '+(cc?esc(cc):'this section')+' yet. '+(h==='business'?'Own a business or offer a service? List it free.':'Know a place? Add it for everyone.')+'<br><button type="button" class="btn primary sm" data-share="'+h+'" data-cat="'+esc(cc)+'" style="margin-top:10px">'+ic('plus')+' Add the first one</button>')+'</div>'}
+var EXP=[['business','Shops','#f59e0b','#ef6c3a'],['business','Hotels & Stay','#6366f1','#8b5cf6'],['business','Taxi & Transport','#eab308','#f97316'],['business','Fruits & Vegetables','#16a34a','#84cc16'],['places','Visiting places','#0ea5e9','#14b8a6'],['places','Mosques','#059669','#0d9488'],['places','Schools','#2563eb','#4f46e5'],['places','Hospitals & Clinics','#dc2626','#f43f5e']];
 var SL={i:0,t:null,hold:false};
 function renderSlides(){var tr=$('#slTrack'),cnt={};(DATA.directory||[]).forEach(function(n){var c=catName(n);cnt[c]=(cnt[c]||0)+1});
   tr.querySelectorAll('.slide:not(#homeWx)').forEach(function(e){e.remove()});
@@ -836,27 +822,27 @@ function slideAuto(){clearInterval(SL.t);if(window.matchMedia('(prefers-reduced-
   sl.addEventListener('touchstart',function(e){SL.hold=true;x0=e.touches[0].clientX},{passive:true});
   sl.addEventListener('touchend',function(e){SL.hold=false;if(x0===null)return;var dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)>40)slideTo(SL.i+(dx<0?1:-1));slideAuto()},{passive:true});
   sl.addEventListener('mouseenter',function(){SL.hold=true});sl.addEventListener('mouseleave',function(){SL.hold=false})})();
-function renderAll(){renderHub('business');renderHub('places');renderHub('community');renderSlides();renderFeed();likeState()}
+function renderAll(){renderHub('business');renderHub('places');renderSlides();renderFeed();likeState()}
 $('#emergency').innerHTML=[['Rescue','1122'],['Police','15'],['Ambulance','115'],['Fire','16']].map(function(e){return'<a href="tel:'+e[1]+'"><b>'+e[1]+'</b>'+e[0]+'</a>'}).join('');
-$('#businessSearch').oninput=function(){renderHub('business')};$('#placesSearch').oninput=function(){renderHub('places')};$('#communitySearch').oninput=function(){renderHub('community')};
+$('#businessSearch').oninput=function(){renderHub('business')};$('#placesSearch').oninput=function(){renderHub('places')};
 slideAuto();paintMe(null);
 $('#langBtn').textContent=LANG==='ur'?'English':'اردو';$('#langBtn').onclick=function(){try{localStorage.setItem('lang',LANG==='ur'?'en':'ur')}catch(e){}location.reload()};
 /* ===== contribute dialog ===== */
 var dlg=$('#dlg'),pendingCat='';
-function isDirType(t){return t==='business'||t==='places'||t==='community'}
-function syncDlg(){var t=$('#fType').value,d=isDirType(t),cm=t==='community',bz=t==='business',cs=$('#fCatSel');
+function isDirType(t){return t==='business'||t==='places'}
+function syncDlg(){var t=$('#fType').value,d=isDirType(t),bz=t==='business',cs=$('#fCatSel');
   if(d&&cs.dataset.h!==t){cs.innerHTML=HUBS[t].cats.map(function(c){return'<option value="'+esc(c[0])+'">'+esc(c[0])+'</option>'}).join('');cs.dataset.h=t}
-  $('#fCatWrap').hidden=t!=='notices';$('#fCatSelWrap').hidden=!d;$('#fAddrWrap').hidden=!d;$('#fWaWrap').hidden=!(bz||t==='places');$('#fHoursWrap').hidden=!(bz||t==='places');$('#fDateWrap').hidden=!cm;$('#fLinkWrap').hidden=!cm;$('#fHint').hidden=!d;
-  $('#fHint').textContent=cm?'Community post. Be respectful: no hate, personal attacks or unverified claims. Check schemes with the official source.':'Free listing. It shows on the Business or Places page and in the Home feed.';
-  $('#fExtraWrap').hidden=!(t==='events'||d);$('#fImgWrap').hidden=!(t==='news'||t==='gallery'||t==='notices'||d);$('#fImg').required=t==='gallery';$('#fExtra').type=t==='events'?'date':'tel';$('#fExtra').required=bz;$('#fExtraLbl').textContent=t==='events'?'Event date':bz?'Phone number':cm?'Contact number (optional)':'Phone number (optional)';
-  $('#fAddrLbl').textContent=cm?'Where / how to apply':'Address / location';$('#fAddr').placeholder=cm?'e.g. Online, or Tehsil office, or call the number':'e.g. Main bazaar, near the bridge';
-  $('#fTitle').placeholder=bz?'Business or service name':t==='places'?'Place name':cm?'Scheme, job, notice or topic':'';$('#fBody').placeholder=bz?'What do you sell or offer? Services, prices, speciality…':t==='places'?'Describe the place: what it is, timings, how to reach it…':cm?'Who is it for? How to apply? Documents needed? What is the issue?':''}
+  $('#fCatWrap').hidden=t!=='notices';$('#fCatSelWrap').hidden=!d;$('#fAddrWrap').hidden=!d;$('#fWaWrap').hidden=!(bz||t==='places');$('#fHoursWrap').hidden=!(bz||t==='places');$('#fHint').hidden=!d;
+  $('#fHint').textContent='Free listing. It shows on the Business or Places page and in the Home feed.';
+  $('#fExtraWrap').hidden=!(t==='events'||d);$('#fImgWrap').hidden=!(t==='news'||t==='gallery'||t==='notices'||d);$('#fImg').required=t==='gallery';$('#fExtra').type=t==='events'?'date':'tel';$('#fExtra').required=bz;$('#fExtraLbl').textContent=t==='events'?'Event date':bz?'Phone number':'Phone number (optional)';
+  $('#fAddrLbl').textContent='Address / location';$('#fAddr').placeholder='e.g. Main bazaar, near the bridge';
+  $('#fTitle').placeholder=bz?'Business or service name':t==='places'?'Place name':'';$('#fBody').placeholder=bz?'What do you sell or offer? Services, prices, speciality…':t==='places'?'Describe the place: what it is, timings, how to reach it…':''}
 $('#fType').onchange=syncDlg;
 function shrink(f){return new Promise(function(ok){if(!f)return ok('');var r=new FileReader();r.onload=function(){var i=new Image();i.onload=function(){var s=Math.min(1,900/Math.max(i.width,i.height)),cv=document.createElement('canvas');cv.width=Math.round(i.width*s);cv.height=Math.round(i.height*s);cv.getContext('2d').drawImage(i,0,0,cv.width,cv.height);ok(cv.toDataURL('image/jpeg',.72))};i.onerror=function(){ok('')};i.src=r.result};r.readAsDataURL(f)})}
 function openDlg(t,cat){if(!USER){pending=t||'news';pendingCat=cat||'';openAuth('in');return}$('#fType').value=t||'news';syncDlg();if(cat)$('#fCatSel').value=cat;dlg.showModal();if(SHARED){$('#fTitle').value=SHARED.title;$('#fBody').value=SHARED.body;SHARED=null}}
 $('#fCancel').onclick=function(){dlg.close()};
 $('#dlgForm').onsubmit=function(e){e.preventDefault();var t=$('#fType').value,d=isDirType(t),c=d?'directory':t,x=$('#fExtra').value.trim(),f=$('#fImg').files[0],o={title:$('#fTitle').value.trim(),body:$('#fBody').value.trim(),cat:d?$('#fCatSel').value:($('#fCat').value.trim()||'General')};
-  o.author=uname();o.uid=USER.uid;if(USER.photoURL)o.photo=USER.photoURL;if(c==='events')o.date=x;if(d){o.phone=x;o.addr=$('#fAddr').value.trim();if(t==='community'){o.hours=$('#fDate').value;var lk=$('#fLink').value.trim();if(lk){if(!/^https?:\/\//i.test(lk))lk='https://'+lk;try{new URL(lk)}catch(er){toast('Enter a valid link');return}o.link=lk}}else{o.whatsapp=$('#fWa').value.trim();o.hours=$('#fHours').value.trim()}}if(c==='news')o.date=new Date().toLocaleDateString();
+  o.author=uname();o.uid=USER.uid;if(USER.photoURL)o.photo=USER.photoURL;if(c==='events')o.date=x;if(d){o.phone=x;o.addr=$('#fAddr').value.trim();o.whatsapp=$('#fWa').value.trim();o.hours=$('#fHours').value.trim()}if(c==='news')o.date=new Date().toLocaleDateString();
   dlg.close();e.target.reset();toast('Sending…');
   shrink(f).then(function(img){if(img)o.image=img;return postDoc(c,o)}).then(function(){toast('Posted!');return loadCol(c)}).then(function(r){if(r){DATA[c]=r;renderAll()}}).catch(function(){toast('Could not send. Please try again.')})};
 /* ===== theme, menu, AI placeholder ===== */
@@ -908,14 +894,14 @@ $('#meDel').onclick=function(){if(!USER||!confirm('Delete your account and all y
   reauth().then(purge).then(delUserDoc).then(function(){return u.delete()}).then(function(){$('#meDlg').close();toast('Your account was deleted');reloadAll()}).catch(function(e){$('#meErr').textContent=(e&&e.code==='cancel')?'':'Could not delete the account. Please try again.'})};
 if(FBA)FBA.onAuthStateChanged(setUser);
 /* ===== app shell + feed ===== */
-var VIEWS=['home','business','places','community','weather','more','ai','profile'],TABOF={ai:'more',profile:'more'},feedFilter='all',feedReady=!FBON;
+var VIEWS=['home','business','places','weather','more','ai','profile'],TABOF={ai:'more',profile:'more'},feedFilter='all',feedReady=!FBON;
 function show(h){var pp=(h||'').split('/'),v=pp[0];if(v==='directory')v='business';if(VIEWS.indexOf(v)<0)v='home';document.body.dataset.view=v;if(v==='profile')renderProfile(pp[1]);var tb=TABOF[v]||v;document.querySelectorAll('#bnav [data-go]').forEach(function(b){b.classList.toggle('on',b.dataset.go===tb)});window.scrollTo({top:0,behavior:'instant'})}
 function go(v){if(navigator.vibrate)navigator.vibrate(8);if(location.hash==='#'+v||(!location.hash&&v==='home'))window.scrollTo({top:0,behavior:'smooth'});else location.hash=v}
 window.addEventListener('hashchange',function(){show(location.hash.slice(1))});
 function feedItem(n,k){if(k!=='events')return n;var c={};for(var x in n)c[x]=n[x];c.body=(n.body||'')+(n.body?'\n':'')+'Date: '+(n.date||'')+(n.place?' · Place: '+n.place:'');return c}
 function renderFeed(){if(!feedReady){$('#feed').innerHTML='<div class="skel h200" style="margin-bottom:10px"></div><div class="skel h200"></div>';return}var ff=feedFilter||'all',items=[],hubF=!!HUBS[ff];
   [['news','News'],['gallery','Photo'],['events','Event'],['notices','Notice'],['directory','']].forEach(function(p){var k=p[0];(DATA[k]||[]).forEach(function(n){var t=p[1];
-    if(k==='directory'){var h=hubOf(n);if(hubF?h!==ff:(ff!=='all'&&ff!=='top'))return;t=h==='community'?catName(n):(h==='places'?'Place':'Business')+' · '+catName(n)}
+    if(k==='directory'){var h=hubOf(n);if(hubF?h!==ff:(ff!=='all'&&ff!=='top'))return;t=(h==='places'?'Place':'Business')+' · '+catName(n)}
     else if(hubF||(ff!=='all'&&ff!=='top'&&ff!==k))return;
     items.push({n:feedItem(n,k),t:t})})});
   var q=($('#feedSearch').value||'').toLowerCase();if(q)items=items.filter(function(x){return((x.n.title||'')+' '+(x.n.body||'')+' '+(x.n.author||'')+' '+(x.n.addr||'')+' '+(x.n.cat||'')).toLowerCase().indexOf(q)>-1});
@@ -984,8 +970,8 @@ function openSheet(id){var p=findPost(id);if(!p)return;var own=USER&&p.uid&&p.ui
   $('#sheetBody').innerHTML=h;$('#sheet').showModal()}
 function delDoc(nm){var col=nm.split('/').slice(-2)[0];return USER.getIdToken().then(function(t){return fetch('https://firestore.googleapis.com/v1/'+nm+'?key='+FB.apiKey,{method:'DELETE',headers:{Authorization:'Bearer '+t}})}).then(function(r){if(!r.ok)throw 0;toast('Post deleted');return loadCol(col)}).then(function(r){if(r){DATA[col]=r;renderAll()}profUid&&(PROF=PROF.filter(function(p){return p._n!==nm}));refreshProfile()}).catch(function(){toast('Could not delete. Please try again.')})}
 var editing=null,reporting=null;
-function openEdit(p){editing=p;$('#eTitle').value=p.title||'';$('#eBody').value=p.body||'';var d=colOf(p)==='directory',cm=d&&hubOf(p)==='community';$('#eDirWrap').hidden=!d;
-  if(d){$('#eCat').innerHTML=['business','places','community'].map(function(h){return'<optgroup label="'+({business:'Business',places:'Places',community:'Community'})[h]+'">'+HUBS[h].cats.map(function(c){return'<option value="'+esc(c[0])+'">'+esc(c[0])+'</option>'}).join('')+'</optgroup>'}).join('');$('#eCat').value=catName(p);$('#eAddr').value=p.addr||'';$('#ePhone').value=p.phone||'';$('#eWa').value=p.whatsapp||'';$('#eWaWrap').hidden=cm;$('#eLinkWrap').hidden=!cm;$('#eLink').value=p.link||'';$('#eHours').type=cm?'date':'text';$('#eHoursLbl').textContent=cm?'Deadline / date':'Opening hours';$('#eHours').value=p.hours||''}
+function openEdit(p){editing=p;$('#eTitle').value=p.title||'';$('#eBody').value=p.body||'';var d=colOf(p)==='directory';$('#eDirWrap').hidden=!d;
+  if(d){$('#eCat').innerHTML=['business','places'].map(function(h){return'<optgroup label="'+({business:'Business',places:'Places'})[h]+'">'+HUBS[h].cats.map(function(c){return'<option value="'+esc(c[0])+'">'+esc(c[0])+'</option>'}).join('')+'</optgroup>'}).join('');$('#eCat').value=catName(p);$('#eAddr').value=p.addr||'';$('#ePhone').value=p.phone||'';$('#eWa').value=p.whatsapp||'';$('#eWaWrap').hidden=false;$('#eHours').value=p.hours||''}
   $('#editDlg').showModal()}
 function openReport(p){if(!USER){openAuth('in');toast('Sign in to report posts');return}reporting=p;$('#repTitle').textContent=p.title||'';$('#repDlg').showModal()}
 $('#sheetBody').onclick=function(e){var b=e.target.closest('[data-act]');if(!b)return;var id=b.dataset.id,p=findPost(id),a=b.dataset.act;$('#sheet').close();if(!p)return;
@@ -999,7 +985,7 @@ $('#eCancel').onclick=function(){$('#editDlg').close()};
 $('#repCancel').onclick=function(){$('#repDlg').close()};
 $('#editForm').onsubmit=function(e){e.preventDefault();var p=editing,t=$('#eTitle').value.trim(),b=$('#eBody').value.trim();if(!p||!t||!USER)return;$('#editDlg').close();
   var f={title:t,body:b,edited:new Date().toISOString()};
-  if(colOf(p)==='directory'){f.cat=$('#eCat').value;f.addr=$('#eAddr').value.trim();f.phone=$('#ePhone').value.trim();f.hours=$('#eHours').value.trim();if(hubOf(p)==='community'||CATMAP[f.cat.toLowerCase()][0]==='community'){var lk=$('#eLink').value.trim();if(lk&&!/^https?:\/\//i.test(lk))lk='https://'+lk;f.link=lk}else f.whatsapp=$('#eWa').value.trim()}
+  if(colOf(p)==='directory'){f.cat=$('#eCat').value;f.addr=$('#eAddr').value.trim();f.phone=$('#ePhone').value.trim();f.hours=$('#eHours').value.trim();f.whatsapp=$('#eWa').value.trim()}
   var fl={},mask='';for(var k in f){fl[k]={stringValue:String(f[k])};mask+='&updateMask.fieldPaths='+k}
   USER.getIdToken().then(function(tk){return fetch('https://firestore.googleapis.com/v1/'+p._n+'?key='+FB.apiKey+mask,{method:'PATCH',headers:hdr(tk),body:JSON.stringify({fields:fl})})}).then(function(r){if(!r.ok)throw 0;eachPost(pid(p),function(n){for(var k in f)n[k]=f[k];n.edited=1});toast('Post updated');renderAll();if(document.body.dataset.view==='profile')paintProf('posts')}).catch(function(){toast('Could not save changes')})};
 $('#repForm').onsubmit=function(e){e.preventDefault();var p=reporting;if(!p||!USER)return;var id=pid(p),reason=(document.querySelector('input[name=rr]:checked')||{}).value||'Something else';$('#repDlg').close();
@@ -1070,6 +1056,12 @@ show(location.hash.slice(1));
 $('#heroRegion').textContent=CFG.region;
 if(FBON)for(var k0 in DATA)DATA[k0]=[];renderAll();loadWeather();
 Promise.all(COLS.map(function(c){return loadCol(c).then(function(r){if(r)DATA[c]=r})})).then(function(){feedReady=true;renderAll()});
+</script>
+<div id="ckb" class="ckb" hidden><span>We use cookies and local storage to run the site and, with Google AdSense, to show ads.</span><button type="button" id="ckOk">OK</button></div>
+<script>
+(function(){if(CFG.adsense){var a=document.createElement('script');a.async=true;a.crossOrigin='anonymous';a.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='+encodeURIComponent(CFG.adsense);document.head.appendChild(a)}
+var b=document.getElementById('ckb'),k='ck_ok';try{if(!localStorage.getItem(k))b.hidden=false}catch(e){}
+document.getElementById('ckOk').onclick=function(){b.hidden=true;try{localStorage.setItem(k,'1')}catch(e){}}})();
 </script>
 </body>
 </html>

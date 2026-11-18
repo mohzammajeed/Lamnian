@@ -1,0 +1,8 @@
+*{box-sizing:border-box}:root{--bg:#f6f4ee;--fg:#15302d;--mut:#5d6f6c;--card:#fff;--line:#dde3de;--brand:#0f3d3a;--lnk:#1b6b63}
+[data-theme=dark]{--bg:#0c1a19;--fg:#e8f0ee;--mut:#93a8a4;--card:#142b29;--line:#21403d;--brand:#1b6b63;--lnk:#7fd0c5}
+body{margin:0;background:var(--bg);color:var(--fg);font:500 16px/1.7 Manrope,system-ui,-apple-system,Segoe UI,sans-serif}
+header{background:var(--brand);color:#fff}header div{width:min(820px,100% - 32px);margin:0 auto;padding:14px 0;display:flex;align-items:center;gap:10px;justify-content:space-between}
+header a{color:#fff;text-decoration:none;font-weight:800;font-size:20px;display:flex;align-items:center;gap:10px}header img{width:32px;height:32px;border-radius:8px}header span a{font-size:14px;font-weight:600;opacity:.9}
+main{width:min(820px,100% - 32px);margin:24px auto;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px 26px}
+h1{font:700 30px Georgia,serif;margin:0 0 4px;color:var(--brand)}[data-theme=dark] h1{color:var(--fg)}h2{font-size:19px;margin:28px 0 6px}p,li{margin:8px 0}.d{color:var(--mut);font-size:14px}
+a{color:var(--lnk)}footer{width:min(820px,100% - 32px);margin:0 auto 32px;text-align:center;color:var(--mut);font-size:14px}footer a{margin:0 8px;white-space:nowrap}

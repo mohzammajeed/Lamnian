@@ -70,9 +70,6 @@ Listings are stored in the existing `directory` collection (the `cat` field deci
 - All Urdu text lives in `ur.js`. It is only downloaded when someone picks Urdu. To change a translation, edit the matching line. Change `NAME` at the top of `ur.js` if you want the town's name written in Urdu script.
 - Text typed by users (posts, business names, comments) is shown exactly as written.
 
-## Community tab
-Government schemes, politics & civic issues, jobs, scholarships, complaints & ideas, help & donations, sports and farming. Posts can carry a deadline (with "N days left"), where or how to apply, a contact number and an official link. An **Official links** card lists government portals. Politics and schemes pages show a short reminder: community posts are not official statements, be respectful, check the official source. Anyone can report a post.
-The categories are in the `HUBS.community` block of `index.html`. **Republish `firestore.rules`** (it now allows the `link` field).
 
 ## Icons
 All symbols in the site are inline SVG icons (one sprite at the top of `index.html`), not emojis. The logo icon is used for the favicon, header, splash screen, home-screen install and the future mobile app (`icons/icon-1024.png`, `icons/maskable-512.png`).

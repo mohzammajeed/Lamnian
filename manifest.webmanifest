@@ -2,7 +2,7 @@
   "id": "/",
   "name": "Lamnian — Weather, News & Community",
   "short_name": "Lamnian",
-  "description": "Live weather, local news, businesses, places, government schemes, jobs and community in Lamnian. Available in English and Urdu.",
+  "description": "Live weather, prayer times, local news, businesses and places in Lamnian. Available in English and Urdu.",
   "start_url": "/?source=pwa",
   "scope": "/",
   "display": "standalone",
@@ -45,17 +45,6 @@
       "name": "New post",
       "short_name": "Post",
       "url": "/?action=compose",
-      "icons": [
-        {
-          "src": "/icons/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
-    },
-    {
-      "name": "Community",
-      "short_name": "Community",
-      "url": "/#community",
       "icons": [
         {
           "src": "/icons/icon-192.png",

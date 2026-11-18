@@ -2,7 +2,7 @@
 // - App shell opens instantly and works offline
 // - Firebase scripts and Google Fonts are saved after the first visit
 // - Weather, posts and sign-in always go to the network (the app keeps its own saved copy)
-const V = 'lamnian-v6';
+const V = 'lamnian-v9';
 const LIBS = 'lamnian-libs-v1';
 const SHELL = ['/', '/offline', '/manifest.webmanifest', '/ur.js', '/icons/icon-192.png', '/icons/icon-512.png', '/icons/favicon-32.png', '/icons/apple-touch-icon.png'];
 
