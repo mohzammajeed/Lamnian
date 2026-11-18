@@ -65,6 +65,15 @@ Signed-in users tap **List yours** (Business) or **Add** (Places). The form asks
 
 Listings are stored in the existing `directory` collection (the `cat` field decides Business or Places). New fields: `addr`, `whatsapp`, `hours`. **Republish `firestore.rules`** so owners can edit those fields; creating listings works with the old rules too. Old entries with categories like `Clinics`, `Shops`, `Transport` or `Electrician` are mapped automatically.
 
+## Languages: English and Urdu
+- The **اردو / English** button in the header switches the whole site (right-to-left layout, Urdu font, Urdu weather and prayer wording). The choice is remembered. First-time visitors whose phone is set to Urdu see Urdu automatically.
+- All Urdu text lives in `ur.js`. It is only downloaded when someone picks Urdu. To change a translation, edit the matching line. Change `NAME` at the top of `ur.js` if you want the town's name written in Urdu script.
+- Text typed by users (posts, business names, comments) is shown exactly as written.
+
+## Community tab
+Government schemes, politics & civic issues, jobs, scholarships, complaints & ideas, help & donations, sports and farming. Posts can carry a deadline (with "N days left"), where or how to apply, a contact number and an official link. An **Official links** card lists government portals. Politics and schemes pages show a short reminder: community posts are not official statements, be respectful, check the official source. Anyone can report a post.
+The categories are in the `HUBS.community` block of `index.html`. **Republish `firestore.rules`** (it now allows the `link` field).
+
 ## Icons
 All symbols in the site are inline SVG icons (one sprite at the top of `index.html`), not emojis. The logo icon is used for the favicon, header, splash screen, home-screen install and the future mobile app (`icons/icon-1024.png`, `icons/maskable-512.png`).
 
